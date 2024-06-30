@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07C2A79A2C31E62700869A56 /* TextUR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C2A7992C31E62700869A56 /* TextUR.cpp */; };
+		07C2A79A2C31E62700869A56 /* textur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C2A7992C31E62700869A56 /* textur.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,7 @@
 
 /* Begin PBXFileReference section */
 		07C2A7962C31E62700869A56 /* TextUR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TextUR; sourceTree = BUILT_PRODUCTS_DIR; };
-		07C2A7992C31E62700869A56 /* TextUR.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextUR.cpp; sourceTree = "<group>"; };
+		07C2A7992C31E62700869A56 /* textur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textur.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +57,7 @@
 		07C2A7982C31E62700869A56 /* TextUR */ = {
 			isa = PBXGroup;
 			children = (
-				07C2A7992C31E62700869A56 /* TextUR.cpp */,
+				07C2A7992C31E62700869A56 /* textur.cpp */,
 			);
 			path = TextUR;
 			sourceTree = "<group>";
@@ -119,7 +119,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07C2A79A2C31E62700869A56 /* TextUR.cpp in Sources */,
+				07C2A79A2C31E62700869A56 /* textur.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,12 +8,10 @@
 #include <Termin8or/GameEngine.h>
 #include <Termin8or/Screen.h>
 #include <Termin8or/Drawing.h>
-#include <Core/Rand.h>
+#include <Termin8or/Texture.h>
 #include <Termin8or/RC.h>
 #include <Termin8or/ASCII_Fonts.h>
-#include <Core/Delay.h>
-#include <DungGine/BSPTree.h>
-#include <DungGine/DungGine.h>
+#include <Core/Rand.h>
 
 #include <iostream>
 
@@ -44,6 +42,7 @@ public:
 private:
   virtual void update() override
   {
+    draw_frame(sh, Color::White);
   }
   
   virtual void draw_title() override
@@ -63,9 +62,6 @@ private:
   std::string font_data_path;
   
   ASCII_Fonts::FontDataColl font_data;
-  
-  dung::BSPTree bsp_tree { 4 };
-  dung::DungGine dungeon_engine { get_exe_folder(), true };
 };
 
 int main(int argc, char** argv)
