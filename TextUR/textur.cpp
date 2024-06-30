@@ -29,6 +29,7 @@ public:
     else
     {
       std::cerr << "You must supply a texture filename as a command line argument!";
+      request_exit();
     }
       
     if (argc >= 4)
