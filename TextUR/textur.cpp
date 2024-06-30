@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+enum class EditorFileMode { NEW_OR_OVERWRITE_FILE, OPEN_EXISTING_FILE };
+
 
 class Game : public GameEngine<>
 {
@@ -23,7 +25,25 @@ public:
     : GameEngine(argv[0], params)
   {
     if (argc >= 2)
-      text = argv[1];
+      texture_file_path = argv[1];
+    else
+    {
+      std::cerr << "You must supply a texture filename as a command line argument!";
+    }
+      
+    if (argc >= 4)
+    {
+      file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
+      
+      std::istringstream iss(argv[2]);
+      RC size;
+      iss >> size.r;
+      iss.str(argv[3]);
+      iss.clear();
+      iss >> size.c;
+      
+      curr_texture = drawing::Texture { size };
+    }
   }
   
   virtual void generate_data() override
@@ -54,14 +74,16 @@ private:
   {
     //::draw_instructions(sh, 0);
   }
-  
-  std::string text;
-  
+    
   std::vector<ASCII_Fonts::ColorScheme> color_schemes;
   
   std::string font_data_path;
   
   ASCII_Fonts::FontDataColl font_data;
+  
+  drawing::Texture curr_texture;
+  std::string texture_file_path;
+  EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
 };
 
 int main(int argc, char** argv)
