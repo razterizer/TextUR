@@ -1,8 +1,8 @@
 //
 //  main.cpp
-//  Gospel Quest
+//  TextUR
 //
-//  Created by Rasmus Anthin on 2023-11-14.
+//  Created by Rasmus Anthin on 2024-07-01.
 //
 
 #include <Termin8or/GameEngine.h>
