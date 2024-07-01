@@ -28,7 +28,7 @@ public:
       texture_file_path = argv[1];
     else
     {
-      std::cerr << "You must supply a texture filename as a command line argument!";
+      std::cerr << "You must supply a texture filename as a command line argument!" << std::endl;
       request_exit();
     }
       
@@ -50,7 +50,7 @@ public:
   virtual void generate_data() override
   {
     font_data_path = ASCII_Fonts::get_path_to_font_data(get_exe_folder());
-    std::cout << font_data_path << std::endl;
+    //std::cout << font_data_path << std::endl;
     
     color_schemes.emplace_back();
     auto& cs = color_schemes.emplace_back();
@@ -63,7 +63,12 @@ public:
 private:
   virtual void update() override
   {
-    draw_frame(sh, Color::White);
+    //draw_frame(sh, Color::White);
+    drawing::draw_box_textured(sh,
+                               pos.r, pos.c, sh.num_rows_inset(), sh.num_cols_inset(),
+                               drawing::OutlineType::Line,
+                               { Color::White, Color::Black },
+                               drawing::Direction::None);
   }
   
   virtual void draw_title() override
@@ -85,6 +90,8 @@ private:
   drawing::Texture curr_texture;
   std::string texture_file_path;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
+  
+  RC pos;
 };
 
 int main(int argc, char** argv)
