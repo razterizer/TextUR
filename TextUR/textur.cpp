@@ -45,6 +45,8 @@ public:
       
       curr_texture = drawing::Texture { size };
     }
+    else
+      curr_texture.load(texture_file_path);
   }
   
   virtual void generate_data() override
