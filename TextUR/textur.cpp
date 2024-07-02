@@ -63,12 +63,32 @@ public:
 private:
   virtual void update() override
   {
-    //draw_frame(sh, Color::White);
-    drawing::draw_box_textured(sh,
-                               pos.r, pos.c, sh.num_rows_inset(), sh.num_cols_inset(),
-                               drawing::OutlineType::Line,
-                               { Color::White, Color::Black },
-                               drawing::Direction::None);
+    using namespace drawing;
+    
+    styles::Style ui_style { Color::LightGray, Color::Black };
+    
+    if (show_menu)
+      draw_box_outline(sh, 0, sh.num_cols() - 10, sh.num_rows() - 1, 10 - 1, drawing::OutlineType::Line, ui_style);
+  
+    draw_frame(sh, Color::White);
+    
+    // Caret
+    if (anim_ctr % 2 == 0)
+      sh.write_buffer("#", caret_pos.r+1, caret_pos.c+1, ui_style);
+      
+    //draw_box_outline(sh,
+    //                 screen_pos.r, screen_pos.c, sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+    //                 drawing::OutlineType::Line,
+    //                 ui_style);
+    draw_box_textured(sh,
+                      screen_pos.r, screen_pos.c,
+                      sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+                      drawing::Direction::None,
+                      curr_texture);
+                      
+    // Keypresses:
+    if (kpd.curr_key == ' ')
+      math::toggle(show_menu);
   }
   
   virtual void draw_title() override
@@ -91,7 +111,10 @@ private:
   std::string texture_file_path;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
-  RC pos;
+  RC screen_pos { 0, 0 };
+  RC caret_pos { 0, 0 };
+  
+  bool show_menu = false;
 };
 
 int main(int argc, char** argv)
