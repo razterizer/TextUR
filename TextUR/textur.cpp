@@ -37,11 +37,16 @@ class Game : public GameEngine<>
     const int nc = sh.num_cols();
   
     int r = 0;
-    for (const auto& preset : textel_presets)
+    const int num_textel_presets = static_cast<int>(textel_presets.size());
+    for (int p_idx = 0; p_idx < num_textel_presets; ++p_idx)
     {
+      auto name_style = ui_style;
+      if (p_idx == selected_textel_preset_idx)
+        name_style.fg_color = Color::Cyan;
+      const auto& preset = textel_presets[p_idx];
       const auto& textel = preset.textel;
       sh.write_buffer(textel.str(), r + 1, nc - menu_width + 2, textel.get_style());
-      sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, ui_style);
+      sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
       draw_box_outline(sh, r, nc - menu_width, 4 - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
       r += 3;
     }
