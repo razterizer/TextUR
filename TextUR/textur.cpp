@@ -161,7 +161,7 @@ private:
                       curr_texture);
                       
     // Keypresses:
-    if (kpd.curr_key == ' ')
+    if (kpd.curr_key == '-')
       math::toggle(show_menu);
       
     bool is_up = kpd.curr_special_key == keyboard::SpecialKey::Up || str::to_lower(kpd.curr_key) == 'w';
