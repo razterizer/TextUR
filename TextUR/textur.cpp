@@ -140,29 +140,52 @@ private:
     const int nc = sh.num_cols();
     const int menu_width = 12;
       
-    if (show_menu)
+    if (!show_confirm_overwrite && show_menu)
       draw_box_outline(sh, 0, nc - menu_width, nr - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
   
     draw_frame(sh, Color::White);
     
-    if (show_menu)
-      draw_menu(ui_style, menu_width);
+    if (show_confirm_overwrite)
+    {
+      bg_color = Color::DarkCyan;
+      draw_confirm(sh, "Are you sure you want to overwrite the file \"" + texture_file_path + "\"?", overwrite_confirm_button,
+                   { Color::Black, Color::DarkCyan },
+                   { Color::Black, Color::DarkCyan, Color::Cyan },
+                   { Color::White, Color::DarkCyan });
+      if (kpd.curr_special_key == keyboard::SpecialKey::Left)
+        overwrite_confirm_button = YesNoButtons::Yes;
+      else if (kpd.curr_special_key == keyboard::SpecialKey::Right)
+        overwrite_confirm_button = YesNoButtons::No;
       
-    message_handler->update(sh, static_cast<float>(sim_time_s), true);
-    
-    // Caret
-    if (anim_ctr % 2 == 0)
-      sh.write_buffer("#", caret_pos.r+1, caret_pos.c+1, ui_style);
+      if (kpd.curr_special_key == keyboard::SpecialKey::Enter)
+      {
+        if (overwrite_confirm_button == YesNoButtons::Yes)
+          safe_to_save = true;
+        else
+          show_confirm_overwrite = false;
+      }
+    }
+    else
+    {
+      if (show_menu)
+        draw_menu(ui_style, menu_width);
       
-    //draw_box_outline(sh,
-    //                 screen_pos.r, screen_pos.c, sh.num_rows_inset()+1, sh.num_cols_inset()+1,
-    //                 drawing::OutlineType::Line,
-    //                 ui_style);
-    draw_box_textured(sh,
-                      screen_pos.r, screen_pos.c,
-                      sh.num_rows_inset()+1, sh.num_cols_inset()+1,
-                      drawing::Direction::None,
-                      curr_texture);
+      message_handler->update(sh, static_cast<float>(sim_time_s), true);
+      
+      // Caret
+      if (anim_ctr % 2 == 0)
+        sh.write_buffer("#", caret_pos.r+1, caret_pos.c+1, ui_style);
+      
+      //draw_box_outline(sh,
+      //                 screen_pos.r, screen_pos.c, sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+      //                 drawing::OutlineType::Line,
+      //                 ui_style);
+      draw_box_textured(sh,
+                        screen_pos.r, screen_pos.c,
+                        sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+                        drawing::Direction::None,
+                        curr_texture);
+    }
                       
     // Keypresses:
     if (kpd.curr_key == '-')
@@ -217,16 +240,33 @@ private:
           caret_pos.c = curr_texture.size.c - 1;
       }
     }
-    if (str::to_lower(kpd.curr_key) == 'x')
+    if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
     {
-      if (curr_texture.save(texture_file_path))
-        message_handler->add_message(static_cast<float>(sim_time_s),
-                                     "Your work was successfully saved.",
-                                     MessageHandler::Level::Guide);
+      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
+      {
+        if (folder::exists(texture_file_path))
+        {
+          show_confirm_overwrite = true;
+          overwrite_confirm_button = YesNoButtons::No;
+        }
+      }
       else
-        message_handler->add_message(static_cast<float>(sim_time_s),
-                                     "An error occurred while saving your work!",
-                                     MessageHandler::Level::Fatal);
+        safe_to_save = true;
+        
+      if (safe_to_save)
+      {
+        if (curr_texture.save(texture_file_path))
+          message_handler->add_message(static_cast<float>(sim_time_s),
+                                       "Your work was successfully saved.",
+                                       MessageHandler::Level::Guide);
+        else
+          message_handler->add_message(static_cast<float>(sim_time_s),
+                                       "An error occurred while saving your work!",
+                                       MessageHandler::Level::Fatal);
+                                       
+        safe_to_save = false;
+        show_confirm_overwrite = false;
+      }
     }
   }
   
@@ -255,6 +295,10 @@ private:
   RC caret_pos { 0, 0 };
   
   bool show_menu = false;
+  bool show_confirm_overwrite = false;
+  
+  YesNoButtons overwrite_confirm_button = YesNoButtons::No;
+  bool safe_to_save = false;
   
   std::vector<TextelItem> textel_presets;
   int selected_textel_preset_idx = 0;
