@@ -248,14 +248,26 @@ private:
       {
         undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
         curr_texture.set_textel(caret_pos, textel_presets[selected_textel_preset_idx].textel);
+        redo_buffer = {};
       }
       else if (str::to_lower(kpd.curr_key) == 'z')
       {
         if (!undo_buffer.empty())
         {
           auto& up = undo_buffer.top();
+          redo_buffer.push({ up.first, curr_texture(up.first) });
           curr_texture.set_textel(up.first, up.second);
           undo_buffer.pop();
+        }
+      }
+      else if (str::to_lower(kpd.curr_key) == 'y')
+      {
+        if (!redo_buffer.empty())
+        {
+          auto& up = redo_buffer.top();
+          undo_buffer.push({ up.first, curr_texture(up.first) });
+          curr_texture.set_textel(up.first, up.second);
+          redo_buffer.pop();
         }
       }
     }
@@ -325,6 +337,7 @@ private:
   
   std::unique_ptr<MessageHandler> message_handler;
   std::stack<std::pair<RC, drawing::Textel>> undo_buffer;
+  std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
 };
 
 int main(int argc, char** argv)
