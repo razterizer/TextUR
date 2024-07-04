@@ -193,7 +193,10 @@ private:
       math::toggle(show_menu);
       
     if (kpd.curr_key == ' ' && !show_menu)
+    {
+      undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
       curr_texture.set_textel(caret_pos, textel_presets[selected_textel_preset_idx].textel);
+    }
       
     bool is_up = kpd.curr_special_key == keyboard::SpecialKey::Up || str::to_lower(kpd.curr_key) == 'w';
     bool is_down = kpd.curr_special_key == keyboard::SpecialKey::Down || str::to_lower(kpd.curr_key) == 's';
