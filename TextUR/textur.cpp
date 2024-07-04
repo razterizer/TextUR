@@ -244,9 +244,12 @@ private:
       }
       else if (str::to_lower(kpd.curr_key) == 'z')
       {
-        auto& up = undo_buffer.top();
-        curr_texture.set_textel(up.first, up.second);
-        undo_buffer.pop();
+        if (!undo_buffer.empty())
+        {
+          auto& up = undo_buffer.top();
+          curr_texture.set_textel(up.first, up.second);
+          undo_buffer.pop();
+        }
       }
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
