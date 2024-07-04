@@ -308,7 +308,7 @@ private:
   int selected_textel_preset_idx = 0;
   
   std::unique_ptr<MessageHandler> message_handler;
-  std::stack<std::pair<RC, drawing:;Textel>> undo_buffer;
+  std::stack<std::pair<RC, drawing::Textel>> undo_buffer;
 };
 
 int main(int argc, char** argv)
