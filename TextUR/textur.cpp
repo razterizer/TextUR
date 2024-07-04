@@ -192,12 +192,6 @@ private:
     if (kpd.curr_key == '-')
       math::toggle(show_menu);
       
-    if (kpd.curr_key == ' ' && !show_menu)
-    {
-      undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
-      curr_texture.set_textel(caret_pos, textel_presets[selected_textel_preset_idx].textel);
-    }
-      
     bool is_up = kpd.curr_special_key == keyboard::SpecialKey::Up || str::to_lower(kpd.curr_key) == 'w';
     bool is_down = kpd.curr_special_key == keyboard::SpecialKey::Down || str::to_lower(kpd.curr_key) == 's';
     bool is_left = kpd.curr_special_key == keyboard::SpecialKey::Left || str::to_lower(kpd.curr_key) == 'a';
@@ -242,6 +236,17 @@ private:
         caret_pos.c++;
         if (caret_pos.c >= static_cast<int>(curr_texture.size.c))
           caret_pos.c = curr_texture.size.c - 1;
+      }
+      else if (kpd.curr_key == ' ')
+      {
+        undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
+        curr_texture.set_textel(caret_pos, textel_presets[selected_textel_preset_idx].textel);
+      }
+      else if (str::to_lower(kpd.curr_key) == 'z')
+      {
+        auto& up = undo_buffer.top();
+        curr_texture.set_textel(up.first, up.second);
+        undo_buffer.pop();
       }
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
