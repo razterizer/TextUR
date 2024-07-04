@@ -213,6 +213,8 @@ private:
           caret_pos.c = curr_texture.size.c - 1;
       }
     }
+    if (str::to_lower(kpd.curr_key) == 'x')
+      curr_texture.save(texture_file_path);
   }
   
   virtual void draw_title() override
