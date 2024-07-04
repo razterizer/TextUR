@@ -11,6 +11,7 @@
 #include <Termin8or/Texture.h>
 #include <Termin8or/RC.h>
 #include <Termin8or/ASCII_Fonts.h>
+#include <Termin8or/MessageHandler.h>
 #include <Core/Rand.h>
 
 #include <iostream>
@@ -55,6 +56,7 @@ class Game : public GameEngine<>
 public:
   Game(int argc, char** argv, const GameEngineParams& params)
     : GameEngine(argv[0], params)
+    , message_handler(std::make_unique<MessageHandler>())
   {
     if (argc >= 2)
       texture_file_path = argv[1];
@@ -145,6 +147,8 @@ private:
     
     if (show_menu)
       draw_menu(ui_style, menu_width);
+      
+    message_handler->update(sh, static_cast<float>(sim_time_s), true);
     
     // Caret
     if (anim_ctr % 2 == 0)
@@ -214,7 +218,16 @@ private:
       }
     }
     if (str::to_lower(kpd.curr_key) == 'x')
-      curr_texture.save(texture_file_path);
+    {
+      if (curr_texture.save(texture_file_path))
+        message_handler->add_message(static_cast<float>(sim_time_s),
+                                     "Your work was successfully saved.",
+                                     MessageHandler::Level::Guide);
+      else
+        message_handler->add_message(static_cast<float>(sim_time_s),
+                                     "An error occurred while saving your work!",
+                                     MessageHandler::Level::Fatal);
+    }
   }
   
   virtual void draw_title() override
@@ -245,6 +258,8 @@ private:
   
   std::vector<TextelItem> textel_presets;
   int selected_textel_preset_idx = 0;
+  
+  std::unique_ptr<MessageHandler> message_handler;
 };
 
 int main(int argc, char** argv)
