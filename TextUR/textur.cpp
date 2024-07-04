@@ -36,15 +36,22 @@ class Game : public GameEngine<>
   void draw_menu(const styles::Style& ui_style, const int menu_width)
   {
     //const int nr = sh.num_rows();
+    const int nri = sh.num_rows_inset();
     const int nc = sh.num_cols();
   
-    int r = 0;
+    int r = menu_r_offs;
     const int num_textel_presets = static_cast<int>(textel_presets.size());
     for (int p_idx = 0; p_idx < num_textel_presets; ++p_idx)
     {
       auto name_style = ui_style;
       if (p_idx == selected_textel_preset_idx)
+      {
         name_style.fg_color = Color::Cyan;
+        if (r + 2 >= nri)
+          menu_r_offs -= 3;
+        else if (r < 0)
+          menu_r_offs += 3;
+      }
       const auto& preset = textel_presets[p_idx];
       const auto& textel = preset.textel;
       sh.write_buffer(textel.str(), r + 1, nc - menu_width + 2, textel.get_style());
@@ -305,6 +312,7 @@ private:
   RC screen_pos { 0, 0 };
   //ttl::Rectangle m_screen_in_world;
   RC caret_pos { 0, 0 };
+  int menu_r_offs = 0;
   
   bool show_menu = false;
   bool show_confirm_overwrite = false;
