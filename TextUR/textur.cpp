@@ -151,6 +151,8 @@ private:
     
     const int nr = sh.num_rows();
     const int nc = sh.num_cols();
+    const int nri = sh.num_rows_inset();
+    //const int nci = sh.num_cols_inset();
     const int menu_width = 12;
 
 //#define SHOW_DEBUG_WINDOW
@@ -236,12 +238,16 @@ private:
         caret_pos.r--;
         if (caret_pos.r < 0)
           caret_pos.r = 0;
+        if (caret_pos.r - screen_pos.r <= 0)
+          screen_pos.r++;
       }
       else if (is_down)
       {
         caret_pos.r++;
         if (caret_pos.r >= static_cast<int>(curr_texture.size.r))
           caret_pos.r = curr_texture.size.r - 1;
+        if (caret_pos.r - screen_pos.r >= nri)
+          screen_pos.r--;
       }
       else if (is_left)
       {
