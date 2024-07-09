@@ -66,14 +66,14 @@ class Game : public GameEngine<>
   {
     if (draw_v_coords)
     {
-      const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(curr_texture.size.r));
+      const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.r - 1)));
       for (int r = 0; r < curr_texture.size.r; ++r)
         sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, screen_pos.c + 1, Color::Red);
     }
     
     if (draw_h_coords)
     {
-      const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(curr_texture.size.c));
+      const int str_max_len = curr_texture.size.c == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.c - 1)));
       int num_cols = curr_texture.size.c;
       if (show_menu && curr_texture.size.c > nc - menu_width)
         num_cols = nc - menu_width - screen_pos.c;
