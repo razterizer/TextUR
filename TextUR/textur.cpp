@@ -230,7 +230,8 @@ private:
                         drawing::Direction::None,
                         curr_texture);
                         
-      draw_coord_sys(draw_vert_coords, draw_horiz_coords);
+      if (!show_menu)
+        draw_coord_sys(draw_vert_coords, draw_horiz_coords);
     }
                       
     // Keypresses:
