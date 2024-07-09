@@ -189,7 +189,7 @@ private:
       if (show_menu)
         draw_menu(ui_style, menu_width);
       
-      message_handler->update(sh, static_cast<float>(sim_time_s), true);
+      message_handler->update(sh, static_cast<float>(sim_time_s));
       
       // Caret
       if (anim_ctr % 2 == 0)
