@@ -320,6 +320,12 @@ private:
         math::toggle(draw_horiz_coords);
       else if (str::to_lower(kpd.curr_key) == 'v')
         math::toggle(draw_vert_coords);
+      else if (str::to_lower(kpd.curr_key) == 'c')
+      {
+        undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
+        curr_texture.set_textel(caret_pos, Textel {});
+        redo_buffer = {};
+      }
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
     {
