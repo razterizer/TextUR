@@ -12,6 +12,7 @@ A terminal-based editor for text-based textures or images.
 ## Keys
 
  * WASD or arrow keys to navigate the cursor or selecting a textel preset.
+ * Space : enter selected textel preset under cursor.
  * `Z` : undo.
  * `SHIFT + Z` : redo.
  * `C` : clear textel under cursor.
