@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		075C651C2C3E00C000B15451 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		0775CB5F2C321B3A0078F60A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		07C2A7962C31E62700869A56 /* TextUR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TextUR; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2A7992C31E62700869A56 /* textur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textur.cpp; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		07C2A7982C31E62700869A56 /* TextUR */ = {
 			isa = PBXGroup;
 			children = (
+				075C651C2C3E00C000B15451 /* LICENSE */,
 				0775CB5F2C321B3A0078F60A /* README.md */,
 				07C2A7992C31E62700869A56 /* textur.cpp */,
 			);
