@@ -61,6 +61,27 @@ class Game : public GameEngine<>
       r += 3;
     }
   }
+  
+  void draw_coord_sys(bool draw_v_coords, bool draw_h_coords)
+  {
+    if (draw_v_coords)
+    {
+      const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(curr_texture.size.r));
+      for (int r = 0; r < curr_texture.size.r; ++r)
+        sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, screen_pos.c + 1, Color::Red);
+    }
+    
+    if (draw_h_coords)
+    {
+      const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(curr_texture.size.c));
+      for (int c = 0; c < curr_texture.size.c; ++c)
+      {
+        auto str = str::adjust_str(std::to_string(c), str::Adjustment::Right, str_max_len);
+        for (int r = 0; r < str_max_len; ++r)
+          sh.write_buffer(std::string(1, str[r]), screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
+      }
+    }
+  }
 
 public:
   Game(int argc, char** argv, const GameEngineParams& params)
@@ -208,6 +229,8 @@ private:
                         sh.num_rows_inset()+1, sh.num_cols_inset()+1,
                         drawing::Direction::None,
                         curr_texture);
+                        
+      draw_coord_sys(draw_vert_coords, draw_horiz_coords);
     }
                       
     // Keypresses:
@@ -293,6 +316,10 @@ private:
           redo_buffer.pop();
         }
       }
+      else if (str::to_lower(kpd.curr_key) == 'h')
+        math::toggle(draw_horiz_coords);
+      else if (str::to_lower(kpd.curr_key) == 'v')
+        math::toggle(draw_vert_coords);
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
     {
@@ -361,6 +388,9 @@ private:
   std::unique_ptr<MessageHandler> message_handler;
   std::stack<std::pair<RC, drawing::Textel>> undo_buffer;
   std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
+  
+  bool draw_vert_coords = true;
+  bool draw_horiz_coords = false;
   
   ui::TextBoxDebug tbd;
 };
