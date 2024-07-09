@@ -138,6 +138,8 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'M', Color::DarkGray, Color::LightGray, 19 }, "Mine");
     textel_presets.emplace_back(drawing::Textel { 'G', Color::DarkYellow, Color::Yellow, 20 }, "Gold");
 
+    tbd.add(PARAM(screen_pos.r));
+    tbd.add(PARAM(screen_pos.c));
   }
   
 private:
