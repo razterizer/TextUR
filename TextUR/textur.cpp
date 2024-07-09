@@ -397,7 +397,7 @@ private:
   std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
   
   bool draw_vert_coords = true;
-  bool draw_horiz_coords = false;
+  bool draw_horiz_coords = true;
   
   ui::TextBoxDebug tbd;
 };
