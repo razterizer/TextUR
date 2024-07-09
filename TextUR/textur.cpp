@@ -160,7 +160,7 @@ private:
 //#define SHOW_DEBUG_WINDOW
 #ifdef SHOW_DEBUG_WINDOW
     tbd.calc_pre_draw(str::Adjustment::Left);
-    tbd.draw(sh, ui::VerticalAlignment::TOP, ui::HorizontalAlignment::RIGHT, { Color::Blue, Color::Yellow }, true, true, 0, 0, std::nullopt, drawing::OutlineType::Line, true);
+    tbd.draw(sh, ui::VerticalAlignment::TOP, ui::HorizontalAlignment::CENTER, { Color::Blue, Color::Yellow }, true, true, 0, 0, std::nullopt, drawing::OutlineType::Line, true);
 #endif
       
     if (!show_confirm_overwrite && show_menu)
