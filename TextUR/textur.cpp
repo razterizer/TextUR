@@ -213,25 +213,26 @@ private:
     {
       if (show_menu)
         draw_menu(ui_style, menu_width);
+      else
+      {
+        message_handler->update(sh, static_cast<float>(sim_time_s));
       
-      message_handler->update(sh, static_cast<float>(sim_time_s));
+        // Caret
+        if (anim_ctr % 2 == 0)
+          sh.write_buffer("#", screen_pos.r + caret_pos.r + 1, screen_pos.c + caret_pos.c + 1, ui_style);
       
-      // Caret
-      if (anim_ctr % 2 == 0)
-        sh.write_buffer("#", screen_pos.r + caret_pos.r + 1, screen_pos.c + caret_pos.c + 1, ui_style);
-      
-      //draw_box_outline(sh,
-      //                 screen_pos.r, screen_pos.c, sh.num_rows_inset()+1, sh.num_cols_inset()+1,
-      //                 drawing::OutlineType::Line,
-      //                 ui_style);
-      draw_box_textured(sh,
-                        screen_pos.r, screen_pos.c,
-                        sh.num_rows_inset()+1, sh.num_cols_inset()+1,
-                        drawing::Direction::None,
-                        curr_texture);
-                        
-      if (!show_menu)
+        //draw_box_outline(sh,
+        //                 screen_pos.r, screen_pos.c, sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+        //                 drawing::OutlineType::Line,
+        //                 ui_style);
+        draw_box_textured(sh,
+                          screen_pos.r, screen_pos.c,
+                          sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+                          drawing::Direction::None,
+                          curr_texture);
+        
         draw_coord_sys(draw_vert_coords, draw_horiz_coords);
+      }
     }
                       
     // Keypresses:
