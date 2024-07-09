@@ -12,13 +12,13 @@ A terminal-based editor for text-based textures or images.
 ## Keys
 
  * WASD or arrow keys to navigate the cursor or selecting a textel preset.
- * Z : undo.
- * SHIFT + Z : redo.
- * C : clear textel under cursor.
- * V : toggle drawing of vertical coordinates.
- * H : toggle drawing of horizontal coordinates.
- * - : toggle hide/show textel presets menu.
- * X : export (save) work to current file.
+ * `Z` : undo.
+ * `SHIFT + Z` : redo.
+ * `C` : clear textel under cursor.
+ * `V` : toggle drawing of vertical coordinates.
+ * `H` : toggle drawing of horizontal coordinates.
+ * `-` : toggle hide/show textel presets menu.
+ * `X` : export (save) work to current file.
 
 ## Screenshots
 
