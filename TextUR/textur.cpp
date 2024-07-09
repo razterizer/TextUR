@@ -298,7 +298,7 @@ private:
         curr_texture.set_textel(caret_pos, textel_presets[selected_textel_preset_idx].textel);
         redo_buffer = {};
       }
-      else if (str::to_lower(kpd.curr_key) == 'z')
+      else if (kpd.curr_key == 'z')
       {
         if (!undo_buffer.empty())
         {
@@ -308,7 +308,7 @@ private:
           undo_buffer.pop();
         }
       }
-      else if (str::to_lower(kpd.curr_key) == 'y')
+      else if (kpd.curr_key == 'Z')
       {
         if (!redo_buffer.empty())
         {
