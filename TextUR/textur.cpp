@@ -62,7 +62,7 @@ class Game : public GameEngine<>
     }
   }
   
-  void draw_coord_sys(bool draw_v_coords, bool draw_h_coords, int menu_width)
+  void draw_coord_sys(bool draw_v_coords, bool draw_h_coords, int nc, int menu_width)
   {
     if (draw_v_coords)
     {
@@ -74,7 +74,9 @@ class Game : public GameEngine<>
     if (draw_h_coords)
     {
       const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(curr_texture.size.c));
-      const int num_cols = curr_texture.size.c - (show_menu ? screen_pos.c + menu_width : 0);
+      int num_cols = curr_texture.size.c;
+      if (show_menu && curr_texture.size.c > nc - menu_width)
+        num_cols = nc - menu_width - screen_pos.c;
       for (int c = 0; c < num_cols; ++c)
       {
         auto str = str::adjust_str(std::to_string(c), str::Adjustment::Right, str_max_len);
@@ -222,8 +224,8 @@ private:
         sh.write_buffer("#", screen_pos.r + caret_pos.r + 1, screen_pos.c + caret_pos.c + 1, ui_style);
       
       int box_width = curr_texture.size.c + 1;
-      if (show_menu)
-        box_width -= screen_pos.c + menu_width;
+      if (show_menu && curr_texture.size.c > nc - menu_width)
+        box_width = nc - menu_width - screen_pos.c + 1;
       //draw_box_outline(sh,
       //                 screen_pos.r, screen_pos.c, curr_texture.size.r+1, box_width,
       //                 drawing::OutlineType::Line,
@@ -234,7 +236,7 @@ private:
                         drawing::Direction::None,
                         curr_texture);
       
-      draw_coord_sys(draw_vert_coords, draw_horiz_coords, menu_width);
+      draw_coord_sys(draw_vert_coords, draw_horiz_coords, nc, menu_width);
     }
                       
     // Keypresses:
