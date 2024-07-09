@@ -332,6 +332,21 @@ private:
         curr_texture.set_textel(cursor_pos, Textel {});
         redo_buffer = {};
       }
+      else if (str::to_lower(kpd.curr_key) == 'b')
+      {
+        undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
+        for (int i = -2; i <= 2; ++i)
+        {
+          int j_offs = std::abs(i) == 2 ? 2 : 4;
+          for (int j = -j_offs; j <= j_offs; ++j)
+          {
+            RC offs { i, j };
+            undo_buffer.push({ cursor_pos + offs, curr_texture(cursor_pos + offs) });
+            curr_texture.set_textel(cursor_pos + offs, textel_presets[selected_textel_preset_idx].textel);
+          }
+        }
+        redo_buffer = {};
+      }
       else if (str::to_lower(kpd.curr_key) == 'l')
         message_handler->add_message(static_cast<float>(sim_time_s),
                                      "Cursor @ " + cursor_pos.str(),
