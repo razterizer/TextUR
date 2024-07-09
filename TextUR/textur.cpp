@@ -332,6 +332,10 @@ private:
         curr_texture.set_textel(caret_pos, Textel {});
         redo_buffer = {};
       }
+      else if (str::to_lower(kpd.curr_key) == 'l')
+        message_handler->add_message(static_cast<float>(sim_time_s),
+                                     "Cursor @ " + caret_pos.str(),
+                                     MessageHandler::Level::Guide);
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
     {
