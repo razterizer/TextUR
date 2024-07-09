@@ -140,6 +140,8 @@ public:
 
     tbd.add(PARAM(screen_pos.r));
     tbd.add(PARAM(screen_pos.c));
+    tbd.add(PARAM(caret_pos.r));
+    tbd.add(PARAM(caret_pos.c));
   }
   
 private:
