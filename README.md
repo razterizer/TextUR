@@ -6,8 +6,8 @@ A terminal-based editor for text-based textures or images.
 
 ## Command Line Arguments
 
- * Load existing texture : ./textel <filename>
- * Create new texture or overwrite existing texture : ./textel <filename> <num_rows> <num_cols>
+ * Load existing texture : `./textel <filename>`
+ * Create new texture or overwrite existing texture : `./textel <filename> <num_rows> <num_cols>`
 
 ## Keys
 
