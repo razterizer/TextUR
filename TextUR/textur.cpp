@@ -412,7 +412,7 @@ int main(int argc, char** argv)
   GameEngineParams params;
   params.enable_title_screen = false;
   params.enable_instructions_screen = false;
-  params.enable_quit_confirm_screen = false;
+  params.enable_quit_confirm_screen = true;
   params.enable_hiscores = false;
   params.screen_bg_color_default = Color::Black;
   params.screen_bg_color_title = Color::DarkYellow;
