@@ -164,8 +164,8 @@ public:
 
     tbd.add(PARAM(screen_pos.r));
     tbd.add(PARAM(screen_pos.c));
-    tbd.add(PARAM(caret_pos.r));
-    tbd.add(PARAM(caret_pos.c));
+    tbd.add(PARAM(cursor_pos.r));
+    tbd.add(PARAM(cursor_pos.c));
   }
   
 private:
@@ -220,8 +220,8 @@ private:
       message_handler->update(sh, static_cast<float>(sim_time_s));
       
       // Caret
-      if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + caret_pos.c + 1 < nc - menu_width))
-        sh.write_buffer("#", screen_pos.r + caret_pos.r + 1, screen_pos.c + caret_pos.c + 1, ui_style);
+      if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
+        sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
       
       int box_width = curr_texture.size.c + 1;
       if (show_menu && curr_texture.size.c > nc - menu_width)
@@ -266,40 +266,40 @@ private:
     {
       if (is_up)
       {
-        caret_pos.r--;
-        if (caret_pos.r < 0)
-          caret_pos.r = 0;
-        if (caret_pos.r + screen_pos.r < 0)
+        cursor_pos.r--;
+        if (cursor_pos.r < 0)
+          cursor_pos.r = 0;
+        if (cursor_pos.r + screen_pos.r < 0)
           screen_pos.r++;
       }
       else if (is_down)
       {
-        caret_pos.r++;
-        if (caret_pos.r >= static_cast<int>(curr_texture.size.r))
-          caret_pos.r = curr_texture.size.r - 1;
-        if (caret_pos.r + screen_pos.r >= nri)
+        cursor_pos.r++;
+        if (cursor_pos.r >= static_cast<int>(curr_texture.size.r))
+          cursor_pos.r = curr_texture.size.r - 1;
+        if (cursor_pos.r + screen_pos.r >= nri)
           screen_pos.r--;
       }
       else if (is_left)
       {
-        caret_pos.c--;
-        if (caret_pos.c < 0)
-          caret_pos.c = 0;
-        if (caret_pos.c + screen_pos.c < 0)
+        cursor_pos.c--;
+        if (cursor_pos.c < 0)
+          cursor_pos.c = 0;
+        if (cursor_pos.c + screen_pos.c < 0)
           screen_pos.c++;
       }
       else if (is_right)
       {
-        caret_pos.c++;
-        if (caret_pos.c >= static_cast<int>(curr_texture.size.c))
-          caret_pos.c = curr_texture.size.c - 1;
-        if (caret_pos.c + screen_pos.c >= nci)
+        cursor_pos.c++;
+        if (cursor_pos.c >= static_cast<int>(curr_texture.size.c))
+          cursor_pos.c = curr_texture.size.c - 1;
+        if (cursor_pos.c + screen_pos.c >= nci)
           screen_pos.c--;
       }
       else if (kpd.curr_key == ' ')
       {
-        undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
-        curr_texture.set_textel(caret_pos, textel_presets[selected_textel_preset_idx].textel);
+        undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
+        curr_texture.set_textel(cursor_pos, textel_presets[selected_textel_preset_idx].textel);
         redo_buffer = {};
       }
       else if (kpd.curr_key == 'z')
@@ -328,13 +328,13 @@ private:
         math::toggle(draw_vert_coords);
       else if (str::to_lower(kpd.curr_key) == 'c')
       {
-        undo_buffer.push({ caret_pos, curr_texture(caret_pos) });
-        curr_texture.set_textel(caret_pos, Textel {});
+        undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
+        curr_texture.set_textel(cursor_pos, Textel {});
         redo_buffer = {};
       }
       else if (str::to_lower(kpd.curr_key) == 'l')
         message_handler->add_message(static_cast<float>(sim_time_s),
-                                     "Cursor @ " + caret_pos.str(),
+                                     "Cursor @ " + cursor_pos.str(),
                                      MessageHandler::Level::Guide);
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
@@ -388,8 +388,7 @@ private:
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
   RC screen_pos { 0, 0 };
-  //ttl::Rectangle m_screen_in_world;
-  RC caret_pos { 0, 0 };
+  RC cursor_pos { 0, 0 };
   int menu_r_offs = 0;
   
   bool show_menu = false;
