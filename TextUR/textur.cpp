@@ -12,6 +12,7 @@
 #include <Termin8or/RC.h>
 #include <Termin8or/ASCII_Fonts.h>
 #include <Termin8or/MessageHandler.h>
+#include <Termin8or/UI.h>
 #include <Core/Rand.h>
 
 #include <iostream>
@@ -149,6 +150,12 @@ private:
     const int nr = sh.num_rows();
     const int nc = sh.num_cols();
     const int menu_width = 12;
+
+#define SHOW_DEBUG_WINDOW
+#ifdef SHOW_DEBUG_WINDOW
+    tbd.calc_pre_draw(str::Adjustment::Left);
+    tbd.draw(sh, ui::VerticalAlignment::TOP, ui::HorizontalAlignment::RIGHT, { Color::Blue, Color::Yellow }, true, true, 0, 0, std::nullopt, drawing::OutlineType::Line, true);
+#endif
       
     if (!show_confirm_overwrite && show_menu)
       draw_box_outline(sh, 0, nc - menu_width, nr - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
@@ -340,6 +347,8 @@ private:
   std::unique_ptr<MessageHandler> message_handler;
   std::stack<std::pair<RC, drawing::Textel>> undo_buffer;
   std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
+  
+  ui::TextBoxDebug tbd;
 };
 
 int main(int argc, char** argv)
