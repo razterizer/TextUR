@@ -20,6 +20,7 @@ A terminal-based editor for text-based textures or images.
  * `H` : toggle drawing of horizontal coordinates.
  * `-` : toggle hide/show textel presets menu.
  * `X` : export (save) work to current file.
+ * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `L` : show location of cursor.
  * `Q` : quit.
 
