@@ -222,12 +222,12 @@ private:
           sh.write_buffer("#", screen_pos.r + caret_pos.r + 1, screen_pos.c + caret_pos.c + 1, ui_style);
       
         //draw_box_outline(sh,
-        //                 screen_pos.r, screen_pos.c, sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+        //                 screen_pos.r, screen_pos.c, curr_texture.size.r+1, curr_texture.size.c+1
         //                 drawing::OutlineType::Line,
         //                 ui_style);
         draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
-                          sh.num_rows_inset()+1, sh.num_cols_inset()+1,
+                          curr_texture.size.r+1, curr_texture.size.c+1,
                           drawing::Direction::None,
                           curr_texture);
         
