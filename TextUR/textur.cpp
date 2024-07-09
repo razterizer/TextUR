@@ -154,7 +154,7 @@ private:
     const int nr = sh.num_rows();
     const int nc = sh.num_cols();
     const int nri = sh.num_rows_inset();
-    //const int nci = sh.num_cols_inset();
+    const int nci = sh.num_cols_inset();
     const int menu_width = 12;
 
 //#define SHOW_DEBUG_WINDOW
@@ -240,7 +240,7 @@ private:
         caret_pos.r--;
         if (caret_pos.r < 0)
           caret_pos.r = 0;
-        if (caret_pos.r - screen_pos.r <= 0)
+        if (caret_pos.r + screen_pos.r < 0)
           screen_pos.r++;
       }
       else if (is_down)
@@ -248,7 +248,7 @@ private:
         caret_pos.r++;
         if (caret_pos.r >= static_cast<int>(curr_texture.size.r))
           caret_pos.r = curr_texture.size.r - 1;
-        if (caret_pos.r - screen_pos.r >= nri)
+        if (caret_pos.r + screen_pos.r >= nri)
           screen_pos.r--;
       }
       else if (is_left)
@@ -256,12 +256,16 @@ private:
         caret_pos.c--;
         if (caret_pos.c < 0)
           caret_pos.c = 0;
+        if (caret_pos.c + screen_pos.c < 0)
+          screen_pos.c++;
       }
       else if (is_right)
       {
         caret_pos.c++;
         if (caret_pos.c >= static_cast<int>(curr_texture.size.c))
           caret_pos.c = curr_texture.size.c - 1;
+        if (caret_pos.c + screen_pos.c >= nci)
+          screen_pos.c--;
       }
       else if (kpd.curr_key == ' ')
       {
