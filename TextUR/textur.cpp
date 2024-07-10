@@ -459,6 +459,8 @@ private:
           show_confirm_overwrite = true;
           overwrite_confirm_button = YesNoButtons::No;
         }
+        else
+          safe_to_save = true;
       }
       else
         safe_to_save = true;
