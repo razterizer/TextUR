@@ -91,29 +91,39 @@ public:
     : GameEngine(argv[0], params)
     , message_handler(std::make_unique<MessageHandler>())
   {
-    if (argc >= 2)
-      texture_file_path = argv[1];
-    else
+    RC size;
+  
+    for (int a_idx = 1; a_idx < argc; ++a_idx)
+    {
+      if (std::strcmp(argv[a_idx], "-f") == 0 && a_idx + 1 < argc)
+        file_path_curr_texture = argv[a_idx + 1];
+      else if (std::strcmp(argv[a_idx], "-s") == 0 && a_idx + 2 < argc)
+      {
+        file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
+        
+        std::istringstream iss(argv[a_idx + 1]);
+        iss >> size.r;
+        iss.str(argv[a_idx + 2]);
+        iss.clear();
+        iss >> size.c;
+      }
+      else if (std::strcmp(argv[a_idx], "-t") == 0 && a_idx + 1 < argc)
+        file_path_tracing_texture = argv[a_idx + 1];
+    }
+  
+    if (file_path_curr_texture.empty())
     {
       std::cerr << "You must supply a texture filename as a command line argument!" << std::endl;
       request_exit();
     }
       
-    if (argc >= 4)
-    {
-      file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
-      
-      std::istringstream iss(argv[2]);
-      RC size;
-      iss >> size.r;
-      iss.str(argv[3]);
-      iss.clear();
-      iss >> size.c;
-      
+    if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
       curr_texture = drawing::Texture { size };
-    }
     else
-      curr_texture.load(texture_file_path);
+      curr_texture.load(file_path_curr_texture);
+      
+    if (!file_path_tracing_texture.empty())
+      tracing_texture.load(file_path_tracing_texture);
   }
   
   virtual void generate_data() override
@@ -195,7 +205,7 @@ private:
     if (show_confirm_overwrite)
     {
       bg_color = Color::DarkCyan;
-      draw_confirm(sh, "Are you sure you want to overwrite the file \"" + texture_file_path + "\"?", overwrite_confirm_button,
+      draw_confirm(sh, "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?", overwrite_confirm_button,
                    { Color::Black, Color::DarkCyan },
                    { Color::Black, Color::DarkCyan, Color::Cyan },
                    { Color::White, Color::DarkCyan });
@@ -223,18 +233,28 @@ private:
       if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
         sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
       
-      int box_width = curr_texture.size.c + 1;
-      if (show_menu && curr_texture.size.c > nc - menu_width)
-        box_width = nc - menu_width - screen_pos.c + 1;
-      //draw_box_outline(sh,
-      //                 screen_pos.r, screen_pos.c, curr_texture.size.r+1, box_width,
-      //                 drawing::OutlineType::Line,
-      //                 ui_style);
+      int box_width_curr = curr_texture.size.c + 1;
+      int box_width_tracing = tracing_texture.size.c + 1;
+      if (show_menu)
+      {
+        if (curr_texture.size.c > nc - menu_width)
+          box_width_curr = nc - menu_width - screen_pos.c + 1;
+        if (tracing_texture.size.c > nc - menu_width)
+          box_width_tracing = nc - menu_width - screen_pos.c + 1;
+      }
       draw_box_textured(sh,
                         screen_pos.r, screen_pos.c,
-                        curr_texture.size.r+1, box_width,
+                        curr_texture.size.r+1, box_width_curr,
                         drawing::Direction::None,
                         curr_texture);
+      if (show_tracing && (tracing_texture.size.r > 0 || tracing_texture.size.c > 0))
+      {
+        draw_box_textured(sh,
+                          screen_pos.r, screen_pos.c,
+                          tracing_texture.size.r+1, box_width_tracing,
+                          drawing::Direction::None,
+                          tracing_texture);
+      }
       
       draw_coord_sys(draw_vert_coords, draw_horiz_coords, nc, menu_width);
     }
@@ -351,12 +371,14 @@ private:
         message_handler->add_message(static_cast<float>(sim_time_s),
                                      "Cursor @ " + cursor_pos.str(),
                                      MessageHandler::Level::Guide);
+      else if (str::to_lower(kpd.curr_key) == 't')
+        math::toggle(show_tracing);
     }
     if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
     {
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
       {
-        if (folder::exists(texture_file_path))
+        if (folder::exists(file_path_curr_texture))
         {
           show_confirm_overwrite = true;
           overwrite_confirm_button = YesNoButtons::No;
@@ -367,7 +389,7 @@ private:
         
       if (safe_to_save)
       {
-        if (curr_texture.save(texture_file_path))
+        if (curr_texture.save(file_path_curr_texture))
           message_handler->add_message(static_cast<float>(sim_time_s),
                                        "Your work was successfully saved.",
                                        MessageHandler::Level::Guide);
@@ -399,7 +421,9 @@ private:
   ASCII_Fonts::FontDataColl font_data;
   
   drawing::Texture curr_texture;
-  std::string texture_file_path;
+  drawing::Texture tracing_texture;
+  std::string file_path_curr_texture;
+  std::string file_path_tracing_texture;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
   RC screen_pos { 0, 0 };
@@ -408,6 +432,7 @@ private:
   
   bool show_menu = false;
   bool show_confirm_overwrite = false;
+  bool show_tracing = true;
   
   YesNoButtons overwrite_confirm_button = YesNoButtons::No;
   bool safe_to_save = false;
