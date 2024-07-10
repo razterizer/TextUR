@@ -6,8 +6,9 @@ A terminal-based editor for text-based textures or images.
 
 ## Command Line Arguments
 
- * Load existing texture : `./textel <filename>`
- * Create new texture or overwrite existing texture : `./textel <filename> <num_rows> <num_cols>`
+ * Load existing texture : `./textel -f <filename>`.
+ * Create new texture or overwrite existing texture : `./textel -f <filename> -s <num_rows> <num_cols>`.
+ * Trace over another texture : `./textel -f <main_texture_filename> -t <trace_texture_filename>`.
 
 ## Keys
 
@@ -22,6 +23,7 @@ A terminal-based editor for text-based textures or images.
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `L` : show location of cursor.
+ * `T` : toggle show/hide of tracing texture.
  * `Q` : quit.
 
 ## Screenshots
