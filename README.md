@@ -3,12 +3,14 @@
 Text-based texture UI and Rasterizer.
 
 A terminal-based editor for text-based textures or images.
+This is a tool for generating textures to be used with [`DungGine`](https://github.com/razterizer/DungGine/).
 
 ## Command Line Arguments
 
  * Load existing texture : `./textel -f <filename>`.
  * Create new texture or overwrite existing texture : `./textel -f <filename> -s <num_rows> <num_cols>`.
  * Trace over another texture : `./textel -f <main_texture_filename> -t <trace_texture_filename>`.
+ * Convert texture made up of bright textels from the textel presets in TextUR to a corresponding dark texture which then can be used for rendering shadows in e.g. `DungGine`.
 
 ## Keys
 
@@ -24,6 +26,7 @@ A terminal-based editor for text-based textures or images.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `L` : show location of cursor.
  * `T` : toggle show/hide of tracing texture.
+ * `I` : toggle inverted textels (i.e. toggle between dark and bright textel presets).
  * `Q` : quit.
 
 ## Screenshots
