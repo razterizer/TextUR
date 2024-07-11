@@ -229,6 +229,21 @@ public:
     textel_presets.emplace_back(drawing::Textel { '\\', Color::DarkGreen, Color::Green, 7 },
                                 drawing::Textel { '\\', Color::Green, Color::DarkGreen, 7 },
                                 "Grass4");
+    textel_presets.emplace_back(drawing::Textel { '|', Color::DarkYellow, Color::Green, 7 },
+                                drawing::Textel { '|', Color::Yellow, Color::DarkGreen, 7 },
+                                "Grass5");
+    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkYellow, Color::Green, 7 },
+                                drawing::Textel { '.', Color::Yellow, Color::DarkGreen, 7 },
+                                "Grass6");
+    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Green, 7 },
+                                drawing::Textel { ':', Color::Yellow, Color::DarkGreen, 7 },
+                                "Grass7");
+    textel_presets.emplace_back(drawing::Textel { '/', Color::DarkYellow, Color::Green, 7 },
+                                drawing::Textel { '/', Color::Yellow, Color::DarkGreen, 7 },
+                                "Grass8");
+    textel_presets.emplace_back(drawing::Textel { '\\', Color::DarkYellow, Color::Green, 7 },
+                                drawing::Textel { '\\', Color::Yellow, Color::DarkGreen, 7 },
+                                "Grass9");
     textel_presets.emplace_back(drawing::Textel { '&', Color::DarkYellow, Color::Green, 8 },
                                 drawing::Textel { '&', Color::Yellow, Color::DarkGreen, 8 },
                                 "Shrub0");
@@ -267,13 +282,19 @@ public:
                                 "Lava");
     textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkYellow, Color::Yellow, 15 },
                                 drawing::Textel { 'C', Color::Yellow, Color::DarkYellow, 15 },
-                                "Cave");
+                                "Cave0");
+    textel_presets.emplace_back(drawing::Textel { 'U', Color::DarkYellow, Color::Yellow, 15 },
+                                drawing::Textel { 'U', Color::Yellow, Color::DarkYellow, 15 },
+                                "Cave1");
     textel_presets.emplace_back(drawing::Textel { 'S', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'S', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
                                 drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
-                                "Poison");
+                                "Poison0");
+    textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGreen, Color::Green, 17 },
+                                drawing::Textel { 'o', Color::Green, Color::DarkGreen, 17 },
+                                "Poison1");
     textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
                                 drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
                                 "Path");
@@ -283,6 +304,9 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
                                 drawing::Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
                                 "Gold");
+    textel_presets.emplace_back(drawing::Textel { 'S', Color::White, Color::LightGray, 21 },
+                                drawing::Textel { 'S', Color::LightGray, Color::DarkGray, 21 },
+                                "Silver");
                                 
     if (convert)
     {
