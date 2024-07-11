@@ -102,9 +102,12 @@ public:
   
     for (int a_idx = 1; a_idx < argc; ++a_idx)
     {
-      if (std::strcmp(argv[a_idx], "-f") == 0 && a_idx + 1 < argc)
+      if (std::strcmp(argv[a_idx], "-f") == 0 && a_idx + 1 < argc) // file
+      {
         file_path_curr_texture = argv[a_idx + 1];
-      else if (std::strcmp(argv[a_idx], "-s") == 0 && a_idx + 2 < argc)
+        file_path_bright_texture = file_path_curr_texture;
+      }
+      else if (std::strcmp(argv[a_idx], "-s") == 0 && a_idx + 2 < argc) // size
       {
         file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
         
@@ -114,23 +117,44 @@ public:
         iss.clear();
         iss >> size.c;
       }
-      else if (std::strcmp(argv[a_idx], "-t") == 0 && a_idx + 1 < argc)
+      else if (std::strcmp(argv[a_idx], "-t") == 0 && a_idx + 1 < argc) // trace
         file_path_tracing_texture = argv[a_idx + 1];
+      else if (std::strcmp(argv[a_idx], "-c") == 0 && a_idx + 1 < argc) // convert to new texture
+      {
+        file_path_curr_texture = argv[a_idx + 1];
+        convert = true;
+      }
     }
   
     if (file_path_curr_texture.empty())
     {
-      std::cerr << "You must supply a texture filename as a command line argument!" << std::endl;
+      std::cerr << "ERROR: You must supply a texture filename as a command line argument!" << std::endl;
       request_exit();
     }
       
-    if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
-      curr_texture = drawing::Texture { size };
+    if (convert)
+    {
+      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
+      {
+        std::cerr << "ERROR: You cannot use the size flag (-s) together with the conversion flag (-c)!" << std::endl;
+        request_exit();
+      }
+      else if (file_path_bright_texture.empty())
+      {
+        std::cerr << "ERROR: When using the conversion flag (-c) you need to also specify the source file with the -f flag!" << std::endl;
+        request_exit();
+      }
+    }
     else
-      curr_texture.load(file_path_curr_texture);
+    {
+      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
+        curr_texture = drawing::Texture { size };
+      else
+        curr_texture.load(file_path_curr_texture);
       
-    if (!file_path_tracing_texture.empty())
-      tracing_texture.load(file_path_tracing_texture);
+      if (!file_path_tracing_texture.empty())
+        tracing_texture.load(file_path_tracing_texture);
+    }
   }
   
   virtual void generate_data() override
@@ -244,6 +268,29 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
                                 drawing::Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
                                 "Gold");
+                                
+    if (convert)
+    {
+      bright_texture.load(file_path_bright_texture); // source
+      curr_texture = drawing::Texture { bright_texture.size }; // target
+      for (int r = 0; r < bright_texture.size.r; ++r)
+        for (int c = 0; c < bright_texture.size.c; ++c)
+        {
+          const auto& curr_textel = bright_texture(r, c);
+          auto it = stlutils::find_if(textel_presets, [&curr_textel](const auto& tp)
+                                      {
+            return tp.textel_normal.ch == curr_textel.ch
+            && tp.textel_normal.fg_color == curr_textel.fg_color
+            && tp.textel_normal.bg_color == curr_textel.bg_color;
+          });
+          if (it != textel_presets.end())
+          {
+            curr_texture.set_textel(r, c, it->textel_shadow);
+          }
+        }
+      curr_texture.save(file_path_curr_texture);
+      request_exit();
+    }
 
     tbd.add(PARAM(screen_pos.r));
     tbd.add(PARAM(screen_pos.c));
@@ -500,8 +547,11 @@ private:
   
   drawing::Texture curr_texture;
   drawing::Texture tracing_texture;
+  drawing::Texture bright_texture;
   std::string file_path_curr_texture;
   std::string file_path_tracing_texture;
+  std::string file_path_bright_texture;
+  bool convert = false;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
   RC screen_pos { 0, 0 };
