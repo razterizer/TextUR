@@ -174,7 +174,22 @@ public:
                                 "Void");
     textel_presets.emplace_back(drawing::Textel { '_', Color::Default, Color::LightGray, 1 },
                                 drawing::Textel { '_', Color::Black, Color::DarkGray, 1 },
-                                "Tile");
+                                "Tile0");
+    textel_presets.emplace_back(drawing::Textel { '_', Color::White, Color::DarkGray, 1 },
+                                drawing::Textel { '_', Color::LightGray, Color::Black, 1 },
+                                "Tile1");
+    textel_presets.emplace_back(drawing::Textel { '_', Color::LightGray, Color::White, 1 },
+                                drawing::Textel { '_', Color::White, Color::LightGray, 1 },
+                                "Tile2");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::Default, Color::LightGray, 1 },
+                                drawing::Textel { 'L', Color::Black, Color::DarkGray, 1 },
+                                "Tile3");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::White, Color::DarkGray, 1 },
+                                drawing::Textel { 'L', Color::LightGray, Color::Black, 1 },
+                                "Tile4");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::LightGray, Color::White, 1 },
+                                drawing::Textel { 'L', Color::White, Color::LightGray, 1 },
+                                "Tile5");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkBlue, Color::Blue, 2 },
                                 drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
                                 "Water0");
