@@ -10,7 +10,7 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * Load existing texture : `./textel -f <filename>`.
  * Create new texture or overwrite existing texture : `./textel -f <filename> -s <num_rows> <num_cols>`.
  * Trace over another texture : `./textel -f <main_texture_filename> -t <trace_texture_filename>`.
- * Convert texture made up of bright textels from the textel presets in TextUR to a corresponding dark texture which then can be used for rendering shadows in e.g. `DungGine` : 
+ * Convert texture made up of bright textels from the textel presets in TextUR to a corresponding dark texture which then can be used for rendering shadows in e.g. `DungGine`. The program exits when conversion is completed : 
 `./textel -f <source_texture_filename> -c <target_texture_filename>`.
 ## Keys
 
