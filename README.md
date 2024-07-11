@@ -35,3 +35,48 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 <img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
 <img width="567" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/850cc9cd-2b12-441a-a888-6a55c746044a">
 <img width="563" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/583a0ee8-8a0f-487a-844e-1cee131fc3ee">
+
+## Build & Run Instructions
+
+There are two options on dealing with repo dependencies:
+### Repo Dependencies Option 1
+
+Run the following command from `<my_source_code_dir>`.
+```sh
+./TextUR/fetch-dependencies ./TextUR/dependencies
+```
+This will make sure you are running the latest stable versions that work with `TextUR`.
+
+This script was created by [Thibaut Buchert](https://github.com/thibautbuchert).
+
+### Repo Dependencies Option 2
+
+You need the following header-only libraries that I've made:
+* https://github.com/razterizer/Core
+* https://github.com/razterizer/Termin8or
+
+Make sure the folder structure looks like this:
+```
+<my_source_code_dir>/lib/Core/                   ; Core repo workspace/checkout goes here.
+<my_source_code_dir>/lib/Termin8or/              ; Termin8or repo workspace/checkout goes here.
+<my_source_code_dir>TextUR/                      ; TextUR repo workspace/checkout goes here.
+```
+
+These repos are not guaranteed to all the time work with the latest version of `TextUR`. If you want the more stable aproach then look at Option 1 instead.
+
+### Windows (not yet implemented)
+
+**NOTE: WIP here. No VS solution file yet.**
+Then just open `<my_source_code_dir>/TextUR/TextUR/TextUR.sln` and build and run. That's it!
+
+### MacOS
+
+Goto `<my_source_code_dir>/TextUR/TextUR/` and build with `./build.sh`.
+
+Then run by typing `./bin/textur` and apply the appropriate command line arguments (see beginning of README.md).
+
+### Linux (Ubuntu)
+
+Goto `<my_source_code_dir>/TextUR/TextUR/` and build with `./build.sh`.
+
+Then run by typing `./bin/textur` and apply the appropriate command line arguments (see beginning of README.md).
