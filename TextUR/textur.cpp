@@ -432,6 +432,8 @@ private:
     if (!show_confirm_overwrite && show_menu)
       draw_box_outline(sh, 0, nc - menu_width, nr - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
   
+    if (is_modified)
+      sh.write_buffer("*", 0, 0, Color::Red, Color::White);
     draw_frame(sh, Color::White);
     
     if (show_confirm_overwrite)
@@ -648,6 +650,7 @@ private:
         undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
         curr_texture.set_textel(cursor_pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
         redo_buffer = {};
+        is_modified = true;
       }
       else if (kpd.curr_key == 'z')
       {
@@ -657,6 +660,7 @@ private:
           redo_buffer.push({ up.first, curr_texture(up.first) });
           curr_texture.set_textel(up.first, up.second);
           undo_buffer.pop();
+          is_modified = true;
         }
       }
       else if (kpd.curr_key == 'Z')
@@ -667,6 +671,7 @@ private:
           undo_buffer.push({ up.first, curr_texture(up.first) });
           curr_texture.set_textel(up.first, up.second);
           redo_buffer.pop();
+          is_modified = true;
         }
       }
       else if (str::to_lower(kpd.curr_key) == 'h')
@@ -678,6 +683,7 @@ private:
         undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
         curr_texture.set_textel(cursor_pos, Textel {});
         redo_buffer = {};
+        is_modified = true;
       }
       else if (str::to_lower(kpd.curr_key) == 'b')
       {
@@ -693,6 +699,7 @@ private:
           }
         }
         redo_buffer = {};
+        is_modified = true;
       }
       else if (str::to_lower(kpd.curr_key) == 'l')
         message_handler->add_message(static_cast<float>(sim_time_s),
@@ -729,9 +736,13 @@ private:
       if (safe_to_save)
       {
         if (curr_texture.save(file_path_curr_texture))
+        {
           message_handler->add_message(static_cast<float>(sim_time_s),
                                        "Your work was successfully saved.",
                                        MessageHandler::Level::Guide);
+                                       
+          is_modified = false;
+        }
         else
           message_handler->add_message(static_cast<float>(sim_time_s),
                                        "An error occurred while saving your work!",
@@ -741,6 +752,8 @@ private:
         show_confirm_overwrite = false;
       }
     }
+    
+    GameEngine::enable_quit_confirm_screen(is_modified);
   }
   
   virtual void draw_title() override
@@ -787,6 +800,7 @@ private:
   std::unique_ptr<MessageHandler> message_handler;
   std::stack<std::pair<RC, drawing::Textel>> undo_buffer;
   std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
+  bool is_modified = false;
   
   bool draw_vert_coords = true;
   bool draw_horiz_coords = true;
