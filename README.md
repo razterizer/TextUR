@@ -41,9 +41,11 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 <img width="567" alt="image" src="https://github.com/user-attachments/assets/4d79d619-63f6-435b-a2c4-3477006c7980">
 
 Bright mode textels (normal mode):
+
 <img width="565" alt="image" src="https://github.com/user-attachments/assets/71eac9f5-a9d2-4c61-a6c4-b4bbaea4ea02">
 
 Dark mode textels (shadow mode):
+
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/dc68fc8a-bb14-45b6-8c4f-f701034ffc37">
 
 
