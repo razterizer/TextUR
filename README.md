@@ -14,7 +14,8 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 `./textel -f <source_texture_filename> -c <target_texture_filename>`.
 ## Keys
 
- * WASD or arrow keys to navigate the cursor or selecting a textel preset. When in the textel menu, left and right (or A and D) scrolls from material to material for quicker navigation among the different textel presets.
+ * wasd (lower case) or arrow keys to navigate the cursor or selecting a textel preset. When in the textel menu, left and right (or A and D) scrolls from material to material for quicker navigation among the different textel presets.
+ * WASD (upper case) keys scrolls the texture page-wise.
  * Space : enter selected textel preset under cursor.
  * `Z` : undo.
  * `SHIFT + Z` : redo.
