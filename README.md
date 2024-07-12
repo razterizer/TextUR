@@ -25,6 +25,7 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `L` : show location of cursor.
+ * `G` : goto new cursor location. Press backspace to clear the last digit, press tab to toggle between R and C coordinate fields and press enter to confirm. Pressing `G` again toggles the input box.
  * `T` : toggle show/hide of tracing texture.
  * `I` : toggle inverted textels (i.e. toggle between dark and bright textel presets).
  * `Q` : quit.
@@ -35,6 +36,8 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 <img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">
 <img width="563" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/583a0ee8-8a0f-487a-844e-1cee131fc3ee">
+<img width="568" alt="image" src="https://github.com/user-attachments/assets/0286226c-a18c-48b6-98d3-adc183e51bc2">
+
 
 ## Build & Run Instructions
 
