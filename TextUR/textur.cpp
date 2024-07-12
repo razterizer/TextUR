@@ -562,6 +562,20 @@ private:
         if (selected_textel_preset_idx == static_cast<int>(textel_presets.size()))
           selected_textel_preset_idx = 0;
       }
+      else if (is_left)
+      {
+        int curr_mat = textel_presets[selected_textel_preset_idx].textel_normal.mat;
+        int prev_mat_idx = stlutils::find_if_idx(textel_presets, [curr_mat](const auto& tp) { return tp.textel_normal.mat == curr_mat - 1; });
+        if (0 <= prev_mat_idx)
+          selected_textel_preset_idx = prev_mat_idx;
+      }
+      else if (is_right)
+      {
+        int curr_mat = textel_presets[selected_textel_preset_idx].textel_normal.mat;
+        int prev_mat_idx = stlutils::find_if_idx(textel_presets, [curr_mat](const auto& tp) { return tp.textel_normal.mat == curr_mat + 1; });
+        if (0 <= prev_mat_idx)
+          selected_textel_preset_idx = prev_mat_idx;
+      }
     }
     else
     {
