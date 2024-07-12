@@ -25,6 +25,7 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `L` : show location of cursor.
+ * `G` : goto new cursor location. Press backspace to clear the last digit, press tab to toggle between R and C coordinate fields and press enter to confirm. Pressing `G` again toggles the input box.
  * `T` : toggle show/hide of tracing texture.
  * `I` : toggle inverted textels (i.e. toggle between dark and bright textel presets).
  * `Q` : quit.
@@ -33,8 +34,21 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 
 <img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">
 <img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
-<img width="567" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/850cc9cd-2b12-441a-a888-6a55c746044a">
+<img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">
 <img width="563" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/583a0ee8-8a0f-487a-844e-1cee131fc3ee">
+<img width="568" alt="image" src="https://github.com/user-attachments/assets/0286226c-a18c-48b6-98d3-adc183e51bc2">
+<img width="562" alt="image" src="https://github.com/user-attachments/assets/18ddb12d-acec-476d-81f8-6798624ede9d">
+<img width="567" alt="image" src="https://github.com/user-attachments/assets/4d79d619-63f6-435b-a2c4-3477006c7980">
+
+Bright mode textels (normal mode):
+
+<img width="565" alt="image" src="https://github.com/user-attachments/assets/71eac9f5-a9d2-4c61-a6c4-b4bbaea4ea02">
+
+Dark mode textels (shadow mode):
+
+<img width="564" alt="image" src="https://github.com/user-attachments/assets/dc68fc8a-bb14-45b6-8c4f-f701034ffc37">
+
+
 
 ## Build & Run Instructions
 
