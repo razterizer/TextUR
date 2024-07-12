@@ -207,6 +207,9 @@ public:
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkCyan, Color::Cyan, 2 },
                                 drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
                                 "Water2");
+    textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Cyan, 2 },
+                                drawing::Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
+                                "Water3");
     textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
                                 drawing::Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand0");
