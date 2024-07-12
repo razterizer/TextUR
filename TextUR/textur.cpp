@@ -452,6 +452,8 @@ private:
       if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
         sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
       
+      draw_coord_sys(draw_vert_coords, draw_horiz_coords, nc, menu_width);
+      
       int box_width_curr = curr_texture.size.c + 1;
       int box_width_tracing = tracing_texture.size.c + 1;
       if (show_menu)
@@ -474,8 +476,6 @@ private:
                           drawing::Direction::None,
                           tracing_texture);
       }
-      
-      draw_coord_sys(draw_vert_coords, draw_horiz_coords, nc, menu_width);
     }
                       
     // Keypresses:
