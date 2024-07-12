@@ -28,6 +28,7 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `G` : goto new cursor location. Press backspace to clear the last digit, press tab to toggle between R and C coordinate fields and press enter to confirm. Pressing `G` again toggles the input box.
  * `T` : toggle show/hide of tracing texture.
  * `I` : toggle inverted textels (i.e. toggle between dark and bright textel presets).
+ * `M` : toggle show/hide of material id:s. 
  * `Q` : quit.
 
 ## Screenshots
