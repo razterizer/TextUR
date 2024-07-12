@@ -483,8 +483,10 @@ private:
           iss >> pos.c;
           if (math::in_range<int>(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
               && math::in_range<int>(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
+          {
             cursor_pos = pos;
-          screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
+            screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
+          }
           reset_goto_input();
           show_goto_pos = false;
         }
