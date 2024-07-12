@@ -196,6 +196,9 @@ public:
     textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Blue, 2 },
                                 drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
                                 "Water1");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkCyan, Color::Cyan, 2 },
+                                drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
+                                "Water2");
     textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
                                 drawing::Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand0");
@@ -303,7 +306,10 @@ public:
                                 "Ice");
     textel_presets.emplace_back(drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
                                 drawing::Textel { '^', Color::LightGray, Color::DarkGray, 13 },
-                                "Mountain");
+                                "Mountain0");
+    textel_presets.emplace_back(drawing::Textel { '^', Color::LightGray, Color::White, 13 },
+                                drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
+                                "Mountain1");
     textel_presets.emplace_back(drawing::Textel { 'W', Color::DarkRed, Color::Red, 14 },
                                 drawing::Textel { 'W', Color::Red, Color::DarkRed, 14 },
                                 "Lava");
