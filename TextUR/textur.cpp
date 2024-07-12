@@ -93,7 +93,14 @@ class Game : public GameEngine<>
       }
     }
   }
-
+  
+  void reset_goto_input()
+  {
+    tb_goto = ui::TextBox({ "Cursor Goto @", str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
+    goto_tab = 0;
+    goto_caret_idx = { 0, 0 };
+  }
+  
 public:
   Game(int argc, char** argv, const GameEngineParams& params)
     : GameEngine(argv[0], params)
@@ -396,6 +403,8 @@ public:
     tbd.add(PARAM(screen_pos.c));
     tbd.add(PARAM(cursor_pos.r));
     tbd.add(PARAM(cursor_pos.c));
+    
+    reset_goto_input();
   }
   
 private:
@@ -446,7 +455,44 @@ private:
     {
       if (show_menu)
         draw_menu(ui_style, menu_width);
+      else if (show_goto_pos)
+      {
+        if ('0' <= kpd.curr_key && kpd.curr_key <= '9')
+        {
+          tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = kpd.curr_key;
+          goto_caret_idx[goto_tab]++;
+          if (goto_caret_idx[goto_tab] > 7)
+            goto_caret_idx[goto_tab] = 7;
+        }
+        else if (kpd.curr_special_key == keyboard::SpecialKey::Backspace)
+        {
+          goto_caret_idx[goto_tab]--;
+          if (goto_caret_idx[goto_tab] < 0)
+            goto_caret_idx[goto_tab] = 0;
+          tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = ' ';
+        }
+        else if (kpd.curr_special_key == keyboard::SpecialKey::Tab)
+          goto_tab = 1 - goto_tab;
+        else if (kpd.curr_special_key == keyboard::SpecialKey::Enter)
+        {
+          std::istringstream iss(tb_goto[1].substr(0, 8));
+          RC pos;
+          iss >> pos.r;
+          iss.str(tb_goto[1].substr(10, 8));
+          iss.clear();
+          iss >> pos.c;
+          if (math::in_range<int>(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
+              && math::in_range<int>(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
+            cursor_pos = pos;
+          screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
+          reset_goto_input();
+          show_goto_pos = false;
+        }
         
+        tb_goto.calc_pre_draw(str::Adjustment::Left);
+        tb_goto.draw(sh, ui::VerticalAlignment::CENTER, ui::HorizontalAlignment::CENTER, { Color::White, Color::DarkBlue }, true, true, 0, 1, std::nullopt, drawing::OutlineType::Line, true);
+      }
+      
       message_handler->update(sh, static_cast<float>(sim_time_s));
       
       // Caret
@@ -591,6 +637,11 @@ private:
         message_handler->add_message(static_cast<float>(sim_time_s),
                                      "Cursor @ " + cursor_pos.str(),
                                      MessageHandler::Level::Guide);
+      else if (str::to_lower(kpd.curr_key) == 'g')
+      {
+        if (!math::toggle(show_goto_pos))
+          reset_goto_input();
+      }
       else if (str::to_lower(kpd.curr_key) == 't')
         math::toggle(show_tracing);
     }
@@ -661,6 +712,7 @@ private:
   bool show_menu = false;
   bool show_confirm_overwrite = false;
   bool show_tracing = true;
+  bool show_goto_pos = false;
   
   YesNoButtons overwrite_confirm_button = YesNoButtons::No;
   bool safe_to_save = false;
@@ -678,6 +730,10 @@ private:
   bool use_shadow_textels = false;
   
   ui::TextBoxDebug tbd;
+  
+  ui::TextBox tb_goto;
+  std::array<int, 2> goto_caret_idx { 0, 0 };
+  int goto_tab = 0;
 };
 
 int main(int argc, char** argv)
