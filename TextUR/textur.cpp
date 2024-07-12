@@ -71,11 +71,12 @@ class Game : public GameEngine<>
   
   void draw_coord_sys(bool draw_v_coords, bool draw_h_coords, int nc, int menu_width)
   {
+    static const bool persist = true;
     if (draw_v_coords)
     {
       const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.r - 1)));
       for (int r = 0; r < curr_texture.size.r; ++r)
-        sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, screen_pos.c + 1, Color::Red);
+        sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, persist ? 1 : screen_pos.c + 1, Color::Red);
     }
     
     if (draw_h_coords)
@@ -88,7 +89,7 @@ class Game : public GameEngine<>
       {
         auto str = str::adjust_str(std::to_string(c), str::Adjustment::Right, str_max_len);
         for (int r = 0; r < str_max_len; ++r)
-          sh.write_buffer(std::string(1, str[r]), screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
+          sh.write_buffer(std::string(1, str[r]), persist ? r + 1 : screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
       }
     }
   }
