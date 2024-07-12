@@ -512,11 +512,21 @@ private:
         if (tracing_texture.size.c > nc - menu_width)
           box_width_tracing = nc - menu_width - screen_pos.c + 1;
       }
-      draw_box_textured(sh,
-                        screen_pos.r, screen_pos.c,
-                        curr_texture.size.r+1, box_width_curr,
-                        drawing::Direction::None,
-                        curr_texture);
+      if (show_materials)
+      {
+        draw_box_texture_materials(sh,
+                                   screen_pos.r, screen_pos.c,
+                                   curr_texture.size.r+1, box_width_curr,
+                                   curr_texture);
+      }
+      else
+      {
+        draw_box_textured(sh,
+                          screen_pos.r, screen_pos.c,
+                          curr_texture.size.r+1, box_width_curr,
+                          drawing::Direction::None,
+                          curr_texture);
+      }
       if (show_tracing && (tracing_texture.size.r > 0 || tracing_texture.size.c > 0))
       {
         draw_box_textured(sh,
@@ -646,6 +656,8 @@ private:
       }
       else if (str::to_lower(kpd.curr_key) == 't')
         math::toggle(show_tracing);
+      else if (str::to_lower(kpd.curr_key) == 'm')
+        math::toggle(show_materials);
     }
     
     if (str::to_lower(kpd.curr_key) == 'i')
@@ -715,6 +727,7 @@ private:
   bool show_confirm_overwrite = false;
   bool show_tracing = true;
   bool show_goto_pos = false;
+  bool show_materials = false;
   
   YesNoButtons overwrite_confirm_button = YesNoButtons::No;
   bool safe_to_save = false;
