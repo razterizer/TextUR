@@ -544,10 +544,10 @@ private:
     if (kpd.curr_key == '-')
       math::toggle(show_menu);
       
-    bool is_up = kpd.curr_special_key == keyboard::SpecialKey::Up || str::to_lower(kpd.curr_key) == 'w';
-    bool is_down = kpd.curr_special_key == keyboard::SpecialKey::Down || str::to_lower(kpd.curr_key) == 's';
-    bool is_left = kpd.curr_special_key == keyboard::SpecialKey::Left || str::to_lower(kpd.curr_key) == 'a';
-    bool is_right = kpd.curr_special_key == keyboard::SpecialKey::Right || str::to_lower(kpd.curr_key) == 'd';
+    bool is_up = kpd.curr_special_key == keyboard::SpecialKey::Up || kpd.curr_key == 'w';
+    bool is_down = kpd.curr_special_key == keyboard::SpecialKey::Down || kpd.curr_key == 's';
+    bool is_left = kpd.curr_special_key == keyboard::SpecialKey::Left || kpd.curr_key == 'a';
+    bool is_right = kpd.curr_special_key == keyboard::SpecialKey::Right || kpd.curr_key == 'd';
     if (show_menu)
     {
       if (is_up)
@@ -609,6 +609,38 @@ private:
         if (cursor_pos.c >= static_cast<int>(curr_texture.size.c))
           cursor_pos.c = curr_texture.size.c - 1;
         if (cursor_pos.c + screen_pos.c >= nci)
+          screen_pos.c--;
+      }
+      else if (kpd.curr_key == 'W')
+      {
+        cursor_pos.r -= nri;
+        if (cursor_pos.r < 0)
+          cursor_pos.r = 0;
+        while (cursor_pos.r + screen_pos.r < 0)
+          screen_pos.r++;
+      }
+      else if (kpd.curr_key == 'S')
+      {
+        cursor_pos.r += nri;
+        if (cursor_pos.r >= static_cast<int>(curr_texture.size.r))
+          cursor_pos.r = curr_texture.size.r - 1;
+        while (cursor_pos.r + screen_pos.r >= nri)
+          screen_pos.r--;
+      }
+      else if (kpd.curr_key == 'A')
+      {
+        cursor_pos.c -= nci;
+        if (cursor_pos.c < 0)
+          cursor_pos.c = 0;
+        while (cursor_pos.c + screen_pos.c < 0)
+          screen_pos.c++;
+      }
+      else if (kpd.curr_key == 'D')
+      {
+        cursor_pos.c += nci;
+        if (cursor_pos.c >= static_cast<int>(curr_texture.size.c))
+          cursor_pos.c = curr_texture.size.c - 1;
+        while (cursor_pos.c + screen_pos.c >= nci)
           screen_pos.c--;
       }
       else if (kpd.curr_key == ' ')
