@@ -661,13 +661,19 @@ private:
       {
         selected_textel_preset_idx--;
         if (selected_textel_preset_idx == -1)
+        {
           selected_textel_preset_idx = static_cast<int>(textel_presets.size()) - 1;
+          menu_r_offs = nri - 3*static_cast<int>(textel_presets.size());
+        }
       }
       else if (is_down)
       {
         selected_textel_preset_idx++;
         if (selected_textel_preset_idx == static_cast<int>(textel_presets.size()))
+        {
           selected_textel_preset_idx = 0;
+          menu_r_offs = 0;
+        }
       }
       else if (is_left)
       {
@@ -676,6 +682,7 @@ private:
           if (textel_presets[idx].textel_normal.mat != curr_mat)
           {
             selected_textel_preset_idx = idx;
+            menu_r_offs = -3*selected_textel_preset_idx;
             break;
           }
       }
@@ -686,6 +693,7 @@ private:
           if (textel_presets[idx].textel_normal.mat != curr_mat)
           {
             selected_textel_preset_idx = idx;
+            menu_r_offs = -3*selected_textel_preset_idx;
             break;
           }
       }
