@@ -33,6 +33,31 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `M` : toggle show/hide of material id:s. 
  * `Q` : quit.
 
+## Custom Textel Presets
+
+Add a file named `custom_textel_presets`.
+The file format looks like this:
+```
+'<normal-char>', <normal-fg-color>, <normal-bg-color>, <normal-material>
+'<shadow-char>', <shadow-fg-color>, <shadow-bg-color>, <shadow-material>
+<textel-preset-name>
+'<normal-char>', <normal-fg-color>, <normal-bg-color>, <normal-material>
+'<shadow-char>', <shadow-fg-color>, <shadow-bg-color>, <shadow-material>
+<textel-preset-name>
+...etc...
+```
+So e.g.
+```
+'%', Magenta, Cyan, 24
+'%', DarkMagenta, DarkCyan, 24
+Magic Stone
+```
+produces the following textel preset at the end of the list:
+
+<img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992">
+
+Look in the source code for which material number that is appropriate to use for your custom presets.
+
 ## Screenshots
 
 <img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">
@@ -64,6 +89,11 @@ Unsaved changes indicator:
 Confirmation screen for attempting to quit while there are unsaved changes:
 
 <img width="565" alt="image" src="https://github.com/user-attachments/assets/1b5e0b9a-41c8-4098-a0b0-77771cf32456">
+
+Custom textel "Magic Stone":
+
+<img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992">
+
 
 
 ## Build & Run Instructions
