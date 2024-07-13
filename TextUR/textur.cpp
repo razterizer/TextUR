@@ -688,12 +688,48 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
-      else if (str::to_lower(kpd.curr_key) == 'b')
+      else if (kpd.curr_key == 'b')
       {
-        undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
         for (int i = -2; i <= 2; ++i)
         {
           int j_offs = std::abs(i) == 2 ? 2 : 4;
+          for (int j = -j_offs; j <= j_offs; ++j)
+          {
+            RC offs { i, j };
+            undo_buffer.push({ cursor_pos + offs, curr_texture(cursor_pos + offs) });
+            curr_texture.set_textel(cursor_pos + offs, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+          }
+        }
+        redo_buffer = {};
+        is_modified = true;
+      }
+      else if (kpd.curr_key == 'B')
+      {
+        //                 ~~~~~
+        //              ~~~~~~~~~~~
+        //            ~~~~~~~~~~~~~~~
+        //           ~~~~~~~~~~~~~~~~~
+        //          ~~~~~~~~~~~~~~~~~~~
+        //          ~~~~~~~~~*~~~~~~~~~
+        //          ~~~~~~~~~~~~~~~~~~~
+        //           ~~~~~~~~~~~~~~~~~
+        //            ~~~~~~~~~~~~~~~
+        //              ~~~~~~~~~~~
+        //                 ~~~~~
+        for (int i = -5; i <= 5; ++i)
+        {
+          int j_offs = 0;
+          switch (std::abs(i))
+          {
+            case 0:
+            case 1:
+              j_offs = 9;
+              break;
+            case 2: j_offs = 8; break;
+            case 3: j_offs = 7; break;
+            case 4: j_offs = 5; break;
+            case 5: j_offs = 2; break;
+          }
           for (int j = -j_offs; j <= j_offs; ++j)
           {
             RC offs { i, j };
