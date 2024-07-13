@@ -381,6 +381,45 @@ public:
     textel_presets.emplace_back(drawing::Textel { '\\', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '\\', Color::LightGray, Color::Black, 23 },
                                 "Bone4");
+    
+    std::vector<std::string> lines_additional_textel_presets;
+    if (TextIO::read_file(folder::join_path({ get_exe_folder(), "additional_textel_presets" }), lines_additional_textel_presets))
+    {
+      int part = 0;
+      drawing::Textel textel_normal, textel_shadow;
+      for (const auto& line : lines_additional_textel_presets)
+      {
+        if (part == 0)
+        {
+          auto tokens = str::tokenize(line, { ' ', ',' }, { '\'' });
+          if (tokens.size() == 4 && tokens[0].length() == 1)
+          {
+            textel_normal.ch = tokens[0][0];
+            textel_normal.fg_color = color::string2color(tokens[1]);
+            textel_normal.bg_color = color::string2color(tokens[2]);
+            textel_normal.mat = std::atoi(tokens[3].c_str());
+          }
+          part = 1;
+        }
+        else if (part == 1)
+        {
+          auto tokens = str::tokenize(line, { ' ', ',' }, { '\'' });
+          if (tokens.size() == 4 && tokens[0].length() == 1)
+          {
+            textel_shadow.ch = tokens[0][0];
+            textel_shadow.fg_color = color::string2color(tokens[1]);
+            textel_shadow.bg_color = color::string2color(tokens[2]);
+            textel_shadow.mat = std::atoi(tokens[3].c_str());
+          }
+          part = 2;
+        }
+        else if (part == 2)
+        {
+          textel_presets.emplace_back(textel_normal, textel_shadow, line);
+          part = 0;
+        }
+      }
+    }
                                 
     if (convert)
     {
