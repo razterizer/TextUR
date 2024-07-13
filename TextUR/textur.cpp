@@ -463,7 +463,7 @@ private:
     const int nc = sh.num_cols();
     const int nri = sh.num_rows_inset();
     const int nci = sh.num_cols_inset();
-    const int menu_width = 12;
+    const int menu_width = 15;
 
 //#define SHOW_DEBUG_WINDOW
 #ifdef SHOW_DEBUG_WINDOW
