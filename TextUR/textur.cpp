@@ -399,6 +399,8 @@ public:
             textel_normal.bg_color = color::string2color(tokens[2]);
             textel_normal.mat = std::atoi(tokens[3].c_str());
           }
+          else
+            std::cerr << "Unable to parse normal textel." << std::endl;
           part = 1;
         }
         else if (part == 1)
@@ -411,6 +413,8 @@ public:
             textel_shadow.bg_color = color::string2color(tokens[2]);
             textel_shadow.mat = std::atoi(tokens[3].c_str());
           }
+          else
+            std::cerr << "Unable to parse shadow textel." << std::endl;
           part = 2;
         }
         else if (part == 2)
