@@ -189,24 +189,6 @@ public:
     textel_presets.emplace_back(drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 "Void");
-    textel_presets.emplace_back(drawing::Textel { '_', Color::Default, Color::LightGray, 1 },
-                                drawing::Textel { '_', Color::Black, Color::DarkGray, 1 },
-                                "Tile0");
-    textel_presets.emplace_back(drawing::Textel { '_', Color::White, Color::DarkGray, 1 },
-                                drawing::Textel { '_', Color::LightGray, Color::Black, 1 },
-                                "Tile1");
-    textel_presets.emplace_back(drawing::Textel { '_', Color::LightGray, Color::White, 1 },
-                                drawing::Textel { '_', Color::White, Color::LightGray, 1 },
-                                "Tile2");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::Default, Color::LightGray, 1 },
-                                drawing::Textel { 'L', Color::Black, Color::DarkGray, 1 },
-                                "Tile3");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::White, Color::DarkGray, 1 },
-                                drawing::Textel { 'L', Color::LightGray, Color::Black, 1 },
-                                "Tile4");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::LightGray, Color::White, 1 },
-                                drawing::Textel { 'L', Color::White, Color::LightGray, 1 },
-                                "Tile5");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkBlue, Color::Blue, 2 },
                                 drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
                                 "Water0");
@@ -225,6 +207,18 @@ public:
     textel_presets.emplace_back(drawing::Textel { '.', Color::DarkYellow, Color::Yellow, 3 },
                                 drawing::Textel { '.', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand1");
+    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkGray, Color::LightGray, 22 },
+                                drawing::Textel { '.', Color::LightGray, Color::DarkGray, 22 },
+                                "Gravel0");
+    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkGray, Color::LightGray, 22 },
+                                drawing::Textel { ':', Color::LightGray, Color::DarkGray, 22 },
+                                "Gravel1");
+    textel_presets.emplace_back(drawing::Textel { '.', Color::Black, Color::LightGray, 22 },
+                                drawing::Textel { '.', Color::Black, Color::DarkGray, 22 },
+                                "Gravel2");
+    textel_presets.emplace_back(drawing::Textel { ':', Color::Black, Color::LightGray, 22 },
+                                drawing::Textel { ':', Color::Black, Color::DarkGray, 22 },
+                                "Gravel3");
     textel_presets.emplace_back(drawing::Textel { '8', Color::DarkGray, Color::LightGray, 4 },
                                 drawing::Textel { '8', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone0");
@@ -258,12 +252,36 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'c', Color::DarkGray, Color::LightGray, 4 },
                                 drawing::Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone10");
-    textel_presets.emplace_back(drawing::Textel { 'H', Color::DarkGray, Color::LightGray, 5 },
-                                drawing::Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
-                                "Masonry");
-    textel_presets.emplace_back(drawing::Textel { '#', Color::DarkRed, Color::Red, 6 },
-                                drawing::Textel { '#', Color::Red, Color::DarkRed, 6 },
-                                "Brick");
+    textel_presets.emplace_back(drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
+                                drawing::Textel { '^', Color::LightGray, Color::DarkGray, 13 },
+                                "Mountain0");
+    textel_presets.emplace_back(drawing::Textel { '^', Color::LightGray, Color::White, 13 },
+                                drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
+                                "Mountain1");
+    textel_presets.emplace_back(drawing::Textel { 'W', Color::DarkRed, Color::Red, 14 },
+                                drawing::Textel { 'W', Color::Red, Color::DarkRed, 14 },
+                                "Lava");
+    textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkYellow, Color::Yellow, 15 },
+                                drawing::Textel { 'C', Color::Yellow, Color::DarkYellow, 15 },
+                                "Cave0");
+    textel_presets.emplace_back(drawing::Textel { 'U', Color::DarkYellow, Color::Yellow, 15 },
+                                drawing::Textel { 'U', Color::Yellow, Color::DarkYellow, 15 },
+                                "Cave1");
+    textel_presets.emplace_back(drawing::Textel { 'S', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'S', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
+                                drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
+                                "Poison0");
+    textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGreen, Color::Green, 17 },
+                                drawing::Textel { 'o', Color::Green, Color::DarkGreen, 17 },
+                                "Poison1");
+    textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
+                                drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
+                                "Path");
+    textel_presets.emplace_back(drawing::Textel { 'M', Color::DarkGray, Color::LightGray, 19 },
+                                drawing::Textel { 'M', Color::LightGray, Color::DarkGray, 19 },
+                                "Mine");
     textel_presets.emplace_back(drawing::Textel { '|', Color::DarkGreen, Color::Green, 7 },
                                 drawing::Textel { '|', Color::Green, Color::DarkGreen, 7 },
                                 "Grass0");
@@ -309,9 +327,30 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'Y', Color::DarkRed, Color::Green, 9 },
                                 drawing::Textel { 'Y', Color::Red, Color::DarkGreen, 9 },
                                 "Tree1");
-    textel_presets.emplace_back(drawing::Textel { '=', Color::DarkGray, Color::LightGray, 10 },
-                                drawing::Textel { '=', Color::LightGray, Color::DarkGray, 10 },
-                                "Metal");
+    textel_presets.emplace_back(drawing::Textel { '_', Color::Default, Color::LightGray, 1 },
+                                drawing::Textel { '_', Color::Black, Color::DarkGray, 1 },
+                                "Tile0");
+    textel_presets.emplace_back(drawing::Textel { '_', Color::White, Color::DarkGray, 1 },
+                                drawing::Textel { '_', Color::LightGray, Color::Black, 1 },
+                                "Tile1");
+    textel_presets.emplace_back(drawing::Textel { '_', Color::LightGray, Color::White, 1 },
+                                drawing::Textel { '_', Color::White, Color::LightGray, 1 },
+                                "Tile2");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::Default, Color::LightGray, 1 },
+                                drawing::Textel { 'L', Color::Black, Color::DarkGray, 1 },
+                                "Tile3");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::White, Color::DarkGray, 1 },
+                                drawing::Textel { 'L', Color::LightGray, Color::Black, 1 },
+                                "Tile4");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::LightGray, Color::White, 1 },
+                                drawing::Textel { 'L', Color::White, Color::LightGray, 1 },
+                                "Tile5");
+    textel_presets.emplace_back(drawing::Textel { 'H', Color::DarkGray, Color::LightGray, 5 },
+                                drawing::Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
+                                "Masonry");
+    textel_presets.emplace_back(drawing::Textel { '#', Color::DarkRed, Color::Red, 6 },
+                                drawing::Textel { '#', Color::Red, Color::DarkRed, 6 },
+                                "Brick");
     textel_presets.emplace_back(drawing::Textel { 'W', Color::DarkRed, Color::Yellow, 11 },
                                 drawing::Textel { 'W', Color::Yellow, Color::DarkRed, 11 },
                                 "Wood0");
@@ -324,54 +363,15 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'X', Color::DarkBlue, Color::Cyan, 12 },
                                 drawing::Textel { 'X', Color::Cyan, Color::DarkBlue, 12 },
                                 "Ice");
-    textel_presets.emplace_back(drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
-                                drawing::Textel { '^', Color::LightGray, Color::DarkGray, 13 },
-                                "Mountain0");
-    textel_presets.emplace_back(drawing::Textel { '^', Color::LightGray, Color::White, 13 },
-                                drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
-                                "Mountain1");
-    textel_presets.emplace_back(drawing::Textel { 'W', Color::DarkRed, Color::Red, 14 },
-                                drawing::Textel { 'W', Color::Red, Color::DarkRed, 14 },
-                                "Lava");
-    textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkYellow, Color::Yellow, 15 },
-                                drawing::Textel { 'C', Color::Yellow, Color::DarkYellow, 15 },
-                                "Cave0");
-    textel_presets.emplace_back(drawing::Textel { 'U', Color::DarkYellow, Color::Yellow, 15 },
-                                drawing::Textel { 'U', Color::Yellow, Color::DarkYellow, 15 },
-                                "Cave1");
-    textel_presets.emplace_back(drawing::Textel { 'S', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'S', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
-                                drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
-                                "Poison0");
-    textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGreen, Color::Green, 17 },
-                                drawing::Textel { 'o', Color::Green, Color::DarkGreen, 17 },
-                                "Poison1");
-    textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
-                                drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
-                                "Path");
-    textel_presets.emplace_back(drawing::Textel { 'M', Color::DarkGray, Color::LightGray, 19 },
-                                drawing::Textel { 'M', Color::LightGray, Color::DarkGray, 19 },
-                                "Mine");
-    textel_presets.emplace_back(drawing::Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
-                                drawing::Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
-                                "Gold");
+    textel_presets.emplace_back(drawing::Textel { '=', Color::DarkGray, Color::LightGray, 10 },
+                                drawing::Textel { '=', Color::LightGray, Color::DarkGray, 10 },
+                                "Metal");
     textel_presets.emplace_back(drawing::Textel { 'S', Color::White, Color::LightGray, 21 },
                                 drawing::Textel { 'S', Color::LightGray, Color::DarkGray, 21 },
                                 "Silver");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkGray, Color::LightGray, 22 },
-                                drawing::Textel { '.', Color::LightGray, Color::DarkGray, 22 },
-                                "Gravel0");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkGray, Color::LightGray, 22 },
-                                drawing::Textel { ':', Color::LightGray, Color::DarkGray, 22 },
-                                "Gravel1");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::Black, Color::LightGray, 22 },
-                                drawing::Textel { '.', Color::Black, Color::DarkGray, 22 },
-                                "Gravel2");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::Black, Color::LightGray, 22 },
-                                drawing::Textel { ':', Color::Black, Color::DarkGray, 22 },
-                                "Gravel3");
+    textel_presets.emplace_back(drawing::Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
+                                drawing::Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
+                                "Gold");
     textel_presets.emplace_back(drawing::Textel { '@', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '@', Color::LightGray, Color::Black, 23 },
                                 "Skull");
