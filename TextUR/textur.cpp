@@ -79,10 +79,10 @@ class Game : public GameEngine<>
       const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.r - 1)));
       for (int r = 0; r < curr_texture.size.r; ++r)
         sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, persist ? 1 : screen_pos.c + 1, Color::Red);
-        
-      if (draw_v_cursor_line)
-        sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color::Red, Color::Transparent2);
     }
+    
+    if (draw_h_cursor_line)
+      sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color::Red, Color::Transparent2);
     
     if (draw_h_coords)
     {
@@ -96,11 +96,11 @@ class Game : public GameEngine<>
         for (int r = 0; r < str_max_len; ++r)
           sh.write_buffer(std::string(1, str[r]), persist ? r + 1 : screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
       }
-      
-      if (draw_h_cursor_line)
-        for (int r = 0; r < cursor_pos.r + screen_pos.r; ++r)
-          sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color::Green, Color::Transparent2);
     }
+    
+    if (draw_v_cursor_line)
+      for (int r = 0; r < cursor_pos.r + screen_pos.r; ++r)
+        sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color::Green, Color::Transparent2);
   }
   
   void reset_goto_input()
@@ -734,9 +734,9 @@ private:
         math::toggle(draw_horiz_coords);
       else if (kpd.curr_key == 'v')
         math::toggle(draw_vert_coords);
-      else if (draw_horiz_coords && kpd.curr_key == 'H')
+      else if (kpd.curr_key == 'H')
         math::toggle(draw_horiz_coord_line);
-      else if (draw_vert_coords && kpd.curr_key == 'V')
+      else if (kpd.curr_key == 'V')
         math::toggle(draw_vert_coord_line);
       else if (str::to_lower(kpd.curr_key) == 'c')
       {
