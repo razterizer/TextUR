@@ -38,10 +38,12 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 <img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">
 <img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">
-<img width="563" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/583a0ee8-8a0f-487a-844e-1cee131fc3ee">
 <img width="568" alt="image" src="https://github.com/user-attachments/assets/0286226c-a18c-48b6-98d3-adc183e51bc2">
 <img width="562" alt="image" src="https://github.com/user-attachments/assets/18ddb12d-acec-476d-81f8-6798624ede9d">
+<img width="567" alt="image" src="https://github.com/user-attachments/assets/eee16100-d7f4-4ea5-936b-1826b185a6e3">
 <img width="567" alt="image" src="https://github.com/user-attachments/assets/4d79d619-63f6-435b-a2c4-3477006c7980">
+<img width="565" alt="image" src="https://github.com/user-attachments/assets/cdbd8aa9-40ab-4eaa-85f5-73f864206e4b">
+
 
 Bright mode textels (normal mode):
 
@@ -51,6 +53,17 @@ Dark mode textels (shadow mode):
 
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/dc68fc8a-bb14-45b6-8c4f-f701034ffc37">
 
+Dark mode texture (shadow texture):
+
+<img width="562" alt="image" src="https://github.com/user-attachments/assets/ad90f507-8797-45ac-8781-47be1ed6ecdc">
+
+Unsaved changes indicator:
+
+<img width="130" alt="image" src="https://github.com/user-attachments/assets/25d7d238-6d35-441e-96cd-463edf94973b">
+
+Confirmation screen for attempting to quit while there are unsaved changes:
+
+<img width="565" alt="image" src="https://github.com/user-attachments/assets/1b5e0b9a-41c8-4098-a0b0-77771cf32456">
 
 
 ## Build & Run Instructions
