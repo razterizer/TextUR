@@ -885,8 +885,8 @@ private:
   std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
   bool is_modified = false;
   
-  bool draw_vert_coords = true;
-  bool draw_horiz_coords = true;
+  bool draw_vert_coords = false;
+  bool draw_horiz_coords = false;
   
   bool use_shadow_textels = false;
   
