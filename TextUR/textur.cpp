@@ -270,24 +270,15 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'S', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'S', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp0");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'L', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp1");
-    textel_presets.emplace_back(drawing::Textel { 'Y', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'Y', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp2");
-    textel_presets.emplace_back(drawing::Textel { 'I', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'I', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp3");
     textel_presets.emplace_back(drawing::Textel { 'B', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'B', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp4");
+                                "Swamp1");
     textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'C', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp5");
+                                "Swamp2");
     textel_presets.emplace_back(drawing::Textel { 'P', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'P', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp6");
+                                "Swamp3");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
                                 drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
                                 "Poison0");
