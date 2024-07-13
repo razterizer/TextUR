@@ -640,7 +640,7 @@ private:
                           drawing::Direction::None,
                           curr_texture);
       }
-      if (show_tracing && (tracing_texture.size.r > 0 || tracing_texture.size.c > 0))
+      if (show_tracing && !tracing_texture.empty())
       {
         draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
