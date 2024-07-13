@@ -81,9 +81,6 @@ class Game : public GameEngine<>
         sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, persist ? 1 : screen_pos.c + 1, Color::Red);
     }
     
-    if (draw_h_cursor_line)
-      sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color::Red, Color::Transparent2);
-    
     if (draw_h_coords)
     {
       const int str_max_len = curr_texture.size.c == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.c - 1)));
@@ -97,6 +94,10 @@ class Game : public GameEngine<>
           sh.write_buffer(std::string(1, str[r]), persist ? r + 1 : screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
       }
     }
+    
+    if (draw_h_cursor_line)
+      sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color::Red, Color::Transparent2);
+
     
     if (draw_v_cursor_line)
       for (int r = 0; r < cursor_pos.r + screen_pos.r; ++r)
