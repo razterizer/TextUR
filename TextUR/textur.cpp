@@ -69,7 +69,9 @@ class Game : public GameEngine<>
     }
   }
   
-  void draw_coord_sys(bool draw_v_coords, bool draw_h_coords, int nc, int menu_width)
+  void draw_coord_sys(bool draw_v_coords, bool draw_h_coords,
+                      bool draw_v_cursor_line, bool draw_h_cursor_line,
+                      int nc, int menu_width)
   {
     static const bool persist = true;
     if (draw_v_coords)
@@ -77,6 +79,9 @@ class Game : public GameEngine<>
       const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.r - 1)));
       for (int r = 0; r < curr_texture.size.r; ++r)
         sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, persist ? 1 : screen_pos.c + 1, Color::Red);
+        
+      if (draw_v_cursor_line)
+        sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color::Red, Color::Transparent2);
     }
     
     if (draw_h_coords)
@@ -91,6 +96,10 @@ class Game : public GameEngine<>
         for (int r = 0; r < str_max_len; ++r)
           sh.write_buffer(std::string(1, str[r]), persist ? r + 1 : screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
       }
+      
+      if (draw_h_cursor_line)
+        for (int r = 0; r < cursor_pos.r; ++r)
+          sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color::Green, Color::Transparent2);
     }
   }
   
@@ -553,7 +562,7 @@ private:
       if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
         sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
       
-      draw_coord_sys(draw_vert_coords, draw_horiz_coords, nc, menu_width);
+      draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line, nc, menu_width);
       
       int box_width_curr = curr_texture.size.c + 1;
       int box_width_tracing = tracing_texture.size.c + 1;
@@ -721,10 +730,14 @@ private:
           is_modified = true;
         }
       }
-      else if (str::to_lower(kpd.curr_key) == 'h')
+      else if (kpd.curr_key == 'h')
         math::toggle(draw_horiz_coords);
-      else if (str::to_lower(kpd.curr_key) == 'v')
+      else if (kpd.curr_key == 'v')
         math::toggle(draw_vert_coords);
+      else if (draw_horiz_coords && kpd.curr_key == 'H')
+        math::toggle(draw_horiz_coord_line);
+      else if (draw_vert_coords && kpd.curr_key == 'V')
+        math::toggle(draw_vert_coord_line);
       else if (str::to_lower(kpd.curr_key) == 'c')
       {
         undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
@@ -887,6 +900,8 @@ private:
   
   bool draw_vert_coords = false;
   bool draw_horiz_coords = false;
+  bool draw_vert_coord_line = false;
+  bool draw_horiz_coord_line = false;
   
   bool use_shadow_textels = false;
   
