@@ -50,8 +50,8 @@ The file format looks like this:
 ```
 So e.g.
 ```
-'%', Magenta, Cyan, 24
-'%', DarkMagenta, DarkCyan, 24
+'%', Magenta, Cyan, 26
+'%', DarkMagenta, DarkCyan, 26
 Magic Stone
 ```
 produces the following textel preset at the end of the list:
