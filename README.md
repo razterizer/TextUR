@@ -38,7 +38,6 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
 <img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">
 <img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">
-<img width="563" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/583a0ee8-8a0f-487a-844e-1cee131fc3ee">
 <img width="568" alt="image" src="https://github.com/user-attachments/assets/0286226c-a18c-48b6-98d3-adc183e51bc2">
 <img width="562" alt="image" src="https://github.com/user-attachments/assets/18ddb12d-acec-476d-81f8-6798624ede9d">
 <img width="567" alt="image" src="https://github.com/user-attachments/assets/4d79d619-63f6-435b-a2c4-3477006c7980">
@@ -58,6 +57,10 @@ Dark mode texture (shadow texture):
 Unsaved changes indicator:
 
 <img width="130" alt="image" src="https://github.com/user-attachments/assets/25d7d238-6d35-441e-96cd-463edf94973b">
+
+Confirmation screen for attempting to quit while there are unsaved changes:
+
+<img width="565" alt="image" src="https://github.com/user-attachments/assets/1b5e0b9a-41c8-4098-a0b0-77771cf32456">
 
 
 ## Build & Run Instructions
