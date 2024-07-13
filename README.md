@@ -51,6 +51,10 @@ Dark mode textels (shadow mode):
 
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/dc68fc8a-bb14-45b6-8c4f-f701034ffc37">
 
+Dark mode texture (shadow texture):
+
+<img width="562" alt="image" src="https://github.com/user-attachments/assets/ad90f507-8797-45ac-8781-47be1ed6ecdc">
+
 
 
 ## Build & Run Instructions
