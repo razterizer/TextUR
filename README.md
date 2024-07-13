@@ -22,8 +22,8 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `C` : clear textel under cursor.
  * `V` : toggle drawing of vertical coordinates.
  * `H` : toggle drawing of horizontal coordinates.
- * `SHIFT + V` : toggle drawing of horizontal guide line from the vertical coordinate axis. You can only toggle when the vertical coord axis is drawn.
- * `SHIFT + H` : toggle drawing of vertical guide line from the horizontal coordinate axis. You can only toggle when the horizontal coord axis is drawn.
+ * `SHIFT + V` : toggle drawing of vertical guide line from the horizontal coordinate axis.
+ * `SHIFT + H` : toggle drawing of horizontal guide line from the vertical coordinate axis.
  * `-` : toggle hide/show textel presets menu.
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
