@@ -279,17 +279,29 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'P', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'P', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp3");
+    textel_presets.emplace_back(drawing::Textel { 'S', Color::Green, Color::DarkRed, 16 },
+                                drawing::Textel { 'S', Color::DarkGreen, Color::DarkRed, 16 },
+                                "Swamp4");
+    textel_presets.emplace_back(drawing::Textel { 'B', Color::Green, Color::DarkRed, 16 },
+                                drawing::Textel { 'B', Color::DarkGreen, Color::DarkRed, 16 },
+                                "Swamp5");
+    textel_presets.emplace_back(drawing::Textel { 'C', Color::Green, Color::DarkRed, 16 },
+                                drawing::Textel { 'C', Color::DarkGreen, Color::DarkRed, 16 },
+                                "Swamp6");
+    textel_presets.emplace_back(drawing::Textel { 'P', Color::Green, Color::DarkRed, 16 },
+                                drawing::Textel { 'P', Color::DarkGreen, Color::DarkRed, 16 },
+                                "Swamp7");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
                                 drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
                                 "Poison0");
     textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGreen, Color::Green, 17 },
                                 drawing::Textel { 'o', Color::Green, Color::DarkGreen, 17 },
                                 "Poison1");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkCyan, Color::Cyan, 24 },
-                                drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 24 },
+    textel_presets.emplace_back(drawing::Textel { '~', Color::Magenta, Color::Cyan, 24 },
+                                drawing::Textel { '~', Color::DarkMagenta, Color::DarkCyan, 24 },
                                 "Acid0");
-    textel_presets.emplace_back(drawing::Textel { 'o', Color::White, Color::Cyan, 24 },
-                                drawing::Textel { 'o', Color::LightGray, Color::DarkCyan, 24 },
+    textel_presets.emplace_back(drawing::Textel { 'o', Color::Magenta, Color::Cyan, 24 },
+                                drawing::Textel { 'o', Color::DarkMagenta, Color::DarkCyan, 24 },
                                 "Acid1");
     textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
                                 drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
