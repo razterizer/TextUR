@@ -366,18 +366,21 @@ public:
     textel_presets.emplace_back(drawing::Textel { '@', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '@', Color::LightGray, Color::Black, 23 },
                                 "Skull");
+    textel_presets.emplace_back(drawing::Textel { '+', Color::White, Color::DarkGray, 23 },
+                                drawing::Textel { '+', Color::LightGray, Color::Black, 23 },
+                                "Bone0");
     textel_presets.emplace_back(drawing::Textel { '|', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '|', Color::LightGray, Color::Black, 23 },
-                                "Bone0");
+                                "Bone1");
     textel_presets.emplace_back(drawing::Textel { '-', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '-', Color::LightGray, Color::Black, 23 },
-                                "Bone1");
+                                "Bone2");
     textel_presets.emplace_back(drawing::Textel { '/', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '/', Color::LightGray, Color::Black, 23 },
-                                "Bone2");
+                                "Bone3");
     textel_presets.emplace_back(drawing::Textel { '\\', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '\\', Color::LightGray, Color::Black, 23 },
-                                "Bone3");
+                                "Bone4");
                                 
     if (convert)
     {
