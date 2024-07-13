@@ -382,12 +382,12 @@ public:
                                 drawing::Textel { '\\', Color::LightGray, Color::Black, 23 },
                                 "Bone4");
     
-    std::vector<std::string> lines_additional_textel_presets;
-    if (TextIO::read_file(folder::join_path({ get_exe_folder(), "additional_textel_presets" }), lines_additional_textel_presets))
+    std::vector<std::string> lines_custom_textel_presets;
+    if (TextIO::read_file(folder::join_path({ get_exe_folder(), "custom_textel_presets" }), lines_custom_textel_presets))
     {
       int part = 0;
       drawing::Textel textel_normal, textel_shadow;
-      for (const auto& line : lines_additional_textel_presets)
+      for (const auto& line : lines_custom_textel_presets)
       {
         if (part == 0)
         {
