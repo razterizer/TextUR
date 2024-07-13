@@ -446,7 +446,8 @@ public:
           {
             return tp.textel_normal.ch == curr_textel.ch
             && tp.textel_normal.fg_color == curr_textel.fg_color
-            && tp.textel_normal.bg_color == curr_textel.bg_color;
+            && tp.textel_normal.bg_color == curr_textel.bg_color
+            && tp.textel_normal.mat == curr_textel.mat;
           });
           if (it != textel_presets.end())
           {
