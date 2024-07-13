@@ -98,7 +98,7 @@ class Game : public GameEngine<>
       }
       
       if (draw_h_cursor_line)
-        for (int r = 0; r < cursor_pos.r; ++r)
+        for (int r = 0; r < cursor_pos.r + screen_pos.r; ++r)
           sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color::Green, Color::Transparent2);
     }
   }
