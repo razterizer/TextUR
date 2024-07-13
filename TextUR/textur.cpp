@@ -609,7 +609,7 @@ private:
         tb_goto.draw(sh, ui::VerticalAlignment::CENTER, ui::HorizontalAlignment::CENTER, { Color::White, Color::DarkBlue }, true, true, 0, 1, std::nullopt, drawing::OutlineType::Line, true);
       }
       
-      message_handler->update(sh, static_cast<float>(sim_time_s));
+      message_handler->update(sh, static_cast<float>(real_time_s));
       
       // Caret
       if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
@@ -865,7 +865,7 @@ private:
         is_modified = true;
       }
       else if (str::to_lower(kpd.curr_key) == 'l')
-        message_handler->add_message(static_cast<float>(sim_time_s),
+        message_handler->add_message(static_cast<float>(real_time_s),
                                      "Cursor @ " + cursor_pos.str(),
                                      MessageHandler::Level::Guide);
       else if (str::to_lower(kpd.curr_key) == 'g')
@@ -900,14 +900,14 @@ private:
       {
         if (curr_texture.save(file_path_curr_texture))
         {
-          message_handler->add_message(static_cast<float>(sim_time_s),
+          message_handler->add_message(static_cast<float>(real_time_s),
                                        "Your work was successfully saved.",
                                        MessageHandler::Level::Guide);
                                        
           is_modified = false;
         }
         else
-          message_handler->add_message(static_cast<float>(sim_time_s),
+          message_handler->add_message(static_cast<float>(real_time_s),
                                        "An error occurred while saving your work!",
                                        MessageHandler::Level::Fatal);
                                        
