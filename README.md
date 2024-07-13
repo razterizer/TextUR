@@ -55,6 +55,9 @@ Dark mode texture (shadow texture):
 
 <img width="562" alt="image" src="https://github.com/user-attachments/assets/ad90f507-8797-45ac-8781-47be1ed6ecdc">
 
+Unsaved changes indicator:
+
+<img width="130" alt="image" src="https://github.com/user-attachments/assets/25d7d238-6d35-441e-96cd-463edf94973b">
 
 
 ## Build & Run Instructions
