@@ -391,7 +391,7 @@ public:
         {
           const auto& curr_textel = bright_texture(r, c);
           auto it = stlutils::find_if(textel_presets, [&curr_textel](const auto& tp)
-                                      {
+          {
             return tp.textel_normal.ch == curr_textel.ch
             && tp.textel_normal.fg_color == curr_textel.fg_color
             && tp.textel_normal.bg_color == curr_textel.bg_color;
