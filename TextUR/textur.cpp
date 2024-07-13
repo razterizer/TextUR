@@ -269,13 +269,37 @@ public:
                                 "Cave1");
     textel_presets.emplace_back(drawing::Textel { 'S', Color::DarkRed, Color::Green, 16 },
                                 drawing::Textel { 'S', Color::Red, Color::DarkGreen, 16 },
-                                "Swamp");
+                                "Swamp0");
+    textel_presets.emplace_back(drawing::Textel { 'L', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'L', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp1");
+    textel_presets.emplace_back(drawing::Textel { 'Y', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'Y', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp2");
+    textel_presets.emplace_back(drawing::Textel { 'I', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'I', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp3");
+    textel_presets.emplace_back(drawing::Textel { 'B', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'B', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp4");
+    textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'C', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp5");
+    textel_presets.emplace_back(drawing::Textel { 'P', Color::DarkRed, Color::Green, 16 },
+                                drawing::Textel { 'P', Color::Red, Color::DarkGreen, 16 },
+                                "Swamp6");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
                                 drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
                                 "Poison0");
     textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGreen, Color::Green, 17 },
                                 drawing::Textel { 'o', Color::Green, Color::DarkGreen, 17 },
                                 "Poison1");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkCyan, Color::Cyan, 24 },
+                                drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 24 },
+                                "Acid0");
+    textel_presets.emplace_back(drawing::Textel { 'o', Color::White, Color::Cyan, 24 },
+                                drawing::Textel { 'o', Color::LightGray, Color::DarkCyan, 24 },
+                                "Acid1");
     textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
                                 drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
                                 "Path");
@@ -345,9 +369,33 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'L', Color::LightGray, Color::White, 1 },
                                 drawing::Textel { 'L', Color::White, Color::LightGray, 1 },
                                 "Tile5");
-    textel_presets.emplace_back(drawing::Textel { 'H', Color::DarkGray, Color::LightGray, 5 },
-                                drawing::Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
-                                "Masonry");
+    textel_presets.emplace_back(drawing::Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { 'H', Color::DarkGray, Color::Black, 5 },
+                                "Masonry0");
+    textel_presets.emplace_back(drawing::Textel { 'M', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { 'M', Color::DarkGray, Color::Black, 5 },
+                                "Masonry1");
+    textel_presets.emplace_back(drawing::Textel { 'W', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { 'W', Color::DarkGray, Color::Black, 5 },
+                                "Masonry2");
+    textel_presets.emplace_back(drawing::Textel { '=', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { '=', Color::DarkGray, Color::Black, 5 },
+                                "Masonry3");
+    textel_presets.emplace_back(drawing::Textel { '#', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { '#', Color::DarkGray, Color::Black, 5 },
+                                "Masonry4");
+    textel_presets.emplace_back(drawing::Textel { '@', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { '@', Color::DarkGray, Color::Black, 5 },
+                                "Masonry5");
+    textel_presets.emplace_back(drawing::Textel { 'O', Color::LightGray, Color::DarkGray, 5 },
+                                drawing::Textel { 'O', Color::DarkGray, Color::Black, 5 },
+                                "Masonry6");
+    textel_presets.emplace_back(drawing::Textel { 'I', Color::White, Color::LightGray, 25 },
+                                drawing::Textel { 'I', Color::LightGray, Color::DarkGray, 25 },
+                                "Column0");
+    textel_presets.emplace_back(drawing::Textel { '=', Color::White, Color::LightGray, 25 },
+                                drawing::Textel { '=', Color::LightGray, Color::DarkGray, 25 },
+                                "Column1");
     textel_presets.emplace_back(drawing::Textel { '#', Color::DarkRed, Color::Red, 6 },
                                 drawing::Textel { '#', Color::Red, Color::DarkRed, 6 },
                                 "Brick");
