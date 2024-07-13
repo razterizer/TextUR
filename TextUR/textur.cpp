@@ -442,7 +442,8 @@ private:
     if (show_confirm_overwrite)
     {
       bg_color = Color::DarkCyan;
-      draw_confirm(sh, "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?", overwrite_confirm_button,
+      draw_confirm(sh, { "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?" },
+                   overwrite_confirm_button,
                    { Color::Black, Color::DarkCyan },
                    { Color::Black, Color::DarkCyan, Color::Cyan },
                    { Color::White, Color::DarkCyan });
