@@ -879,6 +879,27 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
+      else if (str::to_lower(kpd.curr_key) == 'p')
+      {
+        const auto& curr_textel = curr_texture(cursor_pos);
+        auto idx_normal = stlutils::find_if_idx(textel_presets,
+          [&curr_textel](const auto& tp) { return tp.get_textel(false) == curr_textel; });
+        if (0 <= idx_normal)
+        {
+          selected_textel_preset_idx = idx_normal;
+          menu_r_offs = -3*selected_textel_preset_idx;
+        }
+        else
+        {
+          auto idx_shadow = stlutils::find_if_idx(textel_presets,
+          [&curr_textel](const auto& tp) { return tp.get_textel(true) == curr_textel; });
+          if (0 <= idx_shadow)
+          {
+            selected_textel_preset_idx = idx_shadow;
+            menu_r_offs = -3*selected_textel_preset_idx;
+          }
+        }
+      }
       else if (str::to_lower(kpd.curr_key) == 'l')
         message_handler->add_message(static_cast<float>(real_time_s),
                                      "Cursor @ " + cursor_pos.str(),
