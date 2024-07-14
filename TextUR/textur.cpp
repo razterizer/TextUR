@@ -812,22 +812,25 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
-      else if (kpd.curr_key == 'b')
+      else if (kpd.curr_key == 'b' || kpd.curr_key == 'r')
       {
         for (int i = -2; i <= 2; ++i)
         {
           int j_offs = std::abs(i) == 2 ? 2 : 4;
           for (int j = -j_offs; j <= j_offs; ++j)
           {
-            RC offs { i, j };
-            undo_buffer.push({ cursor_pos + offs, curr_texture(cursor_pos + offs) });
-            curr_texture.set_textel(cursor_pos + offs, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+            RC pos = cursor_pos + RC { i, j };
+            if (kpd.curr_key == 'b' || (kpd.curr_key == 'r' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
+            {
+              undo_buffer.push({ pos, curr_texture(pos) });
+              curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+            }
           }
         }
         redo_buffer = {};
         is_modified = true;
       }
-      else if (kpd.curr_key == 'B')
+      else if (kpd.curr_key == 'B' || kpd.curr_key == 'R')
       {
         //                 ~~~~~
         //              ~~~~~~~~~~~
@@ -856,9 +859,12 @@ private:
           }
           for (int j = -j_offs; j <= j_offs; ++j)
           {
-            RC offs { i, j };
-            undo_buffer.push({ cursor_pos + offs, curr_texture(cursor_pos + offs) });
-            curr_texture.set_textel(cursor_pos + offs, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+            RC pos = cursor_pos + RC { i, j };
+            if (kpd.curr_key == 'B' || (kpd.curr_key == 'R' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
+            {
+              undo_buffer.push({ pos, curr_texture(pos) });
+              curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+            }
           }
         }
         redo_buffer = {};
