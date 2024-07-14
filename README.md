@@ -28,6 +28,7 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `SHIFT + B` : big brush-stroke.
+ * `F`: fill screen. Fills the texture with the currently selected textel preset where the bounding box of the screen is currently located over the texture.
  * `L` : show location of cursor.
  * `G` : goto new cursor location. Press backspace to clear the last digit, press tab to toggle between R and C coordinate fields and press enter to confirm. Pressing `G` again toggles the input box.
  * `T` : toggle show/hide of tracing texture.
