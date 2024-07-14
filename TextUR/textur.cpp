@@ -1002,6 +1002,7 @@ int main(int argc, char** argv)
   params.enable_quit_confirm_screen = false;
   params.quit_confirm_unsaved_changes = true;
   params.enable_hiscores = false;
+  params.enable_pause = false;
   params.screen_bg_color_default = Color::Black;
   params.screen_bg_color_title = Color::DarkYellow;
   params.screen_bg_color_instructions = Color::Black;
