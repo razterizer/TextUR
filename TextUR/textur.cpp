@@ -770,7 +770,7 @@ private:
       }
       else if (kpd.curr_key == ' ')
       {
-        undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
+        undo_buffer.push({ { cursor_pos, curr_texture(cursor_pos) } });
         curr_texture.set_textel(cursor_pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
         redo_buffer = {};
         is_modified = true;
@@ -779,9 +779,14 @@ private:
       {
         if (!undo_buffer.empty())
         {
-          auto& up = undo_buffer.top();
-          redo_buffer.push({ up.first, curr_texture(up.first) });
-          curr_texture.set_textel(up.first, up.second);
+          const auto& upv = undo_buffer.top();
+          UndoItem item;
+          item.reserve(upv.size());
+          for (const auto& up : upv)
+            item.emplace_back(up.first, curr_texture(up.first));
+          redo_buffer.push(item);
+          for (const auto& up : upv)
+            curr_texture.set_textel(up.first, up.second);
           undo_buffer.pop();
           is_modified = true;
         }
@@ -790,9 +795,14 @@ private:
       {
         if (!redo_buffer.empty())
         {
-          auto& up = redo_buffer.top();
-          undo_buffer.push({ up.first, curr_texture(up.first) });
-          curr_texture.set_textel(up.first, up.second);
+          const auto& upv = redo_buffer.top();
+          UndoItem item;
+          item.reserve(upv.size());
+          for (const auto& up : upv)
+            item.emplace_back(up.first, curr_texture(up.first));
+          undo_buffer.push(item);
+          for (const auto& up : upv)
+            curr_texture.set_textel(up.first, up.second);
           redo_buffer.pop();
           is_modified = true;
         }
@@ -807,13 +817,14 @@ private:
         math::toggle(draw_vert_coord_line);
       else if (str::to_lower(kpd.curr_key) == 'c')
       {
-        undo_buffer.push({ cursor_pos, curr_texture(cursor_pos) });
+        undo_buffer.push({ { cursor_pos, curr_texture(cursor_pos) } });
         curr_texture.set_textel(cursor_pos, Textel {});
         redo_buffer = {};
         is_modified = true;
       }
       else if (kpd.curr_key == 'b' || kpd.curr_key == 'r')
       {
+        UndoItem undo;
         for (int i = -2; i <= 2; ++i)
         {
           int j_offs = std::abs(i) == 2 ? 2 : 4;
@@ -822,11 +833,12 @@ private:
             RC pos = cursor_pos + RC { i, j };
             if (kpd.curr_key == 'b' || (kpd.curr_key == 'r' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
             {
-              undo_buffer.push({ pos, curr_texture(pos) });
+              undo.emplace_back(pos, curr_texture(pos));
               curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
             }
           }
         }
+        undo_buffer.push(undo);
         redo_buffer = {};
         is_modified = true;
       }
@@ -843,6 +855,7 @@ private:
         //            ~~~~~~~~~~~~~~~
         //              ~~~~~~~~~~~
         //                 ~~~~~
+        UndoItem undo;
         for (int i = -5; i <= 5; ++i)
         {
           int j_offs = 0;
@@ -862,26 +875,29 @@ private:
             RC pos = cursor_pos + RC { i, j };
             if (kpd.curr_key == 'B' || (kpd.curr_key == 'R' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
             {
-              undo_buffer.push({ pos, curr_texture(pos) });
+              undo.emplace_back(pos, curr_texture(pos));
               curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
             }
           }
         }
+        undo_buffer.push(undo);
         redo_buffer = {};
         is_modified = true;
       }
       else if (str::to_lower(kpd.curr_key) == 'f')
       {
+        UndoItem undo;
         const auto& selected_textel = textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels);
         for (int i = 0; i < nri; ++i)
         {
           for (int j = 0; j < nci; ++j)
           {
             RC pos = RC { i, j } - screen_pos;
-            undo_buffer.push({ pos, curr_texture(pos) });
+            undo.emplace_back(pos, curr_texture(pos));
             curr_texture.set_textel(pos, selected_textel);
           }
         }
+        undo_buffer.push(undo);
         redo_buffer = {};
         is_modified = true;
       }
@@ -1003,8 +1019,9 @@ private:
   int selected_textel_preset_idx = 0;
   
   std::unique_ptr<MessageHandler> message_handler;
-  std::stack<std::pair<RC, drawing::Textel>> undo_buffer;
-  std::stack<std::pair<RC, drawing::Textel>> redo_buffer;
+  using UndoItem = std::vector<std::pair<RC, drawing::Textel>>;
+  std::stack<UndoItem> undo_buffer;
+  std::stack<UndoItem> redo_buffer;
   bool is_modified = false;
   
   bool draw_vert_coords = false;
