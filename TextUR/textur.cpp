@@ -864,6 +864,21 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
+      else if (str::to_lower(kpd.curr_key) == 'f')
+      {
+        const auto& selected_textel = textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels);
+        for (int i = 0; i < nri; ++i)
+        {
+          for (int j = 0; j < nci; ++j)
+          {
+            RC pos = RC { i, j } - screen_pos;
+            undo_buffer.push({ pos, curr_texture(pos) });
+            curr_texture.set_textel(pos, selected_textel);
+          }
+        }
+        redo_buffer = {};
+        is_modified = true;
+      }
       else if (str::to_lower(kpd.curr_key) == 'l')
         message_handler->add_message(static_cast<float>(real_time_s),
                                      "Cursor @ " + cursor_pos.str(),
