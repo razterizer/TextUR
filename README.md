@@ -28,6 +28,8 @@ This is a tool for generating textures to be used with [`DungGine`](https://gith
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `SHIFT + B` : big brush-stroke.
+ * `R` : randomized brush-stroke. Same as the `B` key, but fills the circle with textels according to a normal random distribution. You can re-generate until you get the desired result.
+ * `SHIFT + R` : randomized big brush-stroke. Same as the `SHIFT + B` key, but fills the circle with textels according to a normal random distribution. You can re-generate until you get the desired result.
  * `F`: fill screen. Fills the texture with the currently selected textel preset where the bounding box of the screen is currently located over the texture.
  * `P` : pick a textel from under the cursor and hilite the corresponding preset in the menu.
  * `L` : show location of cursor.
@@ -98,6 +100,13 @@ Confirmation screen for attempting to quit while there are unsaved changes:
 Custom textel "Magic Stone":
 
 <img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992">
+
+* Small brush stroke using `B` key (upper left corner).
+* Big brush stroke using `SHIFT + B` key (lower left corner).
+* Small randomized brush stroke using `R` key (upper right corner).
+* Big randomized brush stroke using `SHIFT + R` key (lower right corner).
+
+<img width="566" alt="image" src="https://github.com/user-attachments/assets/f91f3af1-dec0-4cf3-bf25-1af7567f3d99">
 
 
 
