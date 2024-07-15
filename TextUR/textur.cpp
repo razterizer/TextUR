@@ -638,7 +638,7 @@ private:
         draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
                           curr_texture.size.r+1, box_width_curr,
-                          drawing::Direction::None,
+                          drawing::SolarDirection::Zenith,
                           curr_texture);
       }
       if (show_tracing && !tracing_texture.empty())
@@ -646,7 +646,7 @@ private:
         draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
                           tracing_texture.size.r+1, box_width_tracing,
-                          drawing::Direction::None,
+                          drawing::SolarDirection::Zenith,
                           tracing_texture);
       }
     }
