@@ -190,24 +190,30 @@ public:
     textel_presets.emplace_back(drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 "Void");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkBlue, Color::Blue, 2 },
-                                drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
-                                "Water0");
-    textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Blue, 2 },
-                                drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
-                                "Water1");
     textel_presets.emplace_back(drawing::Textel { '~', Color::DarkCyan, Color::Cyan, 2 },
                                 drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
-                                "Water2");
+                                "Water0");
     textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Cyan, 2 },
                                 drawing::Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
+                                "Water1");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
+                                drawing::Textel { '~', Color::DarkCyan, Color::Blue, 2 },
+                                "Water2");
+    textel_presets.emplace_back(drawing::Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
+                                drawing::Textel { '*', Color::DarkGray, Color::Blue, 2 },
                                 "Water3");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkBlue, Color::Blue, 2 },
+                                drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
+                                "Water4");
+    textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Blue, 2 },
+                                drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
+                                "Water5");
     textel_presets.emplace_back(drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
                                 drawing::Textel { '~', Color::DarkBlue, Color::Black, 2 },
-                                "Water4");
+                                "Water6");
     textel_presets.emplace_back(drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
                                 drawing::Textel { '*', Color::DarkGray, Color::Black, 2 },
-                                "Water5");
+                                "Water7");
     textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
                                 drawing::Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand0");
