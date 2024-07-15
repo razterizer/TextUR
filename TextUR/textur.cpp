@@ -202,6 +202,12 @@ public:
     textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Cyan, 2 },
                                 drawing::Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
                                 "Water3");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
+                                drawing::Textel { '~', Color::DarkBlue, Color::Black, 2 },
+                                "Water4");
+    textel_presets.emplace_back(drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
+                                drawing::Textel { '*', Color::DarkGray, Color::Black, 2 },
+                                "Water5");
     textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
                                 drawing::Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand0");
@@ -304,6 +310,9 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'o', Color::Magenta, Color::Cyan, 24 },
                                 drawing::Textel { 'o', Color::DarkMagenta, Color::DarkCyan, 24 },
                                 "Acid1");
+    textel_presets.emplace_back(drawing::Textel { '~', Color::LightGray, Color::Black, 26 },
+                                drawing::Textel { '~', Color::DarkGray, Color::Black, 26 },
+                                "Tar");
     textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
                                 drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
                                 "Path");
@@ -442,6 +451,9 @@ public:
     textel_presets.emplace_back(drawing::Textel { '\\', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '\\', Color::LightGray, Color::Black, 23 },
                                 "Bone4");
+    textel_presets.emplace_back(drawing::Textel { '%', Color::Yellow, Color::Red, 27 },
+                                drawing::Textel { '%', Color::DarkYellow, Color::DarkRed, 27 },
+                                "Rope");
     
     std::vector<std::string> lines_custom_textel_presets;
     if (TextIO::read_file(folder::join_path({ get_exe_folder(), "custom_textel_presets" }), lines_custom_textel_presets))
