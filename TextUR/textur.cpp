@@ -457,8 +457,8 @@ public:
     textel_presets.emplace_back(drawing::Textel { '\\', Color::White, Color::DarkGray, 23 },
                                 drawing::Textel { '\\', Color::LightGray, Color::Black, 23 },
                                 "Bone4");
-    textel_presets.emplace_back(drawing::Textel { '%', Color::Yellow, Color::Red, 27 },
-                                drawing::Textel { '%', Color::DarkYellow, Color::DarkRed, 27 },
+    textel_presets.emplace_back(drawing::Textel { '%', Color::Red, Color::Yellow, 27 },
+                                drawing::Textel { '%', Color::DarkRed, Color::DarkYellow, 27 },
                                 "Rope");
     
     std::vector<std::string> lines_custom_textel_presets;
