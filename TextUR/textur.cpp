@@ -502,9 +502,9 @@ public:
             && tp.textel_normal.mat == curr_textel.mat;
           });
           if (it != textel_presets.end())
-          {
             curr_texture.set_textel(r, c, it->textel_shadow);
-          }
+          else
+            curr_texture.set_textel(r, c, curr_textel);
         }
       curr_texture.save(file_path_curr_texture);
       request_exit();
