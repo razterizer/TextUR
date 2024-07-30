@@ -140,9 +140,8 @@ Make sure the folder structure looks like this:
 
 These repos are not guaranteed to all the time work with the latest version of `TextUR`. If you want the more stable aproach then look at Option 1 instead.
 
-### Windows (not yet implemented)
+### Windows
 
-**NOTE: WIP here. No VS solution file yet.**
 Then just open `<my_source_code_dir>/TextUR/TextUR/TextUR.sln` and build and run. That's it!
 
 ### MacOS
