@@ -23,6 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		075C5B092C5A16CE00E6A6C0 /* test_day.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_day.tex; sourceTree = "<group>"; };
+		075C5B0A2C5A16CE00E6A6C0 /* test_night.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_night.tex; sourceTree = "<group>"; };
 		075C651C2C3E00C000B15451 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		0775CB5F2C321B3A0078F60A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		07C2A7962C31E62700869A56 /* TextUR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TextUR; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,6 +42,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		075C5B082C59B36700E6A6C0 /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				075C5B092C5A16CE00E6A6C0 /* test_day.tex */,
+				075C5B0A2C5A16CE00E6A6C0 /* test_night.tex */,
+			);
+			path = examples;
+			sourceTree = "<group>";
+		};
 		07C2A78D2C31E62700869A56 = {
 			isa = PBXGroup;
 			children = (
@@ -61,6 +72,7 @@
 		07C2A7982C31E62700869A56 /* TextUR */ = {
 			isa = PBXGroup;
 			children = (
+				075C5B082C59B36700E6A6C0 /* examples */,
 				07C2A7992C31E62700869A56 /* textur.cpp */,
 			);
 			path = TextUR;
