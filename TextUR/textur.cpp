@@ -265,6 +265,39 @@ public:
     textel_presets.emplace_back(drawing::Textel { 'c', Color::DarkGray, Color::LightGray, 4 },
                                 drawing::Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone10");
+    textel_presets.emplace_back(drawing::Textel { '8', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { '8', Color::DarkGray, Color::Black, 4 },
+                                "Stone11");
+    textel_presets.emplace_back(drawing::Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'o', Color::DarkGray, Color::Black, 4 },
+                                "Stone12");
+    textel_presets.emplace_back(drawing::Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'O', Color::DarkGray, Color::Black, 4 },
+                                "Stone13");
+    textel_presets.emplace_back(drawing::Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'b', Color::DarkGray, Color::Black, 4 },
+                                "Stone14");
+    textel_presets.emplace_back(drawing::Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'B', Color::DarkGray, Color::Black, 4 },
+                                "Stone15");
+    textel_presets.emplace_back(drawing::Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'p', Color::DarkGray, Color::Black, 4 },
+                                "Stone16");
+    textel_presets.emplace_back(drawing::Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'P', Color::DarkGray, Color::Black, 4 },
+                                "Stone17");
+    textel_presets.emplace_back(drawing::Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'q', Color::DarkGray, Color::Black, 4 },
+                                "Stone18");
+    textel_presets.emplace_back(drawing::Textel { '6', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { '6', Color::DarkGray, Color::Black, 4 },
+                                "Stone19");
+    textel_presets.emplace_back(drawing::Textel { '9', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { '9', Color::DarkGray, Color::Black, 4 },
+                                "Stone20");
+    textel_presets.emplace_back(drawing::Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
+                                drawing::Textel { 'c', Color::DarkGray, Color::Black, 4 },
+                                "Stone21");
     textel_presets.emplace_back(drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
                                 drawing::Textel { '^', Color::LightGray, Color::DarkGray, 13 },
                                 "Mountain0");
