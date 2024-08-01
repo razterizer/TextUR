@@ -587,6 +587,9 @@ private:
     tbd.calc_pre_draw(str::Adjustment::Left);
     tbd.draw(sh, ui::VerticalAlignment::TOP, ui::HorizontalAlignment::CENTER, { Color::Blue, Color::Yellow }, true, true, 0, 0, std::nullopt, drawing::OutlineType::Line, true);
 #endif
+
+    auto curr_key = keyboard::get_char_key(kpd);
+    auto curr_special_key = keyboard::get_special_key(kpd);
       
     if (!show_confirm_overwrite && show_menu)
       draw_box_outline(sh, 0, nc - menu_width, nr - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
@@ -603,12 +606,12 @@ private:
                    { Color::Black, Color::DarkCyan },
                    { Color::Black, Color::DarkCyan, Color::Cyan },
                    { Color::White, Color::DarkCyan });
-      if (kpd.curr_special_key == keyboard::SpecialKey::Left)
+      if (curr_special_key == keyboard::SpecialKey::Left)
         overwrite_confirm_button = YesNoButtons::Yes;
-      else if (kpd.curr_special_key == keyboard::SpecialKey::Right)
+      else if (curr_special_key == keyboard::SpecialKey::Right)
         overwrite_confirm_button = YesNoButtons::No;
       
-      if (kpd.curr_special_key == keyboard::SpecialKey::Enter)
+      if (curr_special_key == keyboard::SpecialKey::Enter)
       {
         if (overwrite_confirm_button == YesNoButtons::Yes)
           safe_to_save = true;
@@ -622,23 +625,23 @@ private:
         draw_menu(ui_style, menu_width);
       else if (show_goto_pos)
       {
-        if ('0' <= kpd.curr_key && kpd.curr_key <= '9')
+        if ('0' <= curr_key && curr_key <= '9')
         {
-          tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = kpd.curr_key;
+          tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = curr_key;
           goto_caret_idx[goto_tab]++;
           if (goto_caret_idx[goto_tab] > 7)
             goto_caret_idx[goto_tab] = 7;
         }
-        else if (kpd.curr_special_key == keyboard::SpecialKey::Backspace)
+        else if (curr_special_key == keyboard::SpecialKey::Backspace)
         {
           goto_caret_idx[goto_tab]--;
           if (goto_caret_idx[goto_tab] < 0)
             goto_caret_idx[goto_tab] = 0;
           tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = ' ';
         }
-        else if (kpd.curr_special_key == keyboard::SpecialKey::Tab)
+        else if (curr_special_key == keyboard::SpecialKey::Tab)
           goto_tab = 1 - goto_tab;
-        else if (kpd.curr_special_key == keyboard::SpecialKey::Enter)
+        else if (curr_special_key == keyboard::SpecialKey::Enter)
         {
           std::istringstream iss(tb_goto[1].substr(0, 8));
           RC pos;
@@ -703,13 +706,13 @@ private:
     }
                       
     // Keypresses:
-    if (kpd.curr_key == '-')
+    if (curr_key == '-')
       math::toggle(show_menu);
       
-    bool is_up = kpd.curr_special_key == keyboard::SpecialKey::Up || kpd.curr_key == 'w';
-    bool is_down = kpd.curr_special_key == keyboard::SpecialKey::Down || kpd.curr_key == 's';
-    bool is_left = kpd.curr_special_key == keyboard::SpecialKey::Left || kpd.curr_key == 'a';
-    bool is_right = kpd.curr_special_key == keyboard::SpecialKey::Right || kpd.curr_key == 'd';
+    bool is_up = curr_special_key == keyboard::SpecialKey::Up || curr_key == 'w';
+    bool is_down = curr_special_key == keyboard::SpecialKey::Down || curr_key == 's';
+    bool is_left = curr_special_key == keyboard::SpecialKey::Left || curr_key == 'a';
+    bool is_right = curr_special_key == keyboard::SpecialKey::Right || curr_key == 'd';
     if (show_menu)
     {
       if (is_up)
@@ -787,7 +790,7 @@ private:
         if (cursor_pos.c + screen_pos.c >= nci)
           screen_pos.c--;
       }
-      else if (kpd.curr_key == 'W')
+      else if (curr_key == 'W')
       {
         cursor_pos.r -= nri;
         if (cursor_pos.r < 0)
@@ -795,7 +798,7 @@ private:
         while (cursor_pos.r + screen_pos.r < 0)
           screen_pos.r++;
       }
-      else if (kpd.curr_key == 'S')
+      else if (curr_key == 'S')
       {
         cursor_pos.r += nri;
         if (cursor_pos.r >= static_cast<int>(curr_texture.size.r))
@@ -803,7 +806,7 @@ private:
         while (cursor_pos.r + screen_pos.r >= nri)
           screen_pos.r--;
       }
-      else if (kpd.curr_key == 'A')
+      else if (curr_key == 'A')
       {
         cursor_pos.c -= nci;
         if (cursor_pos.c < 0)
@@ -811,7 +814,7 @@ private:
         while (cursor_pos.c + screen_pos.c < 0)
           screen_pos.c++;
       }
-      else if (kpd.curr_key == 'D')
+      else if (curr_key == 'D')
       {
         cursor_pos.c += nci;
         if (cursor_pos.c >= static_cast<int>(curr_texture.size.c))
@@ -819,14 +822,14 @@ private:
         while (cursor_pos.c + screen_pos.c >= nci)
           screen_pos.c--;
       }
-      else if (kpd.curr_key == ' ')
+      else if (curr_key == ' ')
       {
         undo_buffer.push({ { cursor_pos, curr_texture(cursor_pos) } });
         curr_texture.set_textel(cursor_pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
         redo_buffer = {};
         is_modified = true;
       }
-      else if (kpd.curr_key == 'z')
+      else if (curr_key == 'z')
       {
         if (!undo_buffer.empty())
         {
@@ -842,7 +845,7 @@ private:
           is_modified = true;
         }
       }
-      else if (kpd.curr_key == 'Z')
+      else if (curr_key == 'Z')
       {
         if (!redo_buffer.empty())
         {
@@ -858,22 +861,22 @@ private:
           is_modified = true;
         }
       }
-      else if (kpd.curr_key == 'h')
+      else if (curr_key == 'h')
         math::toggle(draw_horiz_coords);
-      else if (kpd.curr_key == 'v')
+      else if (curr_key == 'v')
         math::toggle(draw_vert_coords);
-      else if (kpd.curr_key == 'H')
+      else if (curr_key == 'H')
         math::toggle(draw_horiz_coord_line);
-      else if (kpd.curr_key == 'V')
+      else if (curr_key == 'V')
         math::toggle(draw_vert_coord_line);
-      else if (str::to_lower(kpd.curr_key) == 'c')
+      else if (str::to_lower(curr_key) == 'c')
       {
         undo_buffer.push({ { cursor_pos, curr_texture(cursor_pos) } });
         curr_texture.set_textel(cursor_pos, Textel {});
         redo_buffer = {};
         is_modified = true;
       }
-      else if (kpd.curr_key == 'b' || kpd.curr_key == 'r')
+      else if (curr_key == 'b' || curr_key == 'r')
       {
         UndoItem undo;
         for (int i = -2; i <= 2; ++i)
@@ -882,7 +885,7 @@ private:
           for (int j = -j_offs; j <= j_offs; ++j)
           {
             RC pos = cursor_pos + RC { i, j };
-            if (kpd.curr_key == 'b' || (kpd.curr_key == 'r' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
+            if (curr_key == 'b' || (curr_key == 'r' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
             {
               undo.emplace_back(pos, curr_texture(pos));
               curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
@@ -893,7 +896,7 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
-      else if (kpd.curr_key == 'B' || kpd.curr_key == 'R')
+      else if (curr_key == 'B' || curr_key == 'R')
       {
         //                 ~~~~~
         //              ~~~~~~~~~~~
@@ -924,7 +927,7 @@ private:
           for (int j = -j_offs; j <= j_offs; ++j)
           {
             RC pos = cursor_pos + RC { i, j };
-            if (kpd.curr_key == 'B' || (kpd.curr_key == 'R' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
+            if (curr_key == 'B' || (curr_key == 'R' && std::abs(rnd::randn(0.f, math::length(2*i, j))) < 0.1f))
             {
               undo.emplace_back(pos, curr_texture(pos));
               curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
@@ -935,7 +938,7 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
-      else if (str::to_lower(kpd.curr_key) == 'f')
+      else if (str::to_lower(curr_key) == 'f')
       {
         UndoItem undo;
         const auto& selected_textel = textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels);
@@ -952,7 +955,7 @@ private:
         redo_buffer = {};
         is_modified = true;
       }
-      else if (str::to_lower(kpd.curr_key) == 'p')
+      else if (str::to_lower(curr_key) == 'p')
       {
         const auto& curr_textel = curr_texture(cursor_pos);
         auto idx_normal = stlutils::find_if_idx(textel_presets,
@@ -973,24 +976,24 @@ private:
           }
         }
       }
-      else if (str::to_lower(kpd.curr_key) == 'l')
+      else if (str::to_lower(curr_key) == 'l')
         message_handler->add_message(static_cast<float>(get_real_time_s()),
                                      "Cursor @ " + cursor_pos.str(),
                                      MessageHandler::Level::Guide);
-      else if (str::to_lower(kpd.curr_key) == 'g')
+      else if (str::to_lower(curr_key) == 'g')
       {
         if (!math::toggle(show_goto_pos))
           reset_goto_input();
       }
-      else if (str::to_lower(kpd.curr_key) == 't')
+      else if (str::to_lower(curr_key) == 't')
         math::toggle(show_tracing);
-      else if (str::to_lower(kpd.curr_key) == 'm')
+      else if (str::to_lower(curr_key) == 'm')
         math::toggle(show_materials);
     }
     
-    if (str::to_lower(kpd.curr_key) == 'i')
+    if (str::to_lower(curr_key) == 'i')
         math::toggle(use_shadow_textels);
-    else if (str::to_lower(kpd.curr_key) == 'x' || safe_to_save)
+    else if (str::to_lower(curr_key) == 'x' || safe_to_save)
     {
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
       {
