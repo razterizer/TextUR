@@ -658,9 +658,12 @@ private:
           reset_goto_input();
           show_goto_pos = false;
         }
-        
+
+        ui::TextBoxDrawingArgsAlign tb_args;
+        tb_args.base.box_style = { Color::White, Color::DarkBlue };
+        tb_args.base.box_padding_lr = 1;
         tb_goto.calc_pre_draw(str::Adjustment::Left);
-        tb_goto.draw(sh, ui::VerticalAlignment::CENTER, ui::HorizontalAlignment::CENTER, { Color::White, Color::DarkBlue }, true, true, 0, 1, std::nullopt, drawing::OutlineType::Line, true);
+        tb_goto.draw(sh, tb_args);
       }
       
       message_handler->update(sh, static_cast<float>(get_real_time_s()));
