@@ -584,8 +584,12 @@ private:
 
 //#define SHOW_DEBUG_WINDOW
 #ifdef SHOW_DEBUG_WINDOW
+    ui::TextBoxDrawingArgsAlign tbd_args;
+    tbd_args.v_align = ui::VerticalAlignment::TOP;
+    tbd_args.base.box_style = { Color::Blue, Color::Yellow };
+    tbd_args.framed_mode = true;
     tbd.calc_pre_draw(str::Adjustment::Left);
-    tbd.draw(sh, ui::VerticalAlignment::TOP, ui::HorizontalAlignment::CENTER, { Color::Blue, Color::Yellow }, true, true, 0, 0, std::nullopt, drawing::OutlineType::Line, true);
+    tbd.draw(sh, tbd_args);
 #endif
 
     auto curr_key = keyboard::get_char_key(kpd);
