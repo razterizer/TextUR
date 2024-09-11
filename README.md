@@ -1,5 +1,7 @@
 # TextUR
 
+![GitHub License](https://img.shields.io/github/license/razterizer/TextUR?color=blue)
+
 Text-based texture UI and Rasterizer.
 
 TextUR is a terminal-based editor for text-based textures or images.
