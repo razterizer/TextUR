@@ -64,7 +64,7 @@ class Game : public GameEngine<>
       const auto& textel = preset.get_textel(use_shadow_textels);
       sh.write_buffer(textel.str(), r + 1, nc - menu_width + 2, textel.get_style());
       sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
-      draw_box_outline(sh, r, nc - menu_width, 4 - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
+      draw_box_outline(sh, r, nc - menu_width, 4, menu_width, drawing::OutlineType::Line, ui_style);
       r += 3;
     }
   }
@@ -596,7 +596,7 @@ private:
     auto curr_special_key = keyboard::get_special_key(kpd);
       
     if (!show_confirm_overwrite && show_menu)
-      draw_box_outline(sh, 0, nc - menu_width, nr - 1, menu_width - 1, drawing::OutlineType::Line, ui_style);
+      draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, drawing::OutlineType::Line, ui_style);
   
     if (is_modified)
       sh.write_buffer("*", 0, 0, Color::Red, Color::White);
@@ -678,27 +678,27 @@ private:
       
       draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line, nc, menu_width);
       
-      int box_width_curr = curr_texture.size.c + 1;
-      int box_width_tracing = tracing_texture.size.c + 1;
+      int box_width_curr = curr_texture.size.c;
+      int box_width_tracing = tracing_texture.size.c;
       if (show_menu)
       {
         if (curr_texture.size.c > nc - menu_width)
-          box_width_curr = nc - menu_width - screen_pos.c + 1;
+          box_width_curr = nc - menu_width - screen_pos.c;
         if (tracing_texture.size.c > nc - menu_width)
-          box_width_tracing = nc - menu_width - screen_pos.c + 1;
+          box_width_tracing = nc - menu_width - screen_pos.c;
       }
       if (show_materials)
       {
         draw_box_texture_materials(sh,
                                    screen_pos.r, screen_pos.c,
-                                   curr_texture.size.r+1, box_width_curr,
+                                   curr_texture.size.r + 2, box_width_curr + 2,
                                    curr_texture);
       }
       else
       {
         draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
-                          curr_texture.size.r+1, box_width_curr,
+                          curr_texture.size.r + 2, box_width_curr + 2,
                           drawing::SolarDirection::Zenith,
                           curr_texture);
       }
@@ -706,7 +706,7 @@ private:
       {
         draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
-                          tracing_texture.size.r+1, box_width_tracing,
+                          tracing_texture.size.r + 2, box_width_tracing + 2,
                           drawing::SolarDirection::Zenith,
                           tracing_texture);
       }
