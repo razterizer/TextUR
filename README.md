@@ -3,6 +3,8 @@
 ![GitHub License](https://img.shields.io/github/license/razterizer/TextUR?color=blue)
 
 [![build check ubuntu](https://github.com/razterizer/TextUR/actions/workflows/build-ubuntu.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/build-ubuntu.yml)
+[![build check macos](https://github.com/razterizer/TextUR/actions/workflows/build-macos.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/build-macos.yml)
+[![build check windows](https://github.com/razterizer/TextUR/actions/workflows/build-windows.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/build-windows.yml)
 
 Text-based texture UI and Rasterizer.
 
