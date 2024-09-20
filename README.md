@@ -1,7 +1,8 @@
 # TextUR
 
 ![GitHub License](https://img.shields.io/github/license/razterizer/TextUR?color=blue)
-[![Build Check](https://github.com/razterizer/TextUR/actions/workflows/main.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/main.yml)
+
+[![build check ubuntu](https://github.com/razterizer/TextUR/actions/workflows/build-ubuntu.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/build-ubuntu.yml)
 
 Text-based texture UI and Rasterizer.
 
