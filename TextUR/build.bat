@@ -1,4 +1,4 @@
-call ..\..\Core\build.bat
+call ..\..\lib\Core\build.bat
 
 SET configuration="Release"
 IF "%~1" == "Debug" SET configuration="Debug"
