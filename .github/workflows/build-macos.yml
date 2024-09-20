@@ -33,7 +33,7 @@ jobs:
       # Step 3: Change to the correct directory and build
       - name: Build project
         run: |
-          cd demo
-          ./build_demo.sh
+          cd TextUR
+          ./build.sh
         continue-on-error: false # Ensure errors are not bypassed
   
