@@ -30,6 +30,7 @@
 		075C651C2C3E00C000B15451 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		076AB05D2C9DDA7800531419 /* main.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; name = main.yml; path = .github/workflows/main.yml; sourceTree = SOURCE_ROOT; };
 		076AB05E2C9DDAE700531419 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
+		076AB05F2C9DDC8E00531419 /* build.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = build.bat; sourceTree = "<group>"; };
 		0775CB5F2C321B3A0078F60A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		07C2A7962C31E62700869A56 /* TextUR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TextUR; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2A7992C31E62700869A56 /* textur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textur.cpp; sourceTree = "<group>"; };
@@ -90,6 +91,7 @@
 				075C5B082C59B36700E6A6C0 /* examples */,
 				07C2A7992C31E62700869A56 /* textur.cpp */,
 				076AB05E2C9DDAE700531419 /* build.sh */,
+				076AB05F2C9DDC8E00531419 /* build.bat */,
 			);
 			path = TextUR;
 			sourceTree = "<group>";
