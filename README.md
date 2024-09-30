@@ -6,6 +6,13 @@
 [![build macos](https://github.com/razterizer/TextUR/actions/workflows/build-macos.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/build-macos.yml)
 [![build windows](https://github.com/razterizer/TextUR/actions/workflows/build-windows.yml/badge.svg)](https://github.com/razterizer/TextUR/actions/workflows/build-windows.yml)
 
+![Top Languages](https://img.shields.io/github/languages/top/razterizer/TextUR)
+![Goto](https://img.shields.io/github/search/razterizer/TextUR/goto)
+![Commit Activity](https://img.shields.io/github/commit-activity/t/razterizer/TextUR)
+![Last Commit](https://img.shields.io/github/last-commit/razterizer/TextUR?color=blue)
+![Contributors](https://img.shields.io/github/contributors/razterizer/TextUR?color=blue)
+<!-- ![Languages](https://img.shields.io/github/languages/count/razterizer/TextUR) -->
+
 Text-based texture UI and Rasterizer.
 
 TextUR is a terminal-based editor for text-based textures or images.
