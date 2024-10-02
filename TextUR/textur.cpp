@@ -892,7 +892,10 @@ private:
           for (int j = -j_offs; j <= j_offs; ++j)
           {
             RC pos = cursor_pos + RC { i, j };
-            if (curr_key == 'b' || (curr_key == 'r' && std::abs(rnd::randn(0.f, static_cast<float>(math::length(2*i, j)))) < 0.1f))
+            auto dist = static_cast<float>(math::length(2*i, j));
+            float nrnd = rnd::randn(0.f, dist);
+            float anrnd = std::abs(nrnd);
+            if (curr_key == 'b' || (curr_key == 'r' && anrnd < 0.1f))
             {
               undo.emplace_back(pos, curr_texture(pos));
               curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
