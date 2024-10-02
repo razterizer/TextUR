@@ -892,9 +892,9 @@ private:
           for (int j = -j_offs; j <= j_offs; ++j)
           {
             RC pos = cursor_pos + RC { i, j };
-            auto dist = static_cast<float>(math::length(2*i, j));
-            float nrnd = rnd::randn(0.f, dist);
-            float anrnd = std::abs(nrnd);
+            auto dist = math::length(2.f*i, static_cast<float>(j));
+            auto nrnd = rnd::randn(0.f, dist);
+            auto anrnd = std::abs(nrnd);
             if (curr_key == 'b' || (curr_key == 'r' && anrnd < 0.1f))
             {
               undo.emplace_back(pos, curr_texture(pos));
@@ -937,9 +937,9 @@ private:
           for (int j = -j_offs; j <= j_offs; ++j)
           {
             RC pos = cursor_pos + RC { i, j };
-            auto dist = static_cast<float>(math::length(2*i, j));
-            float nrnd = rnd::randn(0.f, dist);
-            float anrnd = std::abs(nrnd);
+            auto dist = math::length(2.f*i, static_cast<float>(j));
+            auto nrnd = rnd::randn(0.f, dist);
+            auto anrnd = std::abs(nrnd);
             if (curr_key == 'B' || (curr_key == 'R' && anrnd < 0.1f))
             {
               undo.emplace_back(pos, curr_texture(pos));
