@@ -6,7 +6,7 @@
 //
 
 #include <Termin8or/GameEngine.h>
-#include <Termin8or/Screen.h>
+#include <Termin8or/ScreenUtils.h>
 #include <Termin8or/Drawing.h>
 #include <Termin8or/Texture.h>
 #include <Termin8or/RC.h>
