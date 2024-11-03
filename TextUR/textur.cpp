@@ -116,6 +116,8 @@ public:
     : GameEngine(argv[0], params)
     , message_handler(std::make_unique<MessageHandler>())
   {
+    GameEngine::set_anim_rate(0, 5);
+  
     RC size;
   
     for (int a_idx = 1; a_idx < argc; ++a_idx)
@@ -592,8 +594,8 @@ private:
     tbd.draw(sh, tbd_args);
 #endif
 
-    auto curr_key = keyboard::get_char_key(kpd);
-    auto curr_special_key = keyboard::get_special_key(kpd);
+    auto curr_key = keyboard::get_char_key(kpdp.transient);
+    auto curr_special_key = keyboard::get_special_key(kpdp.transient);
       
     if (!show_confirm_overwrite && show_menu)
       draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, drawing::OutlineType::Line, ui_style);
@@ -673,7 +675,7 @@ private:
       message_handler->update(sh, static_cast<float>(get_real_time_s()));
       
       // Caret
-      if (anim_ctr % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
+      if (get_anim_count(0) % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
         sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
       
       draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line, nc, menu_width);
