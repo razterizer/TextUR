@@ -157,6 +157,9 @@ These repos are not guaranteed to all the time work with the latest version of `
 
 Then just open `<my_source_code_dir>/TextUR/TextUR/TextUR.sln` and build and run. That's it!
 
+You can also build it by going to `<my_source_code_dir>/TextUR/TextUR/` and build with `build.bat`.
+Then you run by typing `x64\Release\textur` followed by the appropriate command line arguments.
+
 ### MacOS
 
 Goto `<my_source_code_dir>/TextUR/TextUR/` and build with `./build.sh`.
