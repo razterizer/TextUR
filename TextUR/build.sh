@@ -19,8 +19,3 @@ if [ $exit_code -ne 0 ]; then
   exit $exit_code
 fi
 
-### Post-Build Actions ###
-
-mkdir -p bin/fonts/
-cp ../../lib/Termin8or/fonts/* bin/fonts/
-

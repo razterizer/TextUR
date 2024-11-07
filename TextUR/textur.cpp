@@ -10,7 +10,6 @@
 #include <Termin8or/Drawing.h>
 #include <Termin8or/Texture.h>
 #include <Termin8or/RC.h>
-#include <Termin8or/ASCII_Fonts.h>
 #include <Termin8or/MessageHandler.h>
 #include <Termin8or/UI.h>
 #include <Core/Rand.h>
@@ -179,16 +178,6 @@ public:
   
   virtual void generate_data() override
   {
-    font_data_path = ASCII_Fonts::get_path_to_font_data(get_exe_folder());
-    //std::cout << font_data_path << std::endl;
-    
-    color_schemes.emplace_back();
-    auto& cs = color_schemes.emplace_back();
-    cs.internal.bg_color = Color::DarkCyan;
-    cs.side_h.bg_color = Color::DarkBlue;
-    
-    font_data = ASCII_Fonts::load_font_data(font_data_path);
-    
     textel_presets.emplace_back(drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 "Void");
@@ -1055,13 +1044,9 @@ private:
   {
     //::draw_instructions(sh, 0);
   }
-    
-  std::vector<ASCII_Fonts::ColorScheme> color_schemes;
   
   std::string font_data_path;
-  
-  ASCII_Fonts::FontDataColl font_data;
-  
+    
   drawing::Texture curr_texture;
   drawing::Texture tracing_texture;
   drawing::Texture bright_texture;
