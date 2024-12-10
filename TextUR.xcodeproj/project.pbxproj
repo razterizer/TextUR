@@ -23,6 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		072AE7EB2D08BAB8004F92D3 /* fetch-dependencies.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = "fetch-dependencies.py"; sourceTree = SOURCE_ROOT; };
+		072AE7EC2D08BAC3004F92D3 /* dependencies */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dependencies; sourceTree = SOURCE_ROOT; };
 		075C5B092C5A16CE00E6A6C0 /* test_day.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_day.tex; sourceTree = "<group>"; };
 		075C5B0A2C5A16CE00E6A6C0 /* test_night.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_night.tex; sourceTree = "<group>"; };
 		075C5B0B2C5A1C4700E6A6C0 /* textel_presets_day.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = textel_presets_day.tex; sourceTree = "<group>"; };
@@ -49,6 +51,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072AE7EA2D08BAA3004F92D3 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				072AE7EB2D08BAB8004F92D3 /* fetch-dependencies.py */,
+				072AE7EC2D08BAC3004F92D3 /* dependencies */,
+				076AB05E2C9DDAE700531419 /* build.sh */,
+				076AB05F2C9DDC8E00531419 /* build.bat */,
+			);
+			name = scripts;
+			sourceTree = "<group>";
+		};
 		075C5B082C59B36700E6A6C0 /* examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -91,11 +104,10 @@
 		07C2A7982C31E62700869A56 /* TextUR */ = {
 			isa = PBXGroup;
 			children = (
+				072AE7EA2D08BAA3004F92D3 /* scripts */,
 				076AB05C2C9DDA3E00531419 /* workflows */,
 				075C5B082C59B36700E6A6C0 /* examples */,
 				07C2A7992C31E62700869A56 /* textur.cpp */,
-				076AB05E2C9DDAE700531419 /* build.sh */,
-				076AB05F2C9DDC8E00531419 /* build.bat */,
 			);
 			path = TextUR;
 			sourceTree = "<group>";
