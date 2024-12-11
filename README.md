@@ -128,19 +128,39 @@ Custom textel "Magic Stone":
 ## Build & Run Instructions
 
 There are two options on dealing with repo dependencies:
+
 ### Repo Dependencies Option 1
 
-Run the following command from `<my_source_code_dir>`.
-```sh
-./TextUR/fetch-dependencies.py ./TextUR/dependencies
-```
-This will make sure you are running the latest stable versions that work with `TextUR`.
+This method will ensure that you are running the latest stable versions of the dependencies that work with `TextUR`.
 
-This script was created by [Thibaut Buchert](https://github.com/thibautbuchert).
+The script `fetch-dependencies.py` used for this was created by [Thibaut Buchert](https://github.com/thibautbuchert).
+`fetch-dependencies.py` is used in the following scripts below:
+
+After a successful build, the scripts will then prompt you with the question if you want to run the program (it will be run with a demo texture).
+
+When the script has been successfully run for the first time, you can then go to sub-folder `TextUR` and use the `build.sh` / `build.bat` script instead.
+
+#### Windows
+
+Run the following script:
+```sh
+setup_and_build.bat
+```
+
+#### MacOS / Linux
+
+Run the following script:
+```sh
+setup_and_build.sh
+```
 
 ### Repo Dependencies Option 2
 
-You need the following header-only libraries that I've made:
+In this method we basically outline the things done in the `setup_and_build`-scripts in Option 1.
+
+This method is more suitable for development as we're not necessarily working with "locked" dependencies.
+
+You need the following header-only libraries:
 * https://github.com/razterizer/Core
 * https://github.com/razterizer/Termin8or
 
