@@ -2,8 +2,6 @@
 
 REPO_DIR="TextUR"
 
-# brew install openal-soft
-
 cd ..
 
 ./"${REPO_DIR}"/fetch-dependencies.py "${REPO_DIR}"/dependencies
