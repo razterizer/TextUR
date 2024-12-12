@@ -180,14 +180,7 @@ Then just open `<my_source_code_dir>/TextUR/TextUR/TextUR.sln` and build and run
 You can also build it by going to `<my_source_code_dir>/TextUR/TextUR/` and build with `build.bat`.
 Then you run by typing `x64\Release\textur` followed by the appropriate command line arguments.
 
-### MacOS
-
-Goto `<my_source_code_dir>/TextUR/TextUR/` and build with `./build.sh`.
-
-Then run by typing `./bin/textur` and apply the appropriate command line arguments (see beginning of README.md).
-
-### Linux (Ubuntu)
-
+### MacOS / Linux
 Goto `<my_source_code_dir>/TextUR/TextUR/` and build with `./build.sh`.
 
 Then run by typing `./bin/textur` and apply the appropriate command line arguments (see beginning of README.md).
