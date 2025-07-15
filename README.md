@@ -9,6 +9,7 @@
 
 ![Top Languages](https://img.shields.io/github/languages/top/razterizer/TextUR)
 ![GitHub repo size](https://img.shields.io/github/repo-size/razterizer/TextUR)
+![](https://tokei.rs/b1/github/razterizer/TextUR)
 ![Commit Activity](https://img.shields.io/github/commit-activity/t/razterizer/TextUR)
 ![Last Commit](https://img.shields.io/github/last-commit/razterizer/TextUR?color=blue)
 ![Contributors](https://img.shields.io/github/contributors/razterizer/TextUR?color=blue)
