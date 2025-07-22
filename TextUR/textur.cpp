@@ -121,7 +121,7 @@ public:
   
     for (int a_idx = 1; a_idx < argc; ++a_idx)
     {
-      if (std::strcmp(argv[a_idx]), "--help") == 0)
+      if (std::strcmp(argv[a_idx], "--help") == 0)
       {
         std::cout << "textur -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>]" << std::endl;
         std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
