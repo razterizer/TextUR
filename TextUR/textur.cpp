@@ -121,6 +121,19 @@ public:
   
     for (int a_idx = 1; a_idx < argc; ++a_idx)
     {
+      if (std::strcmp(argv[a_idx]), "--help") == 0)
+      {
+        std::cout << "textur -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>]" << std::endl;
+        std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
+        std::cour << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
+        std::cout << "                               then you need to supply the -s argument as well." << std::endl;
+        std::cout << "  -s                         : Specifies the size of a new texture." << std::endl;
+        std::cour << "                             : If <filepath_texture> already exists, then it will be overwritten." << std::endl;
+        std::cout << "  -t                         : Specifies a tracing texture." << std::endl;
+        std::cout << "  <filepath_tracing_texture> : Filepath to tracinh texture. Allows you to do animations." << std::endl;
+        exit(EXIT_SUCCESS);
+      }
+
       if (std::strcmp(argv[a_idx], "-f") == 0 && a_idx + 1 < argc) // file
       {
         file_path_curr_texture = argv[a_idx + 1];
