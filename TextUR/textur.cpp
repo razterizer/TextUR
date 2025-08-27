@@ -123,7 +123,7 @@ public:
     {
       if (std::strcmp(argv[a_idx], "--help") == 0)
       {
-        std::cout << "textur -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>]" << std::endl;
+        std::cout << "textur --help | -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>] [--log_mode (record | replay)]" << std::endl;
         std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
         std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
         std::cout << "                               then you need to supply the -s argument as well." << std::endl;
@@ -137,12 +137,12 @@ public:
         exit(EXIT_SUCCESS);
       }
 
-      if (std::strcmp(argv[a_idx], "-f") == 0 && a_idx + 1 < argc) // file
+      if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-f") == 0) // file
       {
         file_path_curr_texture = argv[a_idx + 1];
         file_path_bright_texture = file_path_curr_texture;
       }
-      else if (std::strcmp(argv[a_idx], "-s") == 0 && a_idx + 2 < argc) // size
+      else if (a_idx + 2 < argc && std::strcmp(argv[a_idx], "-s") == 0) // size
       {
         file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
         
@@ -152,9 +152,9 @@ public:
         iss.clear();
         iss >> size.c;
       }
-      else if (std::strcmp(argv[a_idx], "-t") == 0 && a_idx + 1 < argc) // trace
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-t") == 0) // trace
         file_path_tracing_texture = argv[a_idx + 1];
-      else if (std::strcmp(argv[a_idx], "-c") == 0 && a_idx + 1 < argc) // convert to new texture
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-c") == 0) // convert to new texture
       {
         file_path_curr_texture = argv[a_idx + 1];
         convert = true;
@@ -1120,6 +1120,18 @@ int main(int argc, char** argv)
   params.screen_bg_color_default = Color::Black;
   params.screen_bg_color_title = Color::DarkYellow;
   params.screen_bg_color_instructions = Color::Black;
+  
+  for (int a_idx = 1; a_idx < argc; ++a_idx)
+  {
+    if (a_idx + 1 < argc && strcmp(argv[a_idx], "--log_mode") == 0)
+    {
+      if (strcmp(argv[a_idx + 1], "record") == 0)
+        params.log_mode = LogMode::Record;
+      else if (strcmp(argv[a_idx + 1], "replay") == 0)
+        params.log_mode = LogMode::Replay;
+      params.xcode_log_filepath = "../../../../../../../../Documents/xcode/TextUR/TextUR";
+    }
+  }
 
   Game game(argc, argv, params);
 
