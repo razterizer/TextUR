@@ -17,6 +17,8 @@
 #include <iostream>
 #include <stack>
 
+using namespace std::string_literals;
+
 enum class EditorFileMode { NEW_OR_OVERWRITE_FILE, OPEN_EXISTING_FILE };
 
 
