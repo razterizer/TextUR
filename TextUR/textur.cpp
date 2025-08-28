@@ -132,93 +132,10 @@ class Game : public GameEngine<>
     dialog_editor.set_tab_order(0);
   }
   
-public:
-  Game(int argc, char** argv, const GameEngineParams& params)
-    : GameEngine(argv[0], params)
-    , message_handler(std::make_unique<MessageHandler>())
+  void reload_textel_presets()
   {
-    GameEngine::set_anim_rate(0, 5);
-    GameEngine::set_anim_rate(1, 6);
-    
-    filepath_custom_textel_presets = folder::join_path({ get_exe_folder(), "custom_textel_presets" });
-  
-    RC size;
-  
-    for (int a_idx = 1; a_idx < argc; ++a_idx)
-    {
-      if (std::strcmp(argv[a_idx], "--help") == 0)
-      {
-        std::cout << "textur --help | -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>] [--log_mode (record | replay)] [--suppress_tty_output] [--suppress_tty_input]" << std::endl;
-        std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
-        std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
-        std::cout << "                               then you need to supply the -s argument as well." << std::endl;
-        std::cout << "  -s                         : Specifies the size of a new texture." << std::endl;
-        std::cout << "                             : If <filepath_texture> already exists, then it will be overwritten." << std::endl;
-        std::cout << "  -t                         : Specifies a tracing texture." << std::endl;
-        std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Allows you to do animations." << std::endl;
-        std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
-        std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
-        std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
-        exit(EXIT_SUCCESS);
-      }
-
-      if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-f") == 0) // file
-      {
-        file_path_curr_texture = argv[a_idx + 1];
-        file_path_bright_texture = file_path_curr_texture;
-      }
-      else if (a_idx + 2 < argc && std::strcmp(argv[a_idx], "-s") == 0) // size
-      {
-        file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
-        
-        std::istringstream iss(argv[a_idx + 1]);
-        iss >> size.r;
-        iss.str(argv[a_idx + 2]);
-        iss.clear();
-        iss >> size.c;
-      }
-      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-t") == 0) // trace
-        file_path_tracing_texture = argv[a_idx + 1];
-      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-c") == 0) // convert to new texture
-      {
-        file_path_curr_texture = argv[a_idx + 1];
-        convert = true;
-      }
-    }
-  
-    if (file_path_curr_texture.empty())
-    {
-      std::cerr << "ERROR: You must supply a texture filename as a command line argument!" << std::endl;
-      request_exit();
-    }
-      
-    if (convert)
-    {
-      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
-      {
-        std::cerr << "ERROR: You cannot use the size flag (-s) together with the conversion flag (-c)!" << std::endl;
-        request_exit();
-      }
-      else if (file_path_bright_texture.empty())
-      {
-        std::cerr << "ERROR: When using the conversion flag (-c) you need to also specify the source file with the -f flag!" << std::endl;
-        request_exit();
-      }
-    }
-    else
-    {
-      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
-        curr_texture = drawing::Texture { size };
-      else
-        curr_texture.load(file_path_curr_texture);
-      
-      if (!file_path_tracing_texture.empty())
-        tracing_texture.load(file_path_tracing_texture);
-    }
-  }
-  
-  virtual void generate_data() override
-  {
+    textel_presets.clear();
+    custom_textel_presets.clear();
     textel_presets.emplace_back(drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 drawing::Textel { ' ', Color::Default, Color::Black, 0 },
                                 "Void");
@@ -569,6 +486,96 @@ public:
         }
       }
     }
+  }
+  
+public:
+  Game(int argc, char** argv, const GameEngineParams& params)
+    : GameEngine(argv[0], params)
+    , message_handler(std::make_unique<MessageHandler>())
+  {
+    GameEngine::set_anim_rate(0, 5);
+    GameEngine::set_anim_rate(1, 6);
+    
+    filepath_custom_textel_presets = folder::join_path({ get_exe_folder(), "custom_textel_presets" });
+  
+    RC size;
+  
+    for (int a_idx = 1; a_idx < argc; ++a_idx)
+    {
+      if (std::strcmp(argv[a_idx], "--help") == 0)
+      {
+        std::cout << "textur --help | -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>] [--log_mode (record | replay)] [--suppress_tty_output] [--suppress_tty_input]" << std::endl;
+        std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
+        std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
+        std::cout << "                               then you need to supply the -s argument as well." << std::endl;
+        std::cout << "  -s                         : Specifies the size of a new texture." << std::endl;
+        std::cout << "                             : If <filepath_texture> already exists, then it will be overwritten." << std::endl;
+        std::cout << "  -t                         : Specifies a tracing texture." << std::endl;
+        std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Allows you to do animations." << std::endl;
+        std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
+        std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
+        std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
+        exit(EXIT_SUCCESS);
+      }
+
+      if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-f") == 0) // file
+      {
+        file_path_curr_texture = argv[a_idx + 1];
+        file_path_bright_texture = file_path_curr_texture;
+      }
+      else if (a_idx + 2 < argc && std::strcmp(argv[a_idx], "-s") == 0) // size
+      {
+        file_mode = EditorFileMode::NEW_OR_OVERWRITE_FILE;
+        
+        std::istringstream iss(argv[a_idx + 1]);
+        iss >> size.r;
+        iss.str(argv[a_idx + 2]);
+        iss.clear();
+        iss >> size.c;
+      }
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-t") == 0) // trace
+        file_path_tracing_texture = argv[a_idx + 1];
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-c") == 0) // convert to new texture
+      {
+        file_path_curr_texture = argv[a_idx + 1];
+        convert = true;
+      }
+    }
+  
+    if (file_path_curr_texture.empty())
+    {
+      std::cerr << "ERROR: You must supply a texture filename as a command line argument!" << std::endl;
+      request_exit();
+    }
+      
+    if (convert)
+    {
+      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
+      {
+        std::cerr << "ERROR: You cannot use the size flag (-s) together with the conversion flag (-c)!" << std::endl;
+        request_exit();
+      }
+      else if (file_path_bright_texture.empty())
+      {
+        std::cerr << "ERROR: When using the conversion flag (-c) you need to also specify the source file with the -f flag!" << std::endl;
+        request_exit();
+      }
+    }
+    else
+    {
+      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
+        curr_texture = drawing::Texture { size };
+      else
+        curr_texture.load(file_path_curr_texture);
+      
+      if (!file_path_tracing_texture.empty())
+        tracing_texture.load(file_path_tracing_texture);
+    }
+  }
+  
+  virtual void generate_data() override
+  {
+    reload_textel_presets();
                                 
     if (convert)
     {
@@ -1289,7 +1296,8 @@ private:
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Unable to write to custom textel presets file!",
                                                  MessageHandler::Level::Fatal);
-                // #FIXME: Save changes!
+                                                 
+                    reload_textel_presets();
                 }
                 reset_textel_editor();
                 show_textel_editor = false;
