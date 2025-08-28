@@ -107,9 +107,29 @@ class Game : public GameEngine<>
   
   void reset_goto_input()
   {
-    tb_goto = ui::TextBox({ "Cursor Goto @", str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
-    goto_tab = 0;
-    goto_caret_idx = { 0, 0 };
+    dialog_goto = ui::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
+    dialog_goto.add_text_field({ 2, 1 }, tf_goto_r);
+    dialog_goto.add_text_field({ 2, 11 }, tf_goto_c);
+    dialog_goto.set_tab_order(0);
+  }
+  
+  void reset_textel_editor()
+  {
+    edit_mode = EditTextelMode::EditOrAdd;
+    dialog_edit_or_add = ui::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
+    dialog_edit_or_add.add_button(btn_edit);
+    dialog_edit_or_add.add_button(btn_add);
+    dialog_edit_or_add.set_button_selection(0, true);
+    dialog_edit_mat = ui::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
+    dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
+    dialog_edit_mat.set_tab_order(0);
+    dialog_editor = ui::Dialog({ "Custom Textel Preset Editor (Normal)"s, "Textel:", "Idx:", "Name:", "Char:", "FG Color:", "", "BG Color:", "", "Mat:" });
+    dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
+    dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
+    dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
+    dialog_editor.add_color_picker({ 8, 3 }, cp_textel_bg);
+    dialog_editor.add_text_field({ 9, 5 }, tf_textel_mat);
+    dialog_editor.set_tab_order(0);
   }
   
 public:
@@ -118,6 +138,9 @@ public:
     , message_handler(std::make_unique<MessageHandler>())
   {
     GameEngine::set_anim_rate(0, 5);
+    GameEngine::set_anim_rate(1, 6);
+    
+    filepath_custom_textel_presets = folder::join_path({ get_exe_folder(), "custom_textel_presets" });
   
     RC size;
   
@@ -125,7 +148,7 @@ public:
     {
       if (std::strcmp(argv[a_idx], "--help") == 0)
       {
-        std::cout << "textur --help | -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>] [--log_mode (record | replay)]" << std::endl;
+        std::cout << "textur --help | -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>] [--log_mode (record | replay)] [--suppress_tty_output] [--suppress_tty_input]" << std::endl;
         std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
         std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
         std::cout << "                               then you need to supply the -s argument as well." << std::endl;
@@ -504,7 +527,7 @@ public:
                                 "Rope");
     
     std::vector<std::string> lines_custom_textel_presets;
-    if (TextIO::read_file(folder::join_path({ get_exe_folder(), "custom_textel_presets" }), lines_custom_textel_presets))
+    if (TextIO::read_file(filepath_custom_textel_presets, lines_custom_textel_presets))
     {
       int part = 0;
       drawing::Textel textel_normal, textel_shadow;
@@ -541,6 +564,7 @@ public:
         else if (part == 2)
         {
           textel_presets.emplace_back(textel_normal, textel_shadow, line);
+          custom_textel_presets.emplace_back(textel_normal, textel_shadow, line);
           part = 0;
         }
       }
@@ -576,152 +600,16 @@ public:
     tbd.add(PARAM(cursor_pos.c));
     
     reset_goto_input();
+    
+    reset_textel_editor();
   }
   
 private:
-  virtual void update() override
+  void handle_editor_key_presses(char curr_key, keyboard::SpecialKey curr_special_key,
+                                 int nri, int nci, RC& cursor_pos)
   {
     using namespace drawing;
-    
-    styles::Style ui_style { Color::LightGray, Color::Black };
-    
-    const int nr = sh.num_rows();
-    const int nc = sh.num_cols();
-    const int nri = sh.num_rows_inset();
-    const int nci = sh.num_cols_inset();
-    const int menu_width = 15;
-
-//#define SHOW_DEBUG_WINDOW
-#ifdef SHOW_DEBUG_WINDOW
-    ui::TextBoxDrawingArgsAlign tbd_args;
-    tbd_args.v_align = ui::VerticalAlignment::TOP;
-    tbd_args.base.box_style = { Color::Blue, Color::Yellow };
-    tbd_args.framed_mode = true;
-    tbd.calc_pre_draw(str::Adjustment::Left);
-    tbd.draw(sh, tbd_args);
-#endif
-
-    auto curr_key = keyboard::get_char_key(kpdp.transient);
-    auto curr_special_key = keyboard::get_special_key(kpdp.transient);
-      
-    if (!show_confirm_overwrite && show_menu)
-      draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, drawing::OutlineType::Line, ui_style);
   
-    if (is_modified)
-      sh.write_buffer("*", 0, 0, Color::Red, Color::White);
-    draw_frame(sh, Color::White);
-    
-    if (show_confirm_overwrite)
-    {
-      bg_color = Color::DarkCyan;
-      draw_confirm(sh, { "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?" },
-                   overwrite_confirm_button,
-                   { Color::Black, Color::DarkCyan },
-                   { Color::Black, Color::DarkCyan, Color::Cyan },
-                   { Color::White, Color::DarkCyan });
-      if (curr_special_key == keyboard::SpecialKey::Left)
-        overwrite_confirm_button = YesNoButtons::Yes;
-      else if (curr_special_key == keyboard::SpecialKey::Right)
-        overwrite_confirm_button = YesNoButtons::No;
-      
-      if (curr_special_key == keyboard::SpecialKey::Enter)
-      {
-        if (overwrite_confirm_button == YesNoButtons::Yes)
-          safe_to_save = true;
-        else
-          show_confirm_overwrite = false;
-      }
-    }
-    else
-    {
-      if (show_menu)
-        draw_menu(ui_style, menu_width);
-      else if (show_goto_pos)
-      {
-        if ('0' <= curr_key && curr_key <= '9')
-        {
-          tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = curr_key;
-          goto_caret_idx[goto_tab]++;
-          if (goto_caret_idx[goto_tab] > 7)
-            goto_caret_idx[goto_tab] = 7;
-        }
-        else if (curr_special_key == keyboard::SpecialKey::Backspace)
-        {
-          goto_caret_idx[goto_tab]--;
-          if (goto_caret_idx[goto_tab] < 0)
-            goto_caret_idx[goto_tab] = 0;
-          tb_goto[1][(goto_tab == 0 ? 0 : 10) + goto_caret_idx[goto_tab]] = ' ';
-        }
-        else if (curr_special_key == keyboard::SpecialKey::Tab)
-          goto_tab = 1 - goto_tab;
-        else if (curr_special_key == keyboard::SpecialKey::Enter)
-        {
-          std::istringstream iss(tb_goto[1].substr(0, 8));
-          RC pos;
-          iss >> pos.r;
-          iss.str(tb_goto[1].substr(10, 8));
-          iss.clear();
-          iss >> pos.c;
-          if (math::in_range<int>(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
-              && math::in_range<int>(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
-          {
-            cursor_pos = pos;
-            screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
-          }
-          reset_goto_input();
-          show_goto_pos = false;
-        }
-
-        ui::TextBoxDrawingArgsAlign tb_args;
-        tb_args.base.box_style = { Color::White, Color::DarkBlue };
-        tb_args.base.box_padding_lr = 1;
-        tb_goto.calc_pre_draw(str::Adjustment::Left);
-        tb_goto.draw(sh, tb_args);
-      }
-      
-      message_handler->update(sh, static_cast<float>(get_real_time_s()));
-      
-      // Caret
-      if (get_anim_count(0) % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
-        sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
-      
-      draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line, nc, menu_width);
-      
-      int box_width_curr = curr_texture.size.c;
-      int box_width_tracing = tracing_texture.size.c;
-      if (show_menu)
-      {
-        if (curr_texture.size.c > nc - menu_width)
-          box_width_curr = nc - menu_width - screen_pos.c;
-        if (tracing_texture.size.c > nc - menu_width)
-          box_width_tracing = nc - menu_width - screen_pos.c;
-      }
-      if (show_materials)
-      {
-        draw_box_texture_materials(sh,
-                                   screen_pos.r, screen_pos.c,
-                                   curr_texture.size.r + 2, box_width_curr + 2,
-                                   curr_texture);
-      }
-      else
-      {
-        draw_box_textured(sh,
-                          screen_pos.r, screen_pos.c,
-                          curr_texture.size.r + 2, box_width_curr + 2,
-                          drawing::SolarDirection::Zenith,
-                          curr_texture);
-      }
-      if (show_tracing && !tracing_texture.empty())
-      {
-        draw_box_textured(sh,
-                          screen_pos.r, screen_pos.c,
-                          tracing_texture.size.r + 2, box_width_tracing + 2,
-                          drawing::SolarDirection::Zenith,
-                          tracing_texture);
-      }
-    }
-                      
-    // Keypresses:
     if (curr_key == '-')
       math::toggle(show_menu);
       
@@ -1007,6 +895,11 @@ private:
         if (!math::toggle(show_goto_pos))
           reset_goto_input();
       }
+      else if (str::to_lower(curr_key) == 'e')
+      {
+        if (!math::toggle(show_textel_editor))
+          reset_textel_editor();
+      }
       else if (str::to_lower(curr_key) == 't')
         math::toggle(show_tracing);
       else if (str::to_lower(curr_key) == 'm')
@@ -1049,6 +942,426 @@ private:
         show_confirm_overwrite = false;
       }
     }
+  }
+
+  virtual void update() override
+  {
+    styles::Style ui_style { Color::LightGray, Color::Black };
+    
+    int cursor_anim_ctr = get_anim_count(1) % 2 == 0;
+    
+    const int nr = sh.num_rows();
+    const int nc = sh.num_cols();
+    const int nri = sh.num_rows_inset();
+    const int nci = sh.num_cols_inset();
+    const int menu_width = 15;
+
+//#define SHOW_DEBUG_WINDOW
+#ifdef SHOW_DEBUG_WINDOW
+    ui::TextBoxDrawingArgsAlign tbd_args;
+    tbd_args.v_align = ui::VerticalAlignment::TOP;
+    tbd_args.base.box_style = { Color::Blue, Color::Yellow };
+    tbd_args.framed_mode = true;
+    tbd.calc_pre_draw(str::Adjustment::Left);
+    tbd.draw(sh, tbd_args);
+#endif
+
+    auto curr_key = keyboard::get_char_key(kpdp.transient);
+    auto curr_special_key = keyboard::get_special_key(kpdp.transient);
+    bool allow_editing = true;
+      
+    if (!show_confirm_overwrite && show_menu)
+      draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, drawing::OutlineType::Line, ui_style);
+  
+    if (is_modified)
+      sh.write_buffer("*", 0, 0, Color::Red, Color::White);
+    draw_frame(sh, Color::White);
+    
+    message_handler->update(sh, static_cast<float>(get_real_time_s()));
+    
+    if (show_confirm_overwrite)
+    {
+      bg_color = Color::DarkCyan;
+      draw_confirm(sh, { "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?" },
+                   overwrite_confirm_button,
+                   { Color::Black, Color::DarkCyan },
+                   { Color::Black, Color::DarkCyan, Color::Cyan },
+                   { Color::White, Color::DarkCyan });
+      if (curr_special_key == keyboard::SpecialKey::Left)
+        overwrite_confirm_button = YesNoButtons::Yes;
+      else if (curr_special_key == keyboard::SpecialKey::Right)
+        overwrite_confirm_button = YesNoButtons::No;
+      
+      if (curr_special_key == keyboard::SpecialKey::Enter)
+      {
+        if (overwrite_confirm_button == YesNoButtons::Yes)
+          safe_to_save = true;
+        else
+          show_confirm_overwrite = false;
+      }
+    }
+    else
+    {
+      if (show_menu)
+        draw_menu(ui_style, menu_width);
+      else if (show_goto_pos)
+      {
+        allow_editing = false;
+        dialog_goto.update(curr_key, curr_special_key);
+        if (curr_special_key == keyboard::SpecialKey::Enter)
+        {
+          if (dialog_goto.text_field_empty(0) || dialog_goto.text_field_empty(1))
+          {
+            message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                         "You must type both row and col coordinates.",
+                                         MessageHandler::Level::Guide);
+          }
+          else
+          {
+            std::istringstream iss(dialog_goto.get_text_field_input(0));
+            RC pos;
+            iss >> pos.r;
+            iss.str(dialog_goto.get_text_field_input(1));
+            iss.clear();
+            iss >> pos.c;
+            if (math::in_range<int>(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
+                && math::in_range<int>(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
+            {
+              cursor_pos = pos;
+              screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
+            }
+            reset_goto_input();
+            show_goto_pos = false;
+          }
+        }
+        else if (curr_special_key == keyboard::SpecialKey::Escape)
+        {
+          reset_goto_input();
+          show_goto_pos = false;
+        }
+
+        ui::TextBoxDrawingArgsAlign tb_args;
+        tb_args.base.box_style = { Color::White, Color::DarkBlue };
+        tb_args.base.box_padding_lr = 1;
+        dialog_goto.calc_pre_draw(str::Adjustment::Left);
+        dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
+        
+        tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
+        tb_args.v_align = ui::VerticalAlignment::BOTTOM;
+        tb_args.h_align = ui::HorizontalAlignment::RIGHT;
+        tb_ui_help_goto.calc_pre_draw(str::Adjustment::Left);
+        tb_ui_help_goto.draw(sh, tb_args);
+      }
+      else if (show_textel_editor)
+      {
+        allow_editing = false;
+        switch (edit_mode)
+        {
+          case EditTextelMode::EditOrAdd:
+          {
+            // +-----------------------------------+
+            // | Edit or Add Custom Textel Preset? |
+            // | [Edit]                      [Add] |
+            // +-----------------------------------+
+            dialog_edit_or_add.update(curr_key, curr_special_key);
+            if (curr_special_key == keyboard::SpecialKey::Enter)
+            {
+              auto sel_btn_text = dialog_edit_or_add.get_selected_button_text();
+              if (sel_btn_text == "Edit")
+                edit_mode = EditTextelMode::EditEnterMat;
+              else if (sel_btn_text == "Add")
+              {
+                int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
+                dialog_editor[2] = "Idx: " + std::to_string(last_valid_idx + 1);
+                edit_mode = EditTextelMode::EditTextelNormal;
+              }
+            }
+            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            {
+              reset_textel_editor();
+              show_textel_editor = false;
+            }
+            
+            ui::TextBoxDrawingArgsAlign tb_args;
+            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_padding_lr = 1;
+            dialog_edit_or_add.calc_pre_draw(str::Adjustment::Left);
+            dialog_edit_or_add.draw(sh, tb_args, cursor_anim_ctr);
+            break;
+          }
+            
+          case EditTextelMode::EditEnterMat:
+          {
+            // +----------------------------------+
+            // | Enter Custom Textel Preset Index |
+            // | Idx: ____                        |
+            // +----------------------------------+
+            dialog_edit_mat.update(curr_key, curr_special_key);
+            if (curr_special_key == keyboard::SpecialKey::Enter)
+            {
+              if (dialog_edit_mat.text_field_empty(0))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must type a valid custom textel preset id.",
+                                             MessageHandler::Level::Guide);
+              }
+              else
+              {
+                std::istringstream iss(dialog_edit_mat.get_text_field_input(0));
+                int ctp_idx;
+                iss >> ctp_idx;
+                if (stlutils::in_range(custom_textel_presets, ctp_idx))
+                {
+                  message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                               "Successfully loaded custom textel preset " + std::to_string(ctp_idx) + "!",
+                                               MessageHandler::Level::Guide);
+                  edit_textel_preset = &custom_textel_presets[ctp_idx];
+                  edit_textel_normal = edit_textel_preset->textel_normal;
+                  edit_textel_shadow = edit_textel_preset->textel_shadow;
+                  edit_textel_name = edit_textel_preset->name;
+                  dialog_editor[2] = "Idx: " + std::to_string(ctp_idx);
+                  dialog_editor.set_text_field_input(0, edit_textel_name);
+                  dialog_editor.set_text_field_input(1, std::string(1, edit_textel_normal.ch));
+                  dialog_editor.set_color_picker_color(2, edit_textel_normal.fg_color);
+                  dialog_editor.set_color_picker_color(3, edit_textel_normal.bg_color);
+                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
+                  edit_mode = EditTextelMode::EditTextelNormal;
+                }
+                else
+                {
+                  int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
+                  message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                               "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
+                                               MessageHandler::Level::Guide);
+                  dialog_edit_mat.clear_text_field_input(0);
+                }
+              }
+            }
+            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            {
+              reset_textel_editor();
+              show_textel_editor = false;
+            }
+            
+            ui::TextBoxDrawingArgsAlign tb_args;
+            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_padding_lr = 1;
+            dialog_edit_mat.calc_pre_draw(str::Adjustment::Left);
+            dialog_edit_mat.draw(sh, tb_args, cursor_anim_ctr);
+            break;
+          }
+            
+          case EditTextelMode::EditTextelNormal:
+          {
+            // +--------------------------------------+
+            // | Custom Textel Preset Editor (Normal) |
+            // | Textel:                              |
+            // | Idx:                                 |
+            // | Name: Magic Stone_____               |
+            // | Char: _                              |
+            // | FG Color:                            |
+            // |    ________________                  |
+            // | BG Color:                            |
+            // |    ________________                  |
+            // | Mat: ____                            |
+            // +--------------------------------------+
+            dialog_editor.update(curr_key, curr_special_key);
+            edit_textel_name = dialog_editor.get_text_field_input(0);
+            edit_textel_normal.ch = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
+            edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
+            edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
+            dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+            if (curr_special_key == keyboard::SpecialKey::Enter)
+            {
+              if (dialog_editor.text_field_empty(0))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must enter a textel preset name.",
+                                             MessageHandler::Level::Guide);
+              }
+              else if (dialog_editor.text_field_empty(1))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must enter a textel character.",
+                                             MessageHandler::Level::Guide);
+              }
+              else if (dialog_editor.text_field_empty(4))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must enter a textel material.",
+                                             MessageHandler::Level::Guide);
+              }
+              else
+              {
+                edit_textel_normal.mat = std::stoi(dialog_editor.get_text_field_input(4));
+                if (edit_textel_preset != nullptr)
+                {
+                  edit_textel_preset->name = edit_textel_name;
+                  edit_textel_preset->textel_normal = edit_textel_normal;
+                }
+                dialog_editor.set_text_field_input(0, edit_textel_name);
+                dialog_editor.set_text_field_input(1, std::string(1, edit_textel_shadow.ch));
+                dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
+                dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
+                dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
+                dialog_editor[0] = "Custom Textel Preset Editor (Shadow)";
+                dialog_editor[1] = "Textel:   ( )";
+                dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+                edit_mode = EditTextelMode::EditTextelShadow;
+              }
+            }
+            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            {
+              reset_textel_editor();
+              show_textel_editor = false;
+            }
+            
+            ui::TextBoxDrawingArgsAlign tb_args;
+            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_padding_lr = 1;
+            tb_args.v_align_offs = -2;
+            dialog_editor.calc_pre_draw(str::Adjustment::Left);
+            dialog_editor.draw(sh, tb_args, cursor_anim_ctr);
+            break;
+          }
+            
+          case EditTextelMode::EditTextelShadow:
+          {
+            dialog_editor.update(curr_key, curr_special_key);
+            edit_textel_name = dialog_editor.get_text_field_input(0);
+            edit_textel_shadow.ch = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
+            edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
+            edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
+            dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.ch, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
+            if (curr_special_key == keyboard::SpecialKey::Enter)
+            {
+              if (dialog_editor.text_field_empty(0))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must enter a textel preset name.",
+                                             MessageHandler::Level::Guide);
+              }
+              else if (dialog_editor.text_field_empty(1))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must enter a textel character.",
+                                             MessageHandler::Level::Guide);
+              }
+              else if (dialog_editor.text_field_empty(4))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "You must enter a textel material.",
+                                             MessageHandler::Level::Guide);
+              }
+              else
+              {
+                edit_textel_shadow.mat = std::stoi(dialog_editor.get_text_field_input(4));
+                if (edit_textel_preset != nullptr)
+                {
+                  edit_textel_preset->name = edit_textel_name;
+                  edit_textel_preset->textel_shadow = edit_textel_shadow;
+                }
+                else
+                  custom_textel_presets.emplace_back(edit_textel_normal, edit_textel_shadow, edit_textel_name);
+                
+                {
+                  std::vector<std::string> lines_custom_textel_presets;
+                  for (const auto& ctp : custom_textel_presets)
+                  {
+                    // '%', Magenta, Cyan, 28
+                    // '%', DarkMagenta, DarkCyan, 28
+                    // Magic Stone
+                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.ch + "', "
+                      + color::color2string(ctp.textel_normal.fg_color) + ", "
+                      + color::color2string(ctp.textel_normal.bg_color) + ", "
+                      + std::to_string(ctp.textel_normal.mat));
+                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.ch + "', "
+                      + color::color2string(ctp.textel_shadow.fg_color) + ", "
+                      + color::color2string(ctp.textel_shadow.bg_color) + ", "
+                      + std::to_string(ctp.textel_shadow.mat));
+                    lines_custom_textel_presets.emplace_back(ctp.name);
+                  }
+                  if (TextIO::write_file(filepath_custom_textel_presets, lines_custom_textel_presets))
+                    message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                                 "Successfully wrote to custom textel presets file!",
+                                                 MessageHandler::Level::Guide);
+                  else
+                    message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                                 "Unable to write to custom textel presets file!",
+                                                 MessageHandler::Level::Fatal);
+                // #FIXME: Save changes!
+                }
+                reset_textel_editor();
+                show_textel_editor = false;
+              }
+            }
+            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            {
+              reset_textel_editor();
+              show_textel_editor = false;
+            }
+            
+            ui::TextBoxDrawingArgsAlign tb_args;
+            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_padding_lr = 1;
+            tb_args.v_align_offs = -2;
+            dialog_editor.calc_pre_draw(str::Adjustment::Left);
+            dialog_editor.draw(sh, tb_args, cursor_anim_ctr);
+            break;
+          }
+        }
+        
+        ui::TextBoxDrawingArgsAlign tb_args;
+        tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
+        tb_args.base.box_padding_lr = 1;
+        tb_args.v_align = ui::VerticalAlignment::BOTTOM;
+        tb_args.h_align = ui::HorizontalAlignment::RIGHT;
+        tb_ui_help_edit_textel[static_cast<int>(edit_mode)].calc_pre_draw(str::Adjustment::Left);
+        tb_ui_help_edit_textel[static_cast<int>(edit_mode)].draw(sh, tb_args);
+      }
+      
+      // Caret
+      if (get_anim_count(0) % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
+        sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
+      
+      draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line, nc, menu_width);
+      
+      int box_width_curr = curr_texture.size.c;
+      int box_width_tracing = tracing_texture.size.c;
+      if (show_menu)
+      {
+        if (curr_texture.size.c > nc - menu_width)
+          box_width_curr = nc - menu_width - screen_pos.c;
+        if (tracing_texture.size.c > nc - menu_width)
+          box_width_tracing = nc - menu_width - screen_pos.c;
+      }
+      if (show_materials)
+      {
+        draw_box_texture_materials(sh,
+                                   screen_pos.r, screen_pos.c,
+                                   curr_texture.size.r + 2, box_width_curr + 2,
+                                   curr_texture);
+      }
+      else
+      {
+        draw_box_textured(sh,
+                          screen_pos.r, screen_pos.c,
+                          curr_texture.size.r + 2, box_width_curr + 2,
+                          drawing::SolarDirection::Zenith,
+                          curr_texture);
+      }
+      if (show_tracing && !tracing_texture.empty())
+      {
+        draw_box_textured(sh,
+                          screen_pos.r, screen_pos.c,
+                          tracing_texture.size.r + 2, box_width_tracing + 2,
+                          drawing::SolarDirection::Zenith,
+                          tracing_texture);
+      }
+    }
+                      
+    if (allow_editing)
+      handle_editor_key_presses(curr_key, curr_special_key, nri, nci, cursor_pos);
     
     GameEngine::enable_quit_confirm_screen(is_modified);
   }
@@ -1063,7 +1376,7 @@ private:
     //::draw_instructions(sh, 0);
   }
   
-  std::string font_data_path;
+  std::string filepath_custom_textel_presets;
     
   drawing::Texture curr_texture;
   drawing::Texture tracing_texture;
@@ -1082,13 +1395,15 @@ private:
   bool show_confirm_overwrite = false;
   bool show_tracing = true;
   bool show_goto_pos = false;
+  bool show_textel_editor = false;
   bool show_materials = false;
   
   YesNoButtons overwrite_confirm_button = YesNoButtons::No;
   bool safe_to_save = false;
   
-  std::vector<TextelItem> textel_presets;
+  std::vector<TextelItem> textel_presets; // Including custom textel presets.
   int selected_textel_preset_idx = 0;
+  std::vector<TextelItem> custom_textel_presets;
   
   std::unique_ptr<MessageHandler> message_handler;
   using UndoItem = std::vector<std::pair<RC, drawing::Textel>>;
@@ -1105,9 +1420,48 @@ private:
   
   ui::TextBoxDebug tbd;
   
-  ui::TextBox tb_goto;
-  std::array<int, 2> goto_caret_idx { 0, 0 };
-  int goto_tab = 0;
+  styles::ButtonStyle btn_style { Color::White, Color::DarkBlue, Color::Blue };
+  styles::PromptStyle tf_style { Color::White, Color::DarkBlue, Color::White };
+  ui::ButtonFrame btn_frame = ui::ButtonFrame::SquareBrackets;
+  
+  ui::TextBox tb_ui_help_goto {{
+      "UI Help"s,
+      "Type coordinates using number keys.",
+      "Erase characters by pressing [BACKSPACE].",
+      "Toggle coordinate input by pressing [TAB].",
+      "Press [ENTER] when done.",
+      "Press [ESCAPE] to cancel."
+    }};
+  ui::Dialog dialog_goto;
+  ui::TextField tf_goto_r { 8, ui::TextFieldMode::Numeric, tf_style, 0 };
+  ui::TextField tf_goto_c { 8, ui::TextFieldMode::Numeric, tf_style, 1 };
+  
+  enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
+  std::array<ui::TextBox, 4> tb_ui_help_edit_textel
+  {
+    {
+      { { "UI Help"s, "Use arrow keys or [TAB] to select button,", "Then press [ENTER] when done.", "Press [ESCAPE] to cancel." } },
+      { { "UI Help"s, "Type in the textel preset idx using the number keys.", "First custom textel preset starts at idx = 0.", "Erase characters by pressing [BACKSPACE].", "Press [ENTER] when done.", "Press [ESCAPE] to cancel." } },
+      { { "UI Help"s, "Navigate widgets using [TAB].", "Erase characters with [BACKSPACE].", "Use arrow keys to select a color.", "Press [ENTER] when you're ready to edit the shadow textel.", "Press [ESCAPE] to cancel." } },
+      { { "UI Help"s, "Navigate widgets using [TAB].", "Erase characters with [BACKSPACE].", "Use arrow keys to select a color.", "Press [ENTER] when you're ready to save the textel preset.", "Press [ESCAPE] to cancel." } }
+    }
+  };
+  EditTextelMode edit_mode = EditTextelMode::EditOrAdd;
+  ui::Dialog dialog_edit_or_add;
+  ui::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
+  ui::Button btn_add { "Add", btn_style, btn_frame, 1 };
+  ui::Dialog dialog_edit_mat;
+  ui::TextField tf_textel_idx { 4, ui::TextFieldMode::Numeric, tf_style, 0 };
+  ui::Dialog dialog_editor;
+  ui::TextField tf_textel_name = { 16, ui::TextFieldMode::AlphaNumeric, tf_style, 0 };
+  ui::TextField tf_textel_symbol = { 1, ui::TextFieldMode::All, tf_style, 1 };
+  ui::ColorPicker cp_textel_fg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 2, '*', ' ' };
+  ui::ColorPicker cp_textel_bg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 3, '*', ' ' };
+  ui::TextField tf_textel_mat = { 4, ui::TextFieldMode::Numeric, tf_style, 4 };
+  TextelItem* edit_textel_preset = nullptr;
+  drawing::Textel edit_textel_normal;
+  drawing::Textel edit_textel_shadow;
+  std::string edit_textel_name;
 };
 
 int main(int argc, char** argv)
@@ -1125,7 +1479,11 @@ int main(int argc, char** argv)
   
   for (int a_idx = 1; a_idx < argc; ++a_idx)
   {
-    if (a_idx + 1 < argc && strcmp(argv[a_idx], "--log_mode") == 0)
+    if (strcmp(argv[a_idx],  "--suppress_tty_output") == 0)
+      params.suppress_tty_output = true;
+    else if (strcmp(argv[a_idx], "--suppress_tty_input") == 0)
+      params.suppress_tty_input = true;
+    else if (a_idx + 1 < argc && strcmp(argv[a_idx], "--log_mode") == 0)
     {
       if (strcmp(argv[a_idx + 1], "record") == 0)
         params.log_mode = LogMode::Record;
