@@ -1304,7 +1304,7 @@ private:
                                                  "Unable to write to custom textel presets file!",
                                                  MessageHandler::Level::Fatal);
                                                  
-                    reload_textel_presets();
+                  reload_textel_presets();
                 }
                 reset_textel_editor();
                 show_textel_editor = false;
