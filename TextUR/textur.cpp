@@ -1220,6 +1220,7 @@ private:
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)";
                 dialog_editor[1] = "Textel:   ( )";
                 dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+                dialog_editor.set_tab_order(0);
                 edit_mode = EditTextelMode::EditTextelShadow;
               }
             }
