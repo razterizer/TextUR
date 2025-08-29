@@ -496,7 +496,13 @@ public:
     GameEngine::set_anim_rate(0, 5);
     GameEngine::set_anim_rate(1, 6);
     
-    filepath_custom_textel_presets = folder::join_path({ get_exe_folder(), "custom_textel_presets" });
+    auto bin_folder = get_exe_folder();
+#ifndef _WIN32
+    const char* xcode_env = std::getenv("RUNNING_FROM_XCODE");
+    if (xcode_env != nullptr)
+      bin_folder = folder::join_path({ bin_folder, "../../../../../../../../Documents/xcode/TextUR/TextUR/bin" }); // #FIXME: Find a better solution!
+#endif
+    filepath_custom_textel_presets = folder::join_path({ bin_folder, "custom_textel_presets" });
   
     RC size;
   
