@@ -1470,8 +1470,8 @@ private:
   ui::Dialog dialog_editor;
   ui::TextField tf_textel_name = { 16, ui::TextFieldMode::AlphaNumeric, tf_style, 0 };
   ui::TextField tf_textel_symbol = { 1, ui::TextFieldMode::All, tf_style, 1 };
-  ui::ColorPicker cp_textel_fg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 2, '*', ' ' };
-  ui::ColorPicker cp_textel_bg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 3, '*', ' ' };
+  ui::ColorPicker cp_textel_fg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 2, true, '*', ' ' };
+  ui::ColorPicker cp_textel_bg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 3, true, '*', ' ' };
   ui::TextField tf_textel_mat = { 4, ui::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
   drawing::Textel edit_textel_normal;
