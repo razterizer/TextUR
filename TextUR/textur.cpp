@@ -18,31 +18,35 @@
 #include <stack>
 
 using namespace std::string_literals;
+using Color = t8::Color;
+using RC = t8::RC;
+using Textel = t8::drawing::Textel;
+using Texture = t8x::drawing::Texture;
 
 enum class EditorFileMode { NEW_OR_OVERWRITE_FILE, OPEN_EXISTING_FILE };
 
 
-class Game : public GameEngine<>
+class Game : public t8x::GameEngine<>
 {
   struct TextelItem
   {
-    TextelItem(drawing::Textel tn, drawing::Textel ts, std::string a_name)
+    TextelItem(Textel tn, Textel ts, std::string a_name)
       : textel_normal(std::move(tn))
       , textel_shadow(std::move(ts))
       , name(std::move(a_name))
     {}
     
-    drawing::Textel textel_normal;
-    drawing::Textel textel_shadow;
+    Textel textel_normal;
+    Textel textel_shadow;
     std::string name;
     
-    drawing::Textel get_textel(bool shadow) const
+    Textel get_textel(bool shadow) const
     {
       return shadow ? textel_shadow : textel_normal;
     }
   };
 
-  void draw_menu(const styles::Style& ui_style, const int menu_width)
+  void draw_menu(const t8::color::Style& ui_style, const int menu_width)
   {
     //const int nr = sh.num_rows();
     const int nri = sh.num_rows_inset();
@@ -65,7 +69,8 @@ class Game : public GameEngine<>
       const auto& textel = preset.get_textel(use_shadow_textels);
       sh.write_buffer(textel.str(), r + 1, nc - menu_width + 2, textel.get_style());
       sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
-      draw_box_outline(sh, r, nc - menu_width, 4, menu_width, drawing::OutlineType::Line, ui_style);
+      // Does not need to be qualified with t8x::drawing, but I'm not sure why.
+      t8x::drawing::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::drawing::OutlineType::Line, ui_style);
       r += 3;
     }
   }
@@ -107,7 +112,7 @@ class Game : public GameEngine<>
   
   void reset_goto_input()
   {
-    dialog_goto = ui::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
+    dialog_goto = t8x::ui::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
     dialog_goto.add_text_field({ 2, 1 }, tf_goto_r);
     dialog_goto.add_text_field({ 2, 11 }, tf_goto_c);
     dialog_goto.set_tab_order(0);
@@ -116,14 +121,14 @@ class Game : public GameEngine<>
   void reset_textel_editor()
   {
     edit_mode = EditTextelMode::EditOrAdd;
-    dialog_edit_or_add = ui::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
+    dialog_edit_or_add = t8x::ui::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
     dialog_edit_or_add.add_button(btn_edit);
     dialog_edit_or_add.add_button(btn_add);
     dialog_edit_or_add.set_button_selection(0, true);
-    dialog_edit_mat = ui::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
+    dialog_edit_mat = t8x::ui::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_order(0);
-    dialog_editor = ui::Dialog({ "Custom Textel Preset Editor (Normal)"s, "Textel:", "Idx:", "Name:", "Char:", "FG Color:", "", "BG Color:", "", "Mat:" });
+    dialog_editor = t8x::ui::Dialog({ "Custom Textel Preset Editor (Normal)"s, "Textel:", "Idx:", "Name:", "Char:", "FG Color:", "", "BG Color:", "", "Mat:" });
     dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
     dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
     dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
@@ -136,318 +141,318 @@ class Game : public GameEngine<>
   {
     textel_presets.clear();
     custom_textel_presets.clear();
-    textel_presets.emplace_back(drawing::Textel { ' ', Color::Default, Color::Black, 0 },
-                                drawing::Textel { ' ', Color::Default, Color::Black, 0 },
+    textel_presets.emplace_back(Textel { ' ', Color::Default, Color::Black, 0 },
+                                Textel { ' ', Color::Default, Color::Black, 0 },
                                 "Void");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkCyan, Color::Cyan, 2 },
-                                drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
+    textel_presets.emplace_back(Textel { '~', Color::DarkCyan, Color::Cyan, 2 },
+                                Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
                                 "Water0");
-    textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Cyan, 2 },
-                                drawing::Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
+    textel_presets.emplace_back(Textel { '*', Color::White, Color::Cyan, 2 },
+                                Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
                                 "Water1");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
-                                drawing::Textel { '~', Color::DarkCyan, Color::Blue, 2 },
+    textel_presets.emplace_back(Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
+                                Textel { '~', Color::DarkCyan, Color::Blue, 2 },
                                 "Water2");
-    textel_presets.emplace_back(drawing::Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
-                                drawing::Textel { '*', Color::DarkGray, Color::Blue, 2 },
+    textel_presets.emplace_back(Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
+                                Textel { '*', Color::DarkGray, Color::Blue, 2 },
                                 "Water3");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkBlue, Color::Blue, 2 },
-                                drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
+    textel_presets.emplace_back(Textel { '~', Color::DarkBlue, Color::Blue, 2 },
+                                Textel { '~', Color::Blue, Color::DarkBlue, 2 },
                                 "Water4");
-    textel_presets.emplace_back(drawing::Textel { '*', Color::White, Color::Blue, 2 },
-                                drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
+    textel_presets.emplace_back(Textel { '*', Color::White, Color::Blue, 2 },
+                                Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
                                 "Water5");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::Blue, Color::DarkBlue, 2 },
-                                drawing::Textel { '~', Color::DarkBlue, Color::Black, 2 },
+    textel_presets.emplace_back(Textel { '~', Color::Blue, Color::DarkBlue, 2 },
+                                Textel { '~', Color::DarkBlue, Color::Black, 2 },
                                 "Water6");
-    textel_presets.emplace_back(drawing::Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
-                                drawing::Textel { '*', Color::DarkGray, Color::Black, 2 },
+    textel_presets.emplace_back(Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
+                                Textel { '*', Color::DarkGray, Color::Black, 2 },
                                 "Water7");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
-                                drawing::Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
+    textel_presets.emplace_back(Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
+                                Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand0");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkYellow, Color::Yellow, 3 },
-                                drawing::Textel { '.', Color::Yellow, Color::DarkYellow, 3 },
+    textel_presets.emplace_back(Textel { '.', Color::DarkYellow, Color::Yellow, 3 },
+                                Textel { '.', Color::Yellow, Color::DarkYellow, 3 },
                                 "Sand1");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkGray, Color::LightGray, 22 },
-                                drawing::Textel { '.', Color::LightGray, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { '.', Color::DarkGray, Color::LightGray, 22 },
+                                Textel { '.', Color::LightGray, Color::DarkGray, 22 },
                                 "Gravel0");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkGray, Color::LightGray, 22 },
-                                drawing::Textel { ':', Color::LightGray, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { ':', Color::DarkGray, Color::LightGray, 22 },
+                                Textel { ':', Color::LightGray, Color::DarkGray, 22 },
                                 "Gravel1");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::Black, Color::LightGray, 22 },
-                                drawing::Textel { '.', Color::Black, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { '.', Color::Black, Color::LightGray, 22 },
+                                Textel { '.', Color::Black, Color::DarkGray, 22 },
                                 "Gravel2");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::Black, Color::LightGray, 22 },
-                                drawing::Textel { ':', Color::Black, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { ':', Color::Black, Color::LightGray, 22 },
+                                Textel { ':', Color::Black, Color::DarkGray, 22 },
                                 "Gravel3");
-    textel_presets.emplace_back(drawing::Textel { '8', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { '8', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { '8', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { '8', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone0");
-    textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'o', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone1");
-    textel_presets.emplace_back(drawing::Textel { 'O', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'O', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone2");
-    textel_presets.emplace_back(drawing::Textel { 'b', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'b', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone3");
-    textel_presets.emplace_back(drawing::Textel { 'B', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'B', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone4");
-    textel_presets.emplace_back(drawing::Textel { 'p', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'p', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone5");
-    textel_presets.emplace_back(drawing::Textel { 'P', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'P', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone6");
-    textel_presets.emplace_back(drawing::Textel { 'q', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'q', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone7");
-    textel_presets.emplace_back(drawing::Textel { '6', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { '6', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { '6', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { '6', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone8");
-    textel_presets.emplace_back(drawing::Textel { '9', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { '9', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { '9', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { '9', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone9");
-    textel_presets.emplace_back(drawing::Textel { 'c', Color::DarkGray, Color::LightGray, 4 },
-                                drawing::Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'c', Color::DarkGray, Color::LightGray, 4 },
+                                Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
                                 "Stone10");
-    textel_presets.emplace_back(drawing::Textel { '8', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { '8', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { '8', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { '8', Color::DarkGray, Color::Black, 4 },
                                 "Stone11");
-    textel_presets.emplace_back(drawing::Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'o', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'o', Color::DarkGray, Color::Black, 4 },
                                 "Stone12");
-    textel_presets.emplace_back(drawing::Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'O', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'O', Color::DarkGray, Color::Black, 4 },
                                 "Stone13");
-    textel_presets.emplace_back(drawing::Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'b', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'b', Color::DarkGray, Color::Black, 4 },
                                 "Stone14");
-    textel_presets.emplace_back(drawing::Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'B', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'B', Color::DarkGray, Color::Black, 4 },
                                 "Stone15");
-    textel_presets.emplace_back(drawing::Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'p', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'p', Color::DarkGray, Color::Black, 4 },
                                 "Stone16");
-    textel_presets.emplace_back(drawing::Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'P', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'P', Color::DarkGray, Color::Black, 4 },
                                 "Stone17");
-    textel_presets.emplace_back(drawing::Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'q', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'q', Color::DarkGray, Color::Black, 4 },
                                 "Stone18");
-    textel_presets.emplace_back(drawing::Textel { '6', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { '6', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { '6', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { '6', Color::DarkGray, Color::Black, 4 },
                                 "Stone19");
-    textel_presets.emplace_back(drawing::Textel { '9', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { '9', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { '9', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { '9', Color::DarkGray, Color::Black, 4 },
                                 "Stone20");
-    textel_presets.emplace_back(drawing::Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
-                                drawing::Textel { 'c', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
+                                Textel { 'c', Color::DarkGray, Color::Black, 4 },
                                 "Stone21");
-    textel_presets.emplace_back(drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
-                                drawing::Textel { '^', Color::LightGray, Color::DarkGray, 13 },
+    textel_presets.emplace_back(Textel { '^', Color::DarkGray, Color::LightGray, 13 },
+                                Textel { '^', Color::LightGray, Color::DarkGray, 13 },
                                 "Mountain0");
-    textel_presets.emplace_back(drawing::Textel { '^', Color::LightGray, Color::White, 13 },
-                                drawing::Textel { '^', Color::DarkGray, Color::LightGray, 13 },
+    textel_presets.emplace_back(Textel { '^', Color::LightGray, Color::White, 13 },
+                                Textel { '^', Color::DarkGray, Color::LightGray, 13 },
                                 "Mountain1");
-    textel_presets.emplace_back(drawing::Textel { 'W', Color::DarkRed, Color::Red, 14 },
-                                drawing::Textel { 'W', Color::Red, Color::DarkRed, 14 },
+    textel_presets.emplace_back(Textel { 'W', Color::DarkRed, Color::Red, 14 },
+                                Textel { 'W', Color::Red, Color::DarkRed, 14 },
                                 "Lava");
-    textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkYellow, Color::Yellow, 15 },
-                                drawing::Textel { 'C', Color::Yellow, Color::DarkYellow, 15 },
+    textel_presets.emplace_back(Textel { 'C', Color::DarkYellow, Color::Yellow, 15 },
+                                Textel { 'C', Color::Yellow, Color::DarkYellow, 15 },
                                 "Cave0");
-    textel_presets.emplace_back(drawing::Textel { 'U', Color::DarkYellow, Color::Yellow, 15 },
-                                drawing::Textel { 'U', Color::Yellow, Color::DarkYellow, 15 },
+    textel_presets.emplace_back(Textel { 'U', Color::DarkYellow, Color::Yellow, 15 },
+                                Textel { 'U', Color::Yellow, Color::DarkYellow, 15 },
                                 "Cave1");
-    textel_presets.emplace_back(drawing::Textel { 'S', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'S', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'S', Color::DarkRed, Color::Green, 16 },
+                                Textel { 'S', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp0");
-    textel_presets.emplace_back(drawing::Textel { 'B', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'B', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'B', Color::DarkRed, Color::Green, 16 },
+                                Textel { 'B', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp1");
-    textel_presets.emplace_back(drawing::Textel { 'C', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'C', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'C', Color::DarkRed, Color::Green, 16 },
+                                Textel { 'C', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp2");
-    textel_presets.emplace_back(drawing::Textel { 'P', Color::DarkRed, Color::Green, 16 },
-                                drawing::Textel { 'P', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'P', Color::DarkRed, Color::Green, 16 },
+                                Textel { 'P', Color::Red, Color::DarkGreen, 16 },
                                 "Swamp3");
-    textel_presets.emplace_back(drawing::Textel { 'S', Color::Green, Color::DarkRed, 16 },
-                                drawing::Textel { 'S', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'S', Color::Green, Color::DarkRed, 16 },
+                                Textel { 'S', Color::DarkGreen, Color::DarkRed, 16 },
                                 "Swamp4");
-    textel_presets.emplace_back(drawing::Textel { 'B', Color::Green, Color::DarkRed, 16 },
-                                drawing::Textel { 'B', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'B', Color::Green, Color::DarkRed, 16 },
+                                Textel { 'B', Color::DarkGreen, Color::DarkRed, 16 },
                                 "Swamp5");
-    textel_presets.emplace_back(drawing::Textel { 'C', Color::Green, Color::DarkRed, 16 },
-                                drawing::Textel { 'C', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'C', Color::Green, Color::DarkRed, 16 },
+                                Textel { 'C', Color::DarkGreen, Color::DarkRed, 16 },
                                 "Swamp6");
-    textel_presets.emplace_back(drawing::Textel { 'P', Color::Green, Color::DarkRed, 16 },
-                                drawing::Textel { 'P', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'P', Color::Green, Color::DarkRed, 16 },
+                                Textel { 'P', Color::DarkGreen, Color::DarkRed, 16 },
                                 "Swamp7");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::DarkGreen, Color::Green, 17 },
-                                drawing::Textel { '~', Color::Green, Color::DarkGreen, 17 },
+    textel_presets.emplace_back(Textel { '~', Color::DarkGreen, Color::Green, 17 },
+                                Textel { '~', Color::Green, Color::DarkGreen, 17 },
                                 "Poison0");
-    textel_presets.emplace_back(drawing::Textel { 'o', Color::DarkGreen, Color::Green, 17 },
-                                drawing::Textel { 'o', Color::Green, Color::DarkGreen, 17 },
+    textel_presets.emplace_back(Textel { 'o', Color::DarkGreen, Color::Green, 17 },
+                                Textel { 'o', Color::Green, Color::DarkGreen, 17 },
                                 "Poison1");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::Magenta, Color::Cyan, 24 },
-                                drawing::Textel { '~', Color::DarkMagenta, Color::DarkCyan, 24 },
+    textel_presets.emplace_back(Textel { '~', Color::Magenta, Color::Cyan, 24 },
+                                Textel { '~', Color::DarkMagenta, Color::DarkCyan, 24 },
                                 "Acid0");
-    textel_presets.emplace_back(drawing::Textel { 'o', Color::Magenta, Color::Cyan, 24 },
-                                drawing::Textel { 'o', Color::DarkMagenta, Color::DarkCyan, 24 },
+    textel_presets.emplace_back(Textel { 'o', Color::Magenta, Color::Cyan, 24 },
+                                Textel { 'o', Color::DarkMagenta, Color::DarkCyan, 24 },
                                 "Acid1");
-    textel_presets.emplace_back(drawing::Textel { '~', Color::LightGray, Color::Black, 26 },
-                                drawing::Textel { '~', Color::DarkGray, Color::Black, 26 },
+    textel_presets.emplace_back(Textel { '~', Color::LightGray, Color::Black, 26 },
+                                Textel { '~', Color::DarkGray, Color::Black, 26 },
                                 "Tar");
-    textel_presets.emplace_back(drawing::Textel { '#', Color::DarkYellow, Color::Green, 18 },
-                                drawing::Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
+    textel_presets.emplace_back(Textel { '#', Color::DarkYellow, Color::Green, 18 },
+                                Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
                                 "Path");
-    textel_presets.emplace_back(drawing::Textel { 'M', Color::DarkGray, Color::LightGray, 19 },
-                                drawing::Textel { 'M', Color::LightGray, Color::DarkGray, 19 },
+    textel_presets.emplace_back(Textel { 'M', Color::DarkGray, Color::LightGray, 19 },
+                                Textel { 'M', Color::LightGray, Color::DarkGray, 19 },
                                 "Mine");
-    textel_presets.emplace_back(drawing::Textel { '|', Color::DarkGreen, Color::Green, 7 },
-                                drawing::Textel { '|', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '|', Color::DarkGreen, Color::Green, 7 },
+                                Textel { '|', Color::Green, Color::DarkGreen, 7 },
                                 "Grass0");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkGreen, Color::Green, 7 },
-                                drawing::Textel { '.', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '.', Color::DarkGreen, Color::Green, 7 },
+                                Textel { '.', Color::Green, Color::DarkGreen, 7 },
                                 "Grass1");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkGreen, Color::Green, 7 },
-                                drawing::Textel { ':', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { ':', Color::DarkGreen, Color::Green, 7 },
+                                Textel { ':', Color::Green, Color::DarkGreen, 7 },
                                 "Grass2");
-    textel_presets.emplace_back(drawing::Textel { '/', Color::DarkGreen, Color::Green, 7 },
-                                drawing::Textel { '/', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '/', Color::DarkGreen, Color::Green, 7 },
+                                Textel { '/', Color::Green, Color::DarkGreen, 7 },
                                 "Grass3");
-    textel_presets.emplace_back(drawing::Textel { '\\', Color::DarkGreen, Color::Green, 7 },
-                                drawing::Textel { '\\', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '\\', Color::DarkGreen, Color::Green, 7 },
+                                Textel { '\\', Color::Green, Color::DarkGreen, 7 },
                                 "Grass4");
-    textel_presets.emplace_back(drawing::Textel { '|', Color::DarkYellow, Color::Green, 7 },
-                                drawing::Textel { '|', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '|', Color::DarkYellow, Color::Green, 7 },
+                                Textel { '|', Color::Yellow, Color::DarkGreen, 7 },
                                 "Grass5");
-    textel_presets.emplace_back(drawing::Textel { '.', Color::DarkYellow, Color::Green, 7 },
-                                drawing::Textel { '.', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '.', Color::DarkYellow, Color::Green, 7 },
+                                Textel { '.', Color::Yellow, Color::DarkGreen, 7 },
                                 "Grass6");
-    textel_presets.emplace_back(drawing::Textel { ':', Color::DarkYellow, Color::Green, 7 },
-                                drawing::Textel { ':', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { ':', Color::DarkYellow, Color::Green, 7 },
+                                Textel { ':', Color::Yellow, Color::DarkGreen, 7 },
                                 "Grass7");
-    textel_presets.emplace_back(drawing::Textel { '/', Color::DarkYellow, Color::Green, 7 },
-                                drawing::Textel { '/', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '/', Color::DarkYellow, Color::Green, 7 },
+                                Textel { '/', Color::Yellow, Color::DarkGreen, 7 },
                                 "Grass8");
-    textel_presets.emplace_back(drawing::Textel { '\\', Color::DarkYellow, Color::Green, 7 },
-                                drawing::Textel { '\\', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '\\', Color::DarkYellow, Color::Green, 7 },
+                                Textel { '\\', Color::Yellow, Color::DarkGreen, 7 },
                                 "Grass9");
-    textel_presets.emplace_back(drawing::Textel { '&', Color::DarkYellow, Color::Green, 8 },
-                                drawing::Textel { '&', Color::Yellow, Color::DarkGreen, 8 },
+    textel_presets.emplace_back(Textel { '&', Color::DarkYellow, Color::Green, 8 },
+                                Textel { '&', Color::Yellow, Color::DarkGreen, 8 },
                                 "Shrub0");
-    textel_presets.emplace_back(drawing::Textel { '@', Color::DarkGray, Color::Green, 8 },
-                                drawing::Textel { '@', Color::LightGray, Color::DarkGreen, 8 },
+    textel_presets.emplace_back(Textel { '@', Color::DarkGray, Color::Green, 8 },
+                                Textel { '@', Color::LightGray, Color::DarkGreen, 8 },
                                 "Shrub1");
-    textel_presets.emplace_back(drawing::Textel { '*', Color::DarkGreen, Color::Green, 8 },
-                                drawing::Textel { '*', Color::Green, Color::DarkGreen, 8 },
+    textel_presets.emplace_back(Textel { '*', Color::DarkGreen, Color::Green, 8 },
+                                Textel { '*', Color::Green, Color::DarkGreen, 8 },
                                 "Shrub2");
-    textel_presets.emplace_back(drawing::Textel { 'T', Color::DarkRed, Color::Green, 9 },
-                                drawing::Textel { 'T', Color::Red, Color::DarkGreen, 9 },
+    textel_presets.emplace_back(Textel { 'T', Color::DarkRed, Color::Green, 9 },
+                                Textel { 'T', Color::Red, Color::DarkGreen, 9 },
                                 "Tree0");
-    textel_presets.emplace_back(drawing::Textel { 'Y', Color::DarkRed, Color::Green, 9 },
-                                drawing::Textel { 'Y', Color::Red, Color::DarkGreen, 9 },
+    textel_presets.emplace_back(Textel { 'Y', Color::DarkRed, Color::Green, 9 },
+                                Textel { 'Y', Color::Red, Color::DarkGreen, 9 },
                                 "Tree1");
-    textel_presets.emplace_back(drawing::Textel { '_', Color::Default, Color::LightGray, 1 },
-                                drawing::Textel { '_', Color::Black, Color::DarkGray, 1 },
+    textel_presets.emplace_back(Textel { '_', Color::Default, Color::LightGray, 1 },
+                                Textel { '_', Color::Black, Color::DarkGray, 1 },
                                 "Tile0");
-    textel_presets.emplace_back(drawing::Textel { '_', Color::White, Color::DarkGray, 1 },
-                                drawing::Textel { '_', Color::LightGray, Color::Black, 1 },
+    textel_presets.emplace_back(Textel { '_', Color::White, Color::DarkGray, 1 },
+                                Textel { '_', Color::LightGray, Color::Black, 1 },
                                 "Tile1");
-    textel_presets.emplace_back(drawing::Textel { '_', Color::LightGray, Color::White, 1 },
-                                drawing::Textel { '_', Color::White, Color::LightGray, 1 },
+    textel_presets.emplace_back(Textel { '_', Color::LightGray, Color::White, 1 },
+                                Textel { '_', Color::White, Color::LightGray, 1 },
                                 "Tile2");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::Default, Color::LightGray, 1 },
-                                drawing::Textel { 'L', Color::Black, Color::DarkGray, 1 },
+    textel_presets.emplace_back(Textel { 'L', Color::Default, Color::LightGray, 1 },
+                                Textel { 'L', Color::Black, Color::DarkGray, 1 },
                                 "Tile3");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::White, Color::DarkGray, 1 },
-                                drawing::Textel { 'L', Color::LightGray, Color::Black, 1 },
+    textel_presets.emplace_back(Textel { 'L', Color::White, Color::DarkGray, 1 },
+                                Textel { 'L', Color::LightGray, Color::Black, 1 },
                                 "Tile4");
-    textel_presets.emplace_back(drawing::Textel { 'L', Color::LightGray, Color::White, 1 },
-                                drawing::Textel { 'L', Color::White, Color::LightGray, 1 },
+    textel_presets.emplace_back(Textel { 'L', Color::LightGray, Color::White, 1 },
+                                Textel { 'L', Color::White, Color::LightGray, 1 },
                                 "Tile5");
-    textel_presets.emplace_back(drawing::Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { 'H', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { 'H', Color::DarkGray, Color::Black, 5 },
                                 "Masonry0");
-    textel_presets.emplace_back(drawing::Textel { 'M', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { 'M', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'M', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { 'M', Color::DarkGray, Color::Black, 5 },
                                 "Masonry1");
-    textel_presets.emplace_back(drawing::Textel { 'W', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { 'W', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'W', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { 'W', Color::DarkGray, Color::Black, 5 },
                                 "Masonry2");
-    textel_presets.emplace_back(drawing::Textel { '=', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { '=', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { '=', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { '=', Color::DarkGray, Color::Black, 5 },
                                 "Masonry3");
-    textel_presets.emplace_back(drawing::Textel { '#', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { '#', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { '#', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { '#', Color::DarkGray, Color::Black, 5 },
                                 "Masonry4");
-    textel_presets.emplace_back(drawing::Textel { '@', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { '@', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { '@', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { '@', Color::DarkGray, Color::Black, 5 },
                                 "Masonry5");
-    textel_presets.emplace_back(drawing::Textel { 'O', Color::LightGray, Color::DarkGray, 5 },
-                                drawing::Textel { 'O', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'O', Color::LightGray, Color::DarkGray, 5 },
+                                Textel { 'O', Color::DarkGray, Color::Black, 5 },
                                 "Masonry6");
-    textel_presets.emplace_back(drawing::Textel { 'I', Color::White, Color::LightGray, 25 },
-                                drawing::Textel { 'I', Color::LightGray, Color::DarkGray, 25 },
+    textel_presets.emplace_back(Textel { 'I', Color::White, Color::LightGray, 25 },
+                                Textel { 'I', Color::LightGray, Color::DarkGray, 25 },
                                 "Column0");
-    textel_presets.emplace_back(drawing::Textel { '=', Color::White, Color::LightGray, 25 },
-                                drawing::Textel { '=', Color::LightGray, Color::DarkGray, 25 },
+    textel_presets.emplace_back(Textel { '=', Color::White, Color::LightGray, 25 },
+                                Textel { '=', Color::LightGray, Color::DarkGray, 25 },
                                 "Column1");
-    textel_presets.emplace_back(drawing::Textel { '#', Color::DarkRed, Color::Red, 6 },
-                                drawing::Textel { '#', Color::Red, Color::DarkRed, 6 },
+    textel_presets.emplace_back(Textel { '#', Color::DarkRed, Color::Red, 6 },
+                                Textel { '#', Color::Red, Color::DarkRed, 6 },
                                 "Brick");
-    textel_presets.emplace_back(drawing::Textel { 'W', Color::DarkRed, Color::Yellow, 11 },
-                                drawing::Textel { 'W', Color::Yellow, Color::DarkRed, 11 },
+    textel_presets.emplace_back(Textel { 'W', Color::DarkRed, Color::Yellow, 11 },
+                                Textel { 'W', Color::Yellow, Color::DarkRed, 11 },
                                 "Wood0");
-    textel_presets.emplace_back(drawing::Textel { 'E', Color::DarkRed, Color::Yellow, 11 },
-                                drawing::Textel { 'E', Color::Yellow, Color::DarkRed, 11 },
+    textel_presets.emplace_back(Textel { 'E', Color::DarkRed, Color::Yellow, 11 },
+                                Textel { 'E', Color::Yellow, Color::DarkRed, 11 },
                                 "Wood1");
-    textel_presets.emplace_back(drawing::Textel { 'Z', Color::DarkRed, Color::Yellow, 11 },
-                                drawing::Textel { 'Z', Color::Yellow, Color::DarkRed, 11 },
+    textel_presets.emplace_back(Textel { 'Z', Color::DarkRed, Color::Yellow, 11 },
+                                Textel { 'Z', Color::Yellow, Color::DarkRed, 11 },
                                 "Wood2");
-    textel_presets.emplace_back(drawing::Textel { 'X', Color::DarkBlue, Color::Cyan, 12 },
-                                drawing::Textel { 'X', Color::Cyan, Color::DarkBlue, 12 },
+    textel_presets.emplace_back(Textel { 'X', Color::DarkBlue, Color::Cyan, 12 },
+                                Textel { 'X', Color::Cyan, Color::DarkBlue, 12 },
                                 "Ice");
-    textel_presets.emplace_back(drawing::Textel { '=', Color::DarkGray, Color::LightGray, 10 },
-                                drawing::Textel { '=', Color::LightGray, Color::DarkGray, 10 },
+    textel_presets.emplace_back(Textel { '=', Color::DarkGray, Color::LightGray, 10 },
+                                Textel { '=', Color::LightGray, Color::DarkGray, 10 },
                                 "Metal");
-    textel_presets.emplace_back(drawing::Textel { 'S', Color::White, Color::LightGray, 21 },
-                                drawing::Textel { 'S', Color::LightGray, Color::DarkGray, 21 },
+    textel_presets.emplace_back(Textel { 'S', Color::White, Color::LightGray, 21 },
+                                Textel { 'S', Color::LightGray, Color::DarkGray, 21 },
                                 "Silver");
-    textel_presets.emplace_back(drawing::Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
-                                drawing::Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
+    textel_presets.emplace_back(Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
+                                Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
                                 "Gold");
-    textel_presets.emplace_back(drawing::Textel { '@', Color::White, Color::DarkGray, 23 },
-                                drawing::Textel { '@', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '@', Color::White, Color::DarkGray, 23 },
+                                Textel { '@', Color::LightGray, Color::Black, 23 },
                                 "Skull");
-    textel_presets.emplace_back(drawing::Textel { '+', Color::White, Color::DarkGray, 23 },
-                                drawing::Textel { '+', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '+', Color::White, Color::DarkGray, 23 },
+                                Textel { '+', Color::LightGray, Color::Black, 23 },
                                 "Bone0");
-    textel_presets.emplace_back(drawing::Textel { '|', Color::White, Color::DarkGray, 23 },
-                                drawing::Textel { '|', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '|', Color::White, Color::DarkGray, 23 },
+                                Textel { '|', Color::LightGray, Color::Black, 23 },
                                 "Bone1");
-    textel_presets.emplace_back(drawing::Textel { '-', Color::White, Color::DarkGray, 23 },
-                                drawing::Textel { '-', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '-', Color::White, Color::DarkGray, 23 },
+                                Textel { '-', Color::LightGray, Color::Black, 23 },
                                 "Bone2");
-    textel_presets.emplace_back(drawing::Textel { '/', Color::White, Color::DarkGray, 23 },
-                                drawing::Textel { '/', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '/', Color::White, Color::DarkGray, 23 },
+                                Textel { '/', Color::LightGray, Color::Black, 23 },
                                 "Bone3");
-    textel_presets.emplace_back(drawing::Textel { '\\', Color::White, Color::DarkGray, 23 },
-                                drawing::Textel { '\\', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '\\', Color::White, Color::DarkGray, 23 },
+                                Textel { '\\', Color::LightGray, Color::Black, 23 },
                                 "Bone4");
-    textel_presets.emplace_back(drawing::Textel { '%', Color::Red, Color::Yellow, 27 },
-                                drawing::Textel { '%', Color::DarkRed, Color::DarkYellow, 27 },
+    textel_presets.emplace_back(Textel { '%', Color::Red, Color::Yellow, 27 },
+                                Textel { '%', Color::DarkRed, Color::DarkYellow, 27 },
                                 "Rope");
     
     std::vector<std::string> lines_custom_textel_presets;
     if (TextIO::read_file(filepath_custom_textel_presets, lines_custom_textel_presets))
     {
       int part = 0;
-      drawing::Textel textel_normal, textel_shadow;
+      Textel textel_normal, textel_shadow;
       for (const auto& line : lines_custom_textel_presets)
       {
         if (part == 0)
@@ -456,8 +461,8 @@ class Game : public GameEngine<>
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
             textel_normal.ch = tokens[0][0];
-            textel_normal.fg_color = color::string2color(tokens[1]);
-            textel_normal.bg_color = color::string2color(tokens[2]);
+            textel_normal.fg_color = t8::color::string2color(tokens[1]);
+            textel_normal.bg_color = t8::color::string2color(tokens[2]);
             textel_normal.mat = std::atoi(tokens[3].c_str());
           }
           else
@@ -470,8 +475,8 @@ class Game : public GameEngine<>
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
             textel_shadow.ch = tokens[0][0];
-            textel_shadow.fg_color = color::string2color(tokens[1]);
-            textel_shadow.bg_color = color::string2color(tokens[2]);
+            textel_shadow.fg_color = t8::color::string2color(tokens[1]);
+            textel_shadow.bg_color = t8::color::string2color(tokens[2]);
             textel_shadow.mat = std::atoi(tokens[3].c_str());
           }
           else
@@ -489,9 +494,9 @@ class Game : public GameEngine<>
   }
   
 public:
-  Game(int argc, char** argv, const GameEngineParams& params)
+  Game(int argc, char** argv, const t8x::GameEngineParams& params)
     : GameEngine(argv[0], params)
-    , message_handler(std::make_unique<MessageHandler>())
+    , message_handler(std::make_unique<t8x::ui::MessageHandler>())
   {
     GameEngine::set_anim_rate(0, 5);
     GameEngine::set_anim_rate(1, 6);
@@ -570,7 +575,7 @@ public:
     else
     {
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
-        curr_texture = drawing::Texture { size };
+        curr_texture = Texture { size };
       else
         curr_texture.load(file_path_curr_texture);
       
@@ -586,7 +591,7 @@ public:
     if (convert)
     {
       bright_texture.load(file_path_bright_texture); // source
-      curr_texture = drawing::Texture { bright_texture.size }; // target
+      curr_texture = Texture { bright_texture.size }; // target
       for (int r = 0; r < bright_texture.size.r; ++r)
         for (int c = 0; c < bright_texture.size.c; ++c)
         {
@@ -618,18 +623,16 @@ public:
   }
   
 private:
-  void handle_editor_key_presses(char curr_key, keyboard::SpecialKey curr_special_key,
-                                 int nri, int nci, RC& cursor_pos)
+  void handle_editor_key_presses(char curr_key, t8::input::SpecialKey curr_special_key,
+                                 int nri, int nci, t8::RC& cursor_pos)
   {
-    using namespace drawing;
-  
     if (curr_key == '-')
       math::toggle(show_menu);
       
-    bool is_up = curr_special_key == keyboard::SpecialKey::Up || curr_key == 'w';
-    bool is_down = curr_special_key == keyboard::SpecialKey::Down || curr_key == 's';
-    bool is_left = curr_special_key == keyboard::SpecialKey::Left || curr_key == 'a';
-    bool is_right = curr_special_key == keyboard::SpecialKey::Right || curr_key == 'd';
+    bool is_up = curr_special_key == t8::input::SpecialKey::Up || curr_key == 'w';
+    bool is_down = curr_special_key == t8::input::SpecialKey::Down || curr_key == 's';
+    bool is_left = curr_special_key == t8::input::SpecialKey::Left || curr_key == 'a';
+    bool is_right = curr_special_key == t8::input::SpecialKey::Right || curr_key == 'd';
     if (show_menu)
     {
       if (is_up)
@@ -902,7 +905,7 @@ private:
       else if (str::to_lower(curr_key) == 'l')
         message_handler->add_message(static_cast<float>(get_real_time_s()),
                                      "Cursor @ " + cursor_pos.str(),
-                                     MessageHandler::Level::Guide);
+                                     t8x::ui::MessageHandler::Level::Guide);
       else if (str::to_lower(curr_key) == 'g')
       {
         if (!math::toggle(show_goto_pos))
@@ -928,7 +931,7 @@ private:
         if (folder::exists(file_path_curr_texture))
         {
           show_confirm_overwrite = true;
-          overwrite_confirm_button = YesNoButtons::No;
+          overwrite_confirm_button = t8::screen::YesNoButtons::No;
         }
         else
           safe_to_save = true;
@@ -942,14 +945,14 @@ private:
         {
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "Your work was successfully saved.",
-                                       MessageHandler::Level::Guide);
+                                       t8x::ui::MessageHandler::Level::Guide);
                                        
           is_modified = false;
         }
         else
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "An error occurred while saving your work!",
-                                       MessageHandler::Level::Fatal);
+                                       t8x::ui::MessageHandler::Level::Fatal);
                                        
         safe_to_save = false;
         show_confirm_overwrite = false;
@@ -959,7 +962,7 @@ private:
 
   virtual void update() override
   {
-    styles::Style ui_style { Color::LightGray, Color::Black };
+    t8::color::Style ui_style { Color::LightGray, Color::Black };
     
     int cursor_anim_ctr = get_anim_count(1) % 2 == 0;
     
@@ -971,20 +974,23 @@ private:
 
 //#define SHOW_DEBUG_WINDOW
 #ifdef SHOW_DEBUG_WINDOW
-    ui::TextBoxDrawingArgsAlign tbd_args;
-    tbd_args.v_align = ui::VerticalAlignment::TOP;
+    TextBoxDrawingArgsAlign tbd_args;
+    tbd_args.v_align = VerticalAlignment::TOP;
     tbd_args.base.box_style = { Color::Blue, Color::Yellow };
     tbd_args.framed_mode = true;
     tbd.calc_pre_draw(str::Adjustment::Left);
     tbd.draw(sh, tbd_args);
 #endif
 
-    auto curr_key = keyboard::get_char_key(kpdp.transient);
-    auto curr_special_key = keyboard::get_special_key(kpdp.transient);
+    auto curr_key = get_char_key(kpdp.transient);
+    auto curr_special_key = get_special_key(kpdp.transient);
     bool allow_editing = true;
       
     if (!show_confirm_overwrite && show_menu)
-      draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, drawing::OutlineType::Line, ui_style);
+    {
+      // Does not need to be qualified with t8x::drawing, but I'm not sure why.
+      t8x::drawing::draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, t8x::drawing::OutlineType::Line, ui_style);
+    }
   
     if (is_modified)
       sh.write_buffer("*", 0, 0, Color::Red, Color::White);
@@ -1000,14 +1006,14 @@ private:
                    { Color::Black, Color::DarkCyan },
                    { Color::Black, Color::DarkCyan, Color::Cyan },
                    { Color::White, Color::DarkCyan });
-      if (curr_special_key == keyboard::SpecialKey::Left)
-        overwrite_confirm_button = YesNoButtons::Yes;
-      else if (curr_special_key == keyboard::SpecialKey::Right)
-        overwrite_confirm_button = YesNoButtons::No;
+      if (curr_special_key == t8::input::SpecialKey::Left)
+        overwrite_confirm_button = t8::screen::YesNoButtons::Yes;
+      else if (curr_special_key == t8::input::SpecialKey::Right)
+        overwrite_confirm_button = t8::screen::YesNoButtons::No;
       
-      if (curr_special_key == keyboard::SpecialKey::Enter)
+      if (curr_special_key == t8::input::SpecialKey::Enter)
       {
-        if (overwrite_confirm_button == YesNoButtons::Yes)
+        if (overwrite_confirm_button == t8::screen::YesNoButtons::Yes)
           safe_to_save = true;
         else
           show_confirm_overwrite = false;
@@ -1021,13 +1027,13 @@ private:
       {
         allow_editing = false;
         dialog_goto.update(curr_key, curr_special_key);
-        if (curr_special_key == keyboard::SpecialKey::Enter)
+        if (curr_special_key == t8::input::SpecialKey::Enter)
         {
           if (dialog_goto.text_field_empty(0) || dialog_goto.text_field_empty(1))
           {
             message_handler->add_message(static_cast<float>(get_real_time_s()),
                                          "You must type both row and col coordinates.",
-                                         MessageHandler::Level::Guide);
+                                         t8x::ui::MessageHandler::Level::Guide);
           }
           else
           {
@@ -1047,21 +1053,21 @@ private:
             show_goto_pos = false;
           }
         }
-        else if (curr_special_key == keyboard::SpecialKey::Escape)
+        else if (curr_special_key == t8::input::SpecialKey::Escape)
         {
           reset_goto_input();
           show_goto_pos = false;
         }
 
-        ui::TextBoxDrawingArgsAlign tb_args;
+        t8x::ui::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = { Color::White, Color::DarkBlue };
         tb_args.base.box_padding_lr = 1;
         dialog_goto.calc_pre_draw(str::Adjustment::Left);
         dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
-        tb_args.v_align = ui::VerticalAlignment::BOTTOM;
-        tb_args.h_align = ui::HorizontalAlignment::RIGHT;
+        tb_args.v_align = t8x::ui::VerticalAlignment::BOTTOM;
+        tb_args.h_align = t8x::ui::HorizontalAlignment::RIGHT;
         tb_ui_help_goto.calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_goto.draw(sh, tb_args);
       }
@@ -1077,7 +1083,7 @@ private:
             // | [Edit]                      [Add] |
             // +-----------------------------------+
             dialog_edit_or_add.update(curr_key, curr_special_key);
-            if (curr_special_key == keyboard::SpecialKey::Enter)
+            if (curr_special_key == t8::input::SpecialKey::Enter)
             {
               auto sel_btn_text = dialog_edit_or_add.get_selected_button_text();
               if (sel_btn_text == "Edit")
@@ -1089,13 +1095,13 @@ private:
                 edit_mode = EditTextelMode::EditTextelNormal;
               }
             }
-            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            else if (curr_special_key == t8::input::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::ui::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             dialog_edit_or_add.calc_pre_draw(str::Adjustment::Left);
@@ -1110,13 +1116,13 @@ private:
             // | Idx: ____                        |
             // +----------------------------------+
             dialog_edit_mat.update(curr_key, curr_special_key);
-            if (curr_special_key == keyboard::SpecialKey::Enter)
+            if (curr_special_key == t8::input::SpecialKey::Enter)
             {
               if (dialog_edit_mat.text_field_empty(0))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must type a valid custom textel preset id.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else
               {
@@ -1127,7 +1133,7 @@ private:
                 {
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                "Successfully loaded custom textel preset " + std::to_string(ctp_idx) + "!",
-                                               MessageHandler::Level::Guide);
+                                               t8x::ui::MessageHandler::Level::Guide);
                   edit_textel_preset = &custom_textel_presets[ctp_idx];
                   edit_textel_normal = edit_textel_preset->textel_normal;
                   edit_textel_shadow = edit_textel_preset->textel_shadow;
@@ -1145,18 +1151,18 @@ private:
                   int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
-                                               MessageHandler::Level::Guide);
+                                               t8x::ui::MessageHandler::Level::Guide);
                   dialog_edit_mat.clear_text_field_input(0);
                 }
               }
             }
-            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            else if (curr_special_key == t8::input::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::ui::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             dialog_edit_mat.calc_pre_draw(str::Adjustment::Left);
@@ -1184,25 +1190,25 @@ private:
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
             dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
-            if (curr_special_key == keyboard::SpecialKey::Enter)
+            if (curr_special_key == t8::input::SpecialKey::Enter)
             {
               if (dialog_editor.text_field_empty(0))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel preset name.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(1))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel character.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else
               {
@@ -1224,13 +1230,13 @@ private:
                 edit_mode = EditTextelMode::EditTextelShadow;
               }
             }
-            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            else if (curr_special_key == t8::input::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::ui::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
@@ -1247,25 +1253,25 @@ private:
             edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
             dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.ch, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
-            if (curr_special_key == keyboard::SpecialKey::Enter)
+            if (curr_special_key == t8::input::SpecialKey::Enter)
             {
               if (dialog_editor.text_field_empty(0))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel preset name.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(1))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel character.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
-                                             MessageHandler::Level::Guide);
+                                             t8x::ui::MessageHandler::Level::Guide);
               }
               else
               {
@@ -1286,23 +1292,23 @@ private:
                     // '%', DarkMagenta, DarkCyan, 28
                     // Magic Stone
                     lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.ch + "', "
-                      + color::color2string(ctp.textel_normal.fg_color) + ", "
-                      + color::color2string(ctp.textel_normal.bg_color) + ", "
+                      + t8::color::color2string(ctp.textel_normal.fg_color) + ", "
+                      + t8::color::color2string(ctp.textel_normal.bg_color) + ", "
                       + std::to_string(ctp.textel_normal.mat));
                     lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.ch + "', "
-                      + color::color2string(ctp.textel_shadow.fg_color) + ", "
-                      + color::color2string(ctp.textel_shadow.bg_color) + ", "
+                      + t8::color::color2string(ctp.textel_shadow.fg_color) + ", "
+                      + t8::color::color2string(ctp.textel_shadow.bg_color) + ", "
                       + std::to_string(ctp.textel_shadow.mat));
                     lines_custom_textel_presets.emplace_back(ctp.name);
                   }
                   if (TextIO::write_file(filepath_custom_textel_presets, lines_custom_textel_presets))
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Successfully wrote to custom textel presets file!",
-                                                 MessageHandler::Level::Guide);
+                                                 t8x::ui::MessageHandler::Level::Guide);
                   else
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Unable to write to custom textel presets file!",
-                                                 MessageHandler::Level::Fatal);
+                                                 t8x::ui::MessageHandler::Level::Fatal);
                                                  
                   reload_textel_presets();
                 }
@@ -1310,13 +1316,13 @@ private:
                 show_textel_editor = false;
               }
             }
-            else if (curr_special_key == keyboard::SpecialKey::Escape)
+            else if (curr_special_key == t8::input::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::ui::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
@@ -1326,11 +1332,11 @@ private:
           }
         }
         
-        ui::TextBoxDrawingArgsAlign tb_args;
+        t8x::ui::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
         tb_args.base.box_padding_lr = 1;
-        tb_args.v_align = ui::VerticalAlignment::BOTTOM;
-        tb_args.h_align = ui::HorizontalAlignment::RIGHT;
+        tb_args.v_align = t8x::ui::VerticalAlignment::BOTTOM;
+        tb_args.h_align = t8x::ui::HorizontalAlignment::RIGHT;
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].draw(sh, tb_args);
       }
@@ -1352,25 +1358,27 @@ private:
       }
       if (show_materials)
       {
-        draw_box_texture_materials(sh,
+        t8x::drawing::draw_box_texture_materials(sh,
                                    screen_pos.r, screen_pos.c,
                                    curr_texture.size.r + 2, box_width_curr + 2,
                                    curr_texture);
       }
       else
       {
-        draw_box_textured(sh,
+        // Does not need to be qualified with t8x::drawing, but I'm not sure why.
+        t8x::drawing::draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
                           curr_texture.size.r + 2, box_width_curr + 2,
-                          drawing::SolarDirection::Zenith,
+                          t8x::drawing::SolarDirection::Zenith,
                           curr_texture);
       }
       if (show_tracing && !tracing_texture.empty())
       {
-        draw_box_textured(sh,
+        // Does not need to be qualified with t8x::drawing, but I'm not sure why.
+        t8x::drawing::draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
                           tracing_texture.size.r + 2, box_width_tracing + 2,
-                          drawing::SolarDirection::Zenith,
+                          t8x::drawing::SolarDirection::Zenith,
                           tracing_texture);
       }
     }
@@ -1393,17 +1401,17 @@ private:
   
   std::string filepath_custom_textel_presets;
     
-  drawing::Texture curr_texture;
-  drawing::Texture tracing_texture;
-  drawing::Texture bright_texture;
+  t8::drawing::Texture curr_texture;
+  t8::drawing::Texture tracing_texture;
+  t8::drawing::Texture bright_texture;
   std::string file_path_curr_texture;
   std::string file_path_tracing_texture;
   std::string file_path_bright_texture;
   bool convert = false;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
-  RC screen_pos { 0, 0 };
-  RC cursor_pos { 0, 0 };
+  t8::RC screen_pos { 0, 0 };
+  t8::RC cursor_pos { 0, 0 };
   int menu_r_offs = 0;
   
   bool show_menu = false;
@@ -1413,15 +1421,15 @@ private:
   bool show_textel_editor = false;
   bool show_materials = false;
   
-  YesNoButtons overwrite_confirm_button = YesNoButtons::No;
+  t8::screen::YesNoButtons overwrite_confirm_button = t8::screen::YesNoButtons::No;
   bool safe_to_save = false;
   
   std::vector<TextelItem> textel_presets; // Including custom textel presets.
   int selected_textel_preset_idx = 0;
   std::vector<TextelItem> custom_textel_presets;
   
-  std::unique_ptr<MessageHandler> message_handler;
-  using UndoItem = std::vector<std::pair<RC, drawing::Textel>>;
+  std::unique_ptr<t8x::ui::MessageHandler> message_handler;
+  using UndoItem = std::vector<std::pair<t8::RC, Textel>>;
   std::stack<UndoItem> undo_buffer;
   std::stack<UndoItem> redo_buffer;
   bool is_modified = false;
@@ -1433,13 +1441,13 @@ private:
   
   bool use_shadow_textels = false;
   
-  ui::TextBoxDebug tbd;
+  t8x::ui::TextBoxDebug tbd;
   
-  styles::ButtonStyle btn_style { Color::White, Color::DarkBlue, Color::Blue };
-  styles::PromptStyle tf_style { Color::White, Color::DarkBlue, Color::White };
-  ui::ButtonFrame btn_frame = ui::ButtonFrame::SquareBrackets;
+  t8::color::ButtonStyle btn_style { Color::White, Color::DarkBlue, Color::Blue };
+  t8::color::PromptStyle tf_style { Color::White, Color::DarkBlue, Color::White };
+  t8x::ui::ButtonFrame btn_frame = t8x::ui::ButtonFrame::SquareBrackets;
   
-  ui::TextBox tb_ui_help_goto {{
+  t8x::ui::TextBox tb_ui_help_goto {{
       "UI Help"s,
       "Type coordinates using number keys.",
       "Erase characters by pressing [BACKSPACE].",
@@ -1447,12 +1455,12 @@ private:
       "Press [ENTER] when done.",
       "Press [ESCAPE] to cancel."
     }};
-  ui::Dialog dialog_goto;
-  ui::TextField tf_goto_r { 8, ui::TextFieldMode::Numeric, tf_style, 0 };
-  ui::TextField tf_goto_c { 8, ui::TextFieldMode::Numeric, tf_style, 1 };
+  t8x::ui::Dialog dialog_goto;
+  t8x::ui::TextField tf_goto_r { 8, t8x::ui::TextFieldMode::Numeric, tf_style, 0 };
+  t8x::ui::TextField tf_goto_c { 8, t8x::ui::TextFieldMode::Numeric, tf_style, 1 };
   
   enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
-  std::array<ui::TextBox, 4> tb_ui_help_edit_textel
+  std::array<t8x::ui::TextBox, 4> tb_ui_help_edit_textel
   {
     {
       { { "UI Help"s, "Use arrow keys or [TAB] to select button,", "Then press [ENTER] when done.", "Press [ESCAPE] to cancel." } },
@@ -1462,26 +1470,26 @@ private:
     }
   };
   EditTextelMode edit_mode = EditTextelMode::EditOrAdd;
-  ui::Dialog dialog_edit_or_add;
-  ui::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
-  ui::Button btn_add { "Add", btn_style, btn_frame, 1 };
-  ui::Dialog dialog_edit_mat;
-  ui::TextField tf_textel_idx { 4, ui::TextFieldMode::Numeric, tf_style, 0 };
-  ui::Dialog dialog_editor;
-  ui::TextField tf_textel_name = { 16, ui::TextFieldMode::AlphaNumeric, tf_style, 0 };
-  ui::TextField tf_textel_symbol = { 1, ui::TextFieldMode::All, tf_style, 1 };
-  ui::ColorPicker cp_textel_fg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 2, true, '*', ' ' };
-  ui::ColorPicker cp_textel_bg = { Color::Blue, Color::White, ui::ColorPickerCursorColoring::BlackWhite, 3, true, '*', ' ' };
-  ui::TextField tf_textel_mat = { 4, ui::TextFieldMode::Numeric, tf_style, 4 };
+  t8x::ui::Dialog dialog_edit_or_add;
+  t8x::ui::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
+  t8x::ui::Button btn_add { "Add", btn_style, btn_frame, 1 };
+  t8x::ui::Dialog dialog_edit_mat;
+  t8x::ui::TextField tf_textel_idx { 4, t8x::ui::TextFieldMode::Numeric, tf_style, 0 };
+  t8x::ui::Dialog dialog_editor;
+  t8x::ui::TextField tf_textel_name = { 16, t8x::ui::TextFieldMode::AlphaNumeric, tf_style, 0 };
+  t8x::ui::TextField tf_textel_symbol = { 1, t8x::ui::TextFieldMode::All, tf_style, 1 };
+  t8x::ui::ColorPicker cp_textel_fg = { Color::Blue, Color::White, t8x::ui::ColorPickerCursorColoring::BlackWhite, 2, true, '*', ' ' };
+  t8x::ui::ColorPicker cp_textel_bg = { Color::Blue, Color::White, t8x::ui::ColorPickerCursorColoring::BlackWhite, 3, true, '*', ' ' };
+  t8x::ui::TextField tf_textel_mat = { 4, t8x::ui::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
-  drawing::Textel edit_textel_normal;
-  drawing::Textel edit_textel_shadow;
+  Textel edit_textel_normal;
+  Textel edit_textel_shadow;
   std::string edit_textel_name;
 };
 
 int main(int argc, char** argv)
 {
-  GameEngineParams params;
+  t8x::GameEngineParams params;
   params.enable_title_screen = false;
   params.enable_instructions_screen = false;
   params.enable_quit_confirm_screen = false;
