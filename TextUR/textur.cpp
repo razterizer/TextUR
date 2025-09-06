@@ -5,13 +5,13 @@
 //  Created by Rasmus Anthin on 2024-07-01.
 //
 
-#include <Termin8or/GameEngine.h>
-#include <Termin8or/ScreenUtils.h>
-#include <Termin8or/Drawing.h>
-#include <Termin8or/Texture.h>
-#include <Termin8or/RC.h>
-#include <Termin8or/MessageHandler.h>
-#include <Termin8or/UI.h>
+#include <Termin8or/sys/GameEngine.h>
+#include <Termin8or/screen/ScreenUtils.h>
+#include <Termin8or/drawing/Drawing.h>
+#include <Termin8or/drawing/Texture.h>
+#include <Termin8or/geom/RC.h>
+#include <Termin8or/ui/MessageHandler.h>
+#include <Termin8or/ui/UI.h>
 #include <Core/Rand.h>
 
 #include <iostream>
@@ -20,8 +20,8 @@
 using namespace std::string_literals;
 using Color = t8::Color;
 using RC = t8::RC;
-using Textel = t8::drawing::Textel;
-using Texture = t8x::drawing::Texture;
+using Textel = t8::Textel;
+using Texture = t8x::Texture;
 
 enum class EditorFileMode { NEW_OR_OVERWRITE_FILE, OPEN_EXISTING_FILE };
 
@@ -46,7 +46,7 @@ class Game : public t8x::GameEngine<>
     }
   };
 
-  void draw_menu(const t8::color::Style& ui_style, const int menu_width)
+  void draw_menu(const t8::Style& ui_style, const int menu_width)
   {
     //const int nr = sh.num_rows();
     const int nri = sh.num_rows_inset();
@@ -70,7 +70,7 @@ class Game : public t8x::GameEngine<>
       sh.write_buffer(textel.str(), r + 1, nc - menu_width + 2, textel.get_style());
       sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
       // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-      t8x::drawing::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::drawing::OutlineType::Line, ui_style);
+      t8x::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::OutlineType::Line, ui_style);
       r += 3;
     }
   }
@@ -112,7 +112,7 @@ class Game : public t8x::GameEngine<>
   
   void reset_goto_input()
   {
-    dialog_goto = t8x::ui::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
+    dialog_goto = t8x::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
     dialog_goto.add_text_field({ 2, 1 }, tf_goto_r);
     dialog_goto.add_text_field({ 2, 11 }, tf_goto_c);
     dialog_goto.set_tab_order(0);
@@ -121,14 +121,14 @@ class Game : public t8x::GameEngine<>
   void reset_textel_editor()
   {
     edit_mode = EditTextelMode::EditOrAdd;
-    dialog_edit_or_add = t8x::ui::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
+    dialog_edit_or_add = t8x::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
     dialog_edit_or_add.add_button(btn_edit);
     dialog_edit_or_add.add_button(btn_add);
     dialog_edit_or_add.set_button_selection(0, true);
-    dialog_edit_mat = t8x::ui::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
+    dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_order(0);
-    dialog_editor = t8x::ui::Dialog({ "Custom Textel Preset Editor (Normal)"s, "Textel:", "Idx:", "Name:", "Char:", "FG Color:", "", "BG Color:", "", "Mat:" });
+    dialog_editor = t8x::Dialog({ "Custom Textel Preset Editor (Normal)"s, "Textel:", "Idx:", "Name:", "Char:", "FG Color:", "", "BG Color:", "", "Mat:" });
     dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
     dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
     dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
@@ -461,8 +461,8 @@ class Game : public t8x::GameEngine<>
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
             textel_normal.ch = tokens[0][0];
-            textel_normal.fg_color = t8::color::string2color(tokens[1]);
-            textel_normal.bg_color = t8::color::string2color(tokens[2]);
+            textel_normal.fg_color = t8::string2color(tokens[1]);
+            textel_normal.bg_color = t8::string2color(tokens[2]);
             textel_normal.mat = std::atoi(tokens[3].c_str());
           }
           else
@@ -475,8 +475,8 @@ class Game : public t8x::GameEngine<>
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
             textel_shadow.ch = tokens[0][0];
-            textel_shadow.fg_color = t8::color::string2color(tokens[1]);
-            textel_shadow.bg_color = t8::color::string2color(tokens[2]);
+            textel_shadow.fg_color = t8::string2color(tokens[1]);
+            textel_shadow.bg_color = t8::string2color(tokens[2]);
             textel_shadow.mat = std::atoi(tokens[3].c_str());
           }
           else
@@ -496,7 +496,7 @@ class Game : public t8x::GameEngine<>
 public:
   Game(int argc, char** argv, const t8x::GameEngineParams& params)
     : GameEngine(argv[0], params)
-    , message_handler(std::make_unique<t8x::ui::MessageHandler>())
+    , message_handler(std::make_unique<t8x::MessageHandler>())
   {
     GameEngine::set_anim_rate(0, 5);
     GameEngine::set_anim_rate(1, 6);
@@ -623,16 +623,16 @@ public:
   }
   
 private:
-  void handle_editor_key_presses(char curr_key, t8::input::SpecialKey curr_special_key,
+  void handle_editor_key_presses(char curr_key, t8::SpecialKey curr_special_key,
                                  int nri, int nci, t8::RC& cursor_pos)
   {
     if (curr_key == '-')
       math::toggle(show_menu);
       
-    bool is_up = curr_special_key == t8::input::SpecialKey::Up || curr_key == 'w';
-    bool is_down = curr_special_key == t8::input::SpecialKey::Down || curr_key == 's';
-    bool is_left = curr_special_key == t8::input::SpecialKey::Left || curr_key == 'a';
-    bool is_right = curr_special_key == t8::input::SpecialKey::Right || curr_key == 'd';
+    bool is_up = curr_special_key == t8::SpecialKey::Up || curr_key == 'w';
+    bool is_down = curr_special_key == t8::SpecialKey::Down || curr_key == 's';
+    bool is_left = curr_special_key == t8::SpecialKey::Left || curr_key == 'a';
+    bool is_right = curr_special_key == t8::SpecialKey::Right || curr_key == 'd';
     if (show_menu)
     {
       if (is_up)
@@ -905,7 +905,7 @@ private:
       else if (str::to_lower(curr_key) == 'l')
         message_handler->add_message(static_cast<float>(get_real_time_s()),
                                      "Cursor @ " + cursor_pos.str(),
-                                     t8x::ui::MessageHandler::Level::Guide);
+                                     t8x::MessageHandler::Level::Guide);
       else if (str::to_lower(curr_key) == 'g')
       {
         if (!math::toggle(show_goto_pos))
@@ -931,7 +931,7 @@ private:
         if (folder::exists(file_path_curr_texture))
         {
           show_confirm_overwrite = true;
-          overwrite_confirm_button = t8::screen::YesNoButtons::No;
+          overwrite_confirm_button = t8::YesNoButtons::No;
         }
         else
           safe_to_save = true;
@@ -945,14 +945,14 @@ private:
         {
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "Your work was successfully saved.",
-                                       t8x::ui::MessageHandler::Level::Guide);
+                                       t8x::MessageHandler::Level::Guide);
                                        
           is_modified = false;
         }
         else
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "An error occurred while saving your work!",
-                                       t8x::ui::MessageHandler::Level::Fatal);
+                                       t8x::MessageHandler::Level::Fatal);
                                        
         safe_to_save = false;
         show_confirm_overwrite = false;
@@ -962,7 +962,7 @@ private:
 
   virtual void update() override
   {
-    t8::color::Style ui_style { Color::LightGray, Color::Black };
+    t8::Style ui_style { Color::LightGray, Color::Black };
     
     int cursor_anim_ctr = get_anim_count(1) % 2 == 0;
     
@@ -989,7 +989,7 @@ private:
     if (!show_confirm_overwrite && show_menu)
     {
       // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-      t8x::drawing::draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, t8x::drawing::OutlineType::Line, ui_style);
+      t8x::draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, t8x::OutlineType::Line, ui_style);
     }
   
     if (is_modified)
@@ -1006,14 +1006,14 @@ private:
                    { Color::Black, Color::DarkCyan },
                    { Color::Black, Color::DarkCyan, Color::Cyan },
                    { Color::White, Color::DarkCyan });
-      if (curr_special_key == t8::input::SpecialKey::Left)
-        overwrite_confirm_button = t8::screen::YesNoButtons::Yes;
-      else if (curr_special_key == t8::input::SpecialKey::Right)
-        overwrite_confirm_button = t8::screen::YesNoButtons::No;
+      if (curr_special_key == t8::SpecialKey::Left)
+        overwrite_confirm_button = t8::YesNoButtons::Yes;
+      else if (curr_special_key == t8::SpecialKey::Right)
+        overwrite_confirm_button = t8::YesNoButtons::No;
       
-      if (curr_special_key == t8::input::SpecialKey::Enter)
+      if (curr_special_key == t8::SpecialKey::Enter)
       {
-        if (overwrite_confirm_button == t8::screen::YesNoButtons::Yes)
+        if (overwrite_confirm_button == t8::YesNoButtons::Yes)
           safe_to_save = true;
         else
           show_confirm_overwrite = false;
@@ -1027,13 +1027,13 @@ private:
       {
         allow_editing = false;
         dialog_goto.update(curr_key, curr_special_key);
-        if (curr_special_key == t8::input::SpecialKey::Enter)
+        if (curr_special_key == t8::SpecialKey::Enter)
         {
           if (dialog_goto.text_field_empty(0) || dialog_goto.text_field_empty(1))
           {
             message_handler->add_message(static_cast<float>(get_real_time_s()),
                                          "You must type both row and col coordinates.",
-                                         t8x::ui::MessageHandler::Level::Guide);
+                                         t8x::MessageHandler::Level::Guide);
           }
           else
           {
@@ -1053,21 +1053,21 @@ private:
             show_goto_pos = false;
           }
         }
-        else if (curr_special_key == t8::input::SpecialKey::Escape)
+        else if (curr_special_key == t8::SpecialKey::Escape)
         {
           reset_goto_input();
           show_goto_pos = false;
         }
 
-        t8x::ui::TextBoxDrawingArgsAlign tb_args;
+        t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = { Color::White, Color::DarkBlue };
         tb_args.base.box_padding_lr = 1;
         dialog_goto.calc_pre_draw(str::Adjustment::Left);
         dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
-        tb_args.v_align = t8x::ui::VerticalAlignment::BOTTOM;
-        tb_args.h_align = t8x::ui::HorizontalAlignment::RIGHT;
+        tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
+        tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
         tb_ui_help_goto.calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_goto.draw(sh, tb_args);
       }
@@ -1083,7 +1083,7 @@ private:
             // | [Edit]                      [Add] |
             // +-----------------------------------+
             dialog_edit_or_add.update(curr_key, curr_special_key);
-            if (curr_special_key == t8::input::SpecialKey::Enter)
+            if (curr_special_key == t8::SpecialKey::Enter)
             {
               auto sel_btn_text = dialog_edit_or_add.get_selected_button_text();
               if (sel_btn_text == "Edit")
@@ -1095,13 +1095,13 @@ private:
                 edit_mode = EditTextelMode::EditTextelNormal;
               }
             }
-            else if (curr_special_key == t8::input::SpecialKey::Escape)
+            else if (curr_special_key == t8::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            t8x::ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             dialog_edit_or_add.calc_pre_draw(str::Adjustment::Left);
@@ -1116,13 +1116,13 @@ private:
             // | Idx: ____                        |
             // +----------------------------------+
             dialog_edit_mat.update(curr_key, curr_special_key);
-            if (curr_special_key == t8::input::SpecialKey::Enter)
+            if (curr_special_key == t8::SpecialKey::Enter)
             {
               if (dialog_edit_mat.text_field_empty(0))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must type a valid custom textel preset id.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else
               {
@@ -1133,7 +1133,7 @@ private:
                 {
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                "Successfully loaded custom textel preset " + std::to_string(ctp_idx) + "!",
-                                               t8x::ui::MessageHandler::Level::Guide);
+                                               t8x::MessageHandler::Level::Guide);
                   edit_textel_preset = &custom_textel_presets[ctp_idx];
                   edit_textel_normal = edit_textel_preset->textel_normal;
                   edit_textel_shadow = edit_textel_preset->textel_shadow;
@@ -1151,18 +1151,18 @@ private:
                   int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
-                                               t8x::ui::MessageHandler::Level::Guide);
+                                               t8x::MessageHandler::Level::Guide);
                   dialog_edit_mat.clear_text_field_input(0);
                 }
               }
             }
-            else if (curr_special_key == t8::input::SpecialKey::Escape)
+            else if (curr_special_key == t8::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            t8x::ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             dialog_edit_mat.calc_pre_draw(str::Adjustment::Left);
@@ -1190,25 +1190,25 @@ private:
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
             dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
-            if (curr_special_key == t8::input::SpecialKey::Enter)
+            if (curr_special_key == t8::SpecialKey::Enter)
             {
               if (dialog_editor.text_field_empty(0))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel preset name.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(1))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel character.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else
               {
@@ -1230,13 +1230,13 @@ private:
                 edit_mode = EditTextelMode::EditTextelShadow;
               }
             }
-            else if (curr_special_key == t8::input::SpecialKey::Escape)
+            else if (curr_special_key == t8::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            t8x::ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
@@ -1253,25 +1253,25 @@ private:
             edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
             dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.ch, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
-            if (curr_special_key == t8::input::SpecialKey::Enter)
+            if (curr_special_key == t8::SpecialKey::Enter)
             {
               if (dialog_editor.text_field_empty(0))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel preset name.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(1))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel character.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
-                                             t8x::ui::MessageHandler::Level::Guide);
+                                             t8x::MessageHandler::Level::Guide);
               }
               else
               {
@@ -1292,23 +1292,23 @@ private:
                     // '%', DarkMagenta, DarkCyan, 28
                     // Magic Stone
                     lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.ch + "', "
-                      + t8::color::color2string(ctp.textel_normal.fg_color) + ", "
-                      + t8::color::color2string(ctp.textel_normal.bg_color) + ", "
+                      + t8::color2string(ctp.textel_normal.fg_color) + ", "
+                      + t8::color2string(ctp.textel_normal.bg_color) + ", "
                       + std::to_string(ctp.textel_normal.mat));
                     lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.ch + "', "
-                      + t8::color::color2string(ctp.textel_shadow.fg_color) + ", "
-                      + t8::color::color2string(ctp.textel_shadow.bg_color) + ", "
+                      + t8::color2string(ctp.textel_shadow.fg_color) + ", "
+                      + t8::color2string(ctp.textel_shadow.bg_color) + ", "
                       + std::to_string(ctp.textel_shadow.mat));
                     lines_custom_textel_presets.emplace_back(ctp.name);
                   }
                   if (TextIO::write_file(filepath_custom_textel_presets, lines_custom_textel_presets))
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Successfully wrote to custom textel presets file!",
-                                                 t8x::ui::MessageHandler::Level::Guide);
+                                                 t8x::MessageHandler::Level::Guide);
                   else
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Unable to write to custom textel presets file!",
-                                                 t8x::ui::MessageHandler::Level::Fatal);
+                                                 t8x::MessageHandler::Level::Fatal);
                                                  
                   reload_textel_presets();
                 }
@@ -1316,13 +1316,13 @@ private:
                 show_textel_editor = false;
               }
             }
-            else if (curr_special_key == t8::input::SpecialKey::Escape)
+            else if (curr_special_key == t8::SpecialKey::Escape)
             {
               reset_textel_editor();
               show_textel_editor = false;
             }
             
-            t8x::ui::TextBoxDrawingArgsAlign tb_args;
+            t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = { Color::White, Color::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
@@ -1332,11 +1332,11 @@ private:
           }
         }
         
-        t8x::ui::TextBoxDrawingArgsAlign tb_args;
+        t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
         tb_args.base.box_padding_lr = 1;
-        tb_args.v_align = t8x::ui::VerticalAlignment::BOTTOM;
-        tb_args.h_align = t8x::ui::HorizontalAlignment::RIGHT;
+        tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
+        tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].draw(sh, tb_args);
       }
@@ -1358,7 +1358,7 @@ private:
       }
       if (show_materials)
       {
-        t8x::drawing::draw_box_texture_materials(sh,
+        t8x::draw_box_texture_materials(sh,
                                    screen_pos.r, screen_pos.c,
                                    curr_texture.size.r + 2, box_width_curr + 2,
                                    curr_texture);
@@ -1366,19 +1366,19 @@ private:
       else
       {
         // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-        t8x::drawing::draw_box_textured(sh,
+        t8x::draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
                           curr_texture.size.r + 2, box_width_curr + 2,
-                          t8x::drawing::SolarDirection::Zenith,
+                          t8x::SolarDirection::Zenith,
                           curr_texture);
       }
       if (show_tracing && !tracing_texture.empty())
       {
         // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-        t8x::drawing::draw_box_textured(sh,
+        t8x::draw_box_textured(sh,
                           screen_pos.r, screen_pos.c,
                           tracing_texture.size.r + 2, box_width_tracing + 2,
-                          t8x::drawing::SolarDirection::Zenith,
+                          t8x::SolarDirection::Zenith,
                           tracing_texture);
       }
     }
@@ -1401,9 +1401,9 @@ private:
   
   std::string filepath_custom_textel_presets;
     
-  t8::drawing::Texture curr_texture;
-  t8::drawing::Texture tracing_texture;
-  t8::drawing::Texture bright_texture;
+  t8::Texture curr_texture;
+  t8::Texture tracing_texture;
+  t8::Texture bright_texture;
   std::string file_path_curr_texture;
   std::string file_path_tracing_texture;
   std::string file_path_bright_texture;
@@ -1421,14 +1421,14 @@ private:
   bool show_textel_editor = false;
   bool show_materials = false;
   
-  t8::screen::YesNoButtons overwrite_confirm_button = t8::screen::YesNoButtons::No;
+  t8::YesNoButtons overwrite_confirm_button = t8::YesNoButtons::No;
   bool safe_to_save = false;
   
   std::vector<TextelItem> textel_presets; // Including custom textel presets.
   int selected_textel_preset_idx = 0;
   std::vector<TextelItem> custom_textel_presets;
   
-  std::unique_ptr<t8x::ui::MessageHandler> message_handler;
+  std::unique_ptr<t8x::MessageHandler> message_handler;
   using UndoItem = std::vector<std::pair<t8::RC, Textel>>;
   std::stack<UndoItem> undo_buffer;
   std::stack<UndoItem> redo_buffer;
@@ -1441,13 +1441,13 @@ private:
   
   bool use_shadow_textels = false;
   
-  t8x::ui::TextBoxDebug tbd;
+  t8x::TextBoxDebug tbd;
   
-  t8::color::ButtonStyle btn_style { Color::White, Color::DarkBlue, Color::Blue };
-  t8::color::PromptStyle tf_style { Color::White, Color::DarkBlue, Color::White };
-  t8x::ui::ButtonFrame btn_frame = t8x::ui::ButtonFrame::SquareBrackets;
+  t8::ButtonStyle btn_style { Color::White, Color::DarkBlue, Color::Blue };
+  t8::PromptStyle tf_style { Color::White, Color::DarkBlue, Color::White };
+  t8x::ButtonFrame btn_frame = t8x::ButtonFrame::SquareBrackets;
   
-  t8x::ui::TextBox tb_ui_help_goto {{
+  t8x::TextBox tb_ui_help_goto {{
       "UI Help"s,
       "Type coordinates using number keys.",
       "Erase characters by pressing [BACKSPACE].",
@@ -1455,12 +1455,12 @@ private:
       "Press [ENTER] when done.",
       "Press [ESCAPE] to cancel."
     }};
-  t8x::ui::Dialog dialog_goto;
-  t8x::ui::TextField tf_goto_r { 8, t8x::ui::TextFieldMode::Numeric, tf_style, 0 };
-  t8x::ui::TextField tf_goto_c { 8, t8x::ui::TextFieldMode::Numeric, tf_style, 1 };
+  t8x::Dialog dialog_goto;
+  t8x::TextField tf_goto_r { 8, t8x::TextFieldMode::Numeric, tf_style, 0 };
+  t8x::TextField tf_goto_c { 8, t8x::TextFieldMode::Numeric, tf_style, 1 };
   
   enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
-  std::array<t8x::ui::TextBox, 4> tb_ui_help_edit_textel
+  std::array<t8x::TextBox, 4> tb_ui_help_edit_textel
   {
     {
       { { "UI Help"s, "Use arrow keys or [TAB] to select button,", "Then press [ENTER] when done.", "Press [ESCAPE] to cancel." } },
@@ -1470,17 +1470,17 @@ private:
     }
   };
   EditTextelMode edit_mode = EditTextelMode::EditOrAdd;
-  t8x::ui::Dialog dialog_edit_or_add;
-  t8x::ui::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
-  t8x::ui::Button btn_add { "Add", btn_style, btn_frame, 1 };
-  t8x::ui::Dialog dialog_edit_mat;
-  t8x::ui::TextField tf_textel_idx { 4, t8x::ui::TextFieldMode::Numeric, tf_style, 0 };
-  t8x::ui::Dialog dialog_editor;
-  t8x::ui::TextField tf_textel_name = { 16, t8x::ui::TextFieldMode::AlphaNumeric, tf_style, 0 };
-  t8x::ui::TextField tf_textel_symbol = { 1, t8x::ui::TextFieldMode::All, tf_style, 1 };
-  t8x::ui::ColorPicker cp_textel_fg = { Color::Blue, Color::White, t8x::ui::ColorPickerCursorColoring::BlackWhite, 2, true, '*', ' ' };
-  t8x::ui::ColorPicker cp_textel_bg = { Color::Blue, Color::White, t8x::ui::ColorPickerCursorColoring::BlackWhite, 3, true, '*', ' ' };
-  t8x::ui::TextField tf_textel_mat = { 4, t8x::ui::TextFieldMode::Numeric, tf_style, 4 };
+  t8x::Dialog dialog_edit_or_add;
+  t8x::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
+  t8x::Button btn_add { "Add", btn_style, btn_frame, 1 };
+  t8x::Dialog dialog_edit_mat;
+  t8x::TextField tf_textel_idx { 4, t8x::TextFieldMode::Numeric, tf_style, 0 };
+  t8x::Dialog dialog_editor;
+  t8x::TextField tf_textel_name = { 16, t8x::TextFieldMode::AlphaNumeric, tf_style, 0 };
+  t8x::TextField tf_textel_symbol = { 1, t8x::TextFieldMode::All, tf_style, 1 };
+  t8x::ColorPicker cp_textel_fg = { Color::Blue, Color::White, t8x::ColorPickerCursorColoring::BlackWhite, 2, true, '*', ' ' };
+  t8x::ColorPicker cp_textel_bg = { Color::Blue, Color::White, t8x::ColorPickerCursorColoring::BlackWhite, 3, true, '*', ' ' };
+  t8x::TextField tf_textel_mat = { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
   Textel edit_textel_normal;
   Textel edit_textel_shadow;
