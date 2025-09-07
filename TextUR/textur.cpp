@@ -1512,7 +1512,7 @@ int main(int argc, char** argv)
         params.log_mode = LogMode::Record;
       else if (strcmp(argv[a_idx + 1], "replay") == 0)
         params.log_mode = LogMode::Replay;
-      params.xcode_log_filepath = "../../../../../../../../Documents/xcode/TextUR/TextUR";
+      params.xcode_log_path = "../../../../../../../../Documents/xcode/TextUR/TextUR";
     }
   }
 
