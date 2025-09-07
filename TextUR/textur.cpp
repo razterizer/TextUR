@@ -455,6 +455,8 @@ class Game : public t8x::GameEngine<>
       Textel textel_normal, textel_shadow;
       for (const auto& line : lines_custom_textel_presets)
       {
+        if (line.empty())
+          continue;
         if (part == 0)
         {
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'' });
