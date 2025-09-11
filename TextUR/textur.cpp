@@ -933,7 +933,7 @@ private:
         if (folder::exists(file_path_curr_texture))
         {
           show_confirm_overwrite = true;
-          overwrite_confirm_button = t8::YesNoButtons::No;
+          overwrite_confirm_button = t8x::YesNoButtons::No;
         }
         else
           safe_to_save = true;
@@ -1009,13 +1009,13 @@ private:
                    { Color::Black, Color::DarkCyan, Color::Cyan },
                    { Color::White, Color::DarkCyan });
       if (curr_special_key == t8::SpecialKey::Left)
-        overwrite_confirm_button = t8::YesNoButtons::Yes;
+        overwrite_confirm_button = t8x::YesNoButtons::Yes;
       else if (curr_special_key == t8::SpecialKey::Right)
-        overwrite_confirm_button = t8::YesNoButtons::No;
+        overwrite_confirm_button = t8x::YesNoButtons::No;
       
       if (curr_special_key == t8::SpecialKey::Enter)
       {
-        if (overwrite_confirm_button == t8::YesNoButtons::Yes)
+        if (overwrite_confirm_button == t8x::YesNoButtons::Yes)
           safe_to_save = true;
         else
           show_confirm_overwrite = false;
@@ -1423,7 +1423,7 @@ private:
   bool show_textel_editor = false;
   bool show_materials = false;
   
-  t8::YesNoButtons overwrite_confirm_button = t8::YesNoButtons::No;
+  t8x::YesNoButtons overwrite_confirm_button = t8x::YesNoButtons::No;
   bool safe_to_save = false;
   
   std::vector<TextelItem> textel_presets; // Including custom textel presets.
