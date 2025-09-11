@@ -1152,8 +1152,9 @@ private:
                 {
                   int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
-                                               "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
-                                               t8x::MessageHandler::Level::Guide);
+                                               "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!\n" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
+                                               t8x::MessageHandler::Level::Guide,
+                                               3.f);
                   dialog_edit_mat.clear_text_field_input(0);
                 }
               }
