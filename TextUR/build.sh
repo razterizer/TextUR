@@ -3,10 +3,10 @@
 os_name=$(uname)
 
 if [[ $os_name == *"Darwin"* ]]; then
-  additional_flags="-I../../lib \
+  additional_flags="-I../../lib/Core/include \
     -I../../lib/Termin8or/include"
 else
-  additional_flags="-I../../lib \
+  additional_flags="-I../../lib/Core/include \
     -I../../lib/Termin8or/include"
   # export BUILD_PKG_CONFIG_MODULES='openal'
 fi

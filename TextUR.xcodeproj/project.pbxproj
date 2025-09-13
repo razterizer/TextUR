@@ -302,8 +302,8 @@
 				DEVELOPMENT_TEAM = HFL2Q84SZB;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = (
+					../lib/Core/include,
 					../lib/Termin8or/include,
-					../lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -316,8 +316,8 @@
 				DEVELOPMENT_TEAM = HFL2Q84SZB;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = (
+					../lib/Core/include,
 					../lib/Termin8or/include,
-					../lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
