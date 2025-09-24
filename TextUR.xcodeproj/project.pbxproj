@@ -38,6 +38,9 @@
 		076AB0612C9DDFB200531419 /* build-macos.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; name = "build-macos.yml"; path = ".github/workflows/build-macos.yml"; sourceTree = SOURCE_ROOT; };
 		076AB0622C9DE15400531419 /* build-windows.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; name = "build-windows.yml"; path = ".github/workflows/build-windows.yml"; sourceTree = SOURCE_ROOT; };
 		0775CB5F2C321B3A0078F60A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		07980B9D2E83CEA6007A0EB4 /* release-linux.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "release-linux.yml"; path = ".github/workflows/release-linux.yml"; sourceTree = SOURCE_ROOT; };
+		07980B9E2E83CEA6007A0EB4 /* release-macos.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "release-macos.yml"; path = ".github/workflows/release-macos.yml"; sourceTree = SOURCE_ROOT; };
+		07980B9F2E83CEA6007A0EB4 /* release-windows.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "release-windows.yml"; path = ".github/workflows/release-windows.yml"; sourceTree = SOURCE_ROOT; };
 		07C2A7962C31E62700869A56 /* TextUR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TextUR; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2A7992C31E62700869A56 /* textur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textur.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -83,6 +86,9 @@
 				076AB0622C9DE15400531419 /* build-windows.yml */,
 				076AB0612C9DDFB200531419 /* build-macos.yml */,
 				076AB05D2C9DDA7800531419 /* build-ubuntu.yml */,
+				07980B9E2E83CEA6007A0EB4 /* release-macos.yml */,
+				07980B9D2E83CEA6007A0EB4 /* release-linux.yml */,
+				07980B9F2E83CEA6007A0EB4 /* release-windows.yml */,
 			);
 			name = workflows;
 			sourceTree = "<group>";
