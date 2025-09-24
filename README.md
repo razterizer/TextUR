@@ -14,6 +14,9 @@
 ![Last Commit](https://img.shields.io/github/last-commit/razterizer/TextUR?color=blue)
 ![Contributors](https://img.shields.io/github/contributors/razterizer/TextUR?color=blue)
 
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/razterizer/TextUR/total)
+
+
 Text-based texture UI and Rasterizer.
 
 TextUR is a terminal-based editor for text-based textures or images.
