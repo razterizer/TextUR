@@ -42,9 +42,7 @@ jobs:
         
       # Step 5: Copy examples/ folder
       - name: Copy examples folder
-        run: |
-          cd TextUR
-          cp examples bin/
+        run: cp -r examples bin/
 
       # Step 6: Upload build artifact
       - name: Upload macOS build artifact
