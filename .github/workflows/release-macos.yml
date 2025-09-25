@@ -40,6 +40,10 @@ jobs:
           ./build.sh
         continue-on-error: false
         
+      # Step 5: Debug list the directory tree.
+      - name: List files
+        run: tree
+        
       # Step 5: Copy examples/ folder
       - name: Copy examples folder
         run: cp -r examples bin/
