@@ -113,8 +113,8 @@ class Game : public t8x::GameEngine<>
   void reset_goto_input()
   {
     dialog_goto = t8x::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
-    dialog_goto.add_text_field({ 2, 1 }, tf_goto_r);
-    dialog_goto.add_text_field({ 2, 11 }, tf_goto_c);
+    dialog_goto.add_text_field({ 1, 0 }, tf_goto_r);
+    dialog_goto.add_text_field({ 1, 10 }, tf_goto_c);
     dialog_goto.set_tab_order(0);
   }
   
