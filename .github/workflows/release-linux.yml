@@ -68,6 +68,9 @@ jobs:
           mkdir -p textur-${{ github.ref_name }}
           chmod ugo+x textur
           cp textur textur-${{ github.ref_name }}/
+          if [ -d ../examples ]; then
+            cp -r ../examples textur-${{ github.ref_name }}/
+          fi
           tar -czf textur-${{ github.ref_name }}-linux.tar.gz textur-${{ github.ref_name }}/
           
       - name: Upload Linux package to release

@@ -70,6 +70,9 @@ jobs:
           # Copy the executable and necessary files
           chmod ugo+x textur
           cp textur textur-${{ github.ref_name }}/
+          if [ -d ../examples ]; then
+            cp -r ../examples textur-${{ github.ref_name }}/
+          fi
           # Create zip archive
           zip -r textur-${{ github.ref_name }}-macos.zip textur-${{ github.ref_name }}/
           
