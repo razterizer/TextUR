@@ -42,7 +42,9 @@ jobs:
         
       # Step 5: Debug list the directory tree.
       - name: List files
-        run: tree
+        run: |
+          brew install tree
+          tree
         
       # Step 5: Copy examples/ folder
       - name: Copy examples folder
