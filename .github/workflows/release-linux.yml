@@ -40,11 +40,19 @@ jobs:
           ./build.sh
         continue-on-error: false
         
-      # Step 5: Copy examples/ folder
+      # Step 5: Debug list the directory tree.
+      - name: List files
+        run: |
+          sudo apt install tree
+          tree
+        
+      # Step 6: Copy examples/ folder
       - name: Copy examples folder
-        run: cp -r examples bin/
+        run: |
+          cd TextUR
+          cp -r examples bin/
 
-      # Step 6: Upload build artifact.
+      # Step 7: Upload build artifact.
       - name: Upload Linux build artifact
         uses: actions/upload-artifact@v4
         with:

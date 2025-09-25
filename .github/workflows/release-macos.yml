@@ -46,13 +46,13 @@ jobs:
           brew install tree
           tree
         
-      # Step 5: Copy examples/ folder
+      # Step 6: Copy examples/ folder
       - name: Copy examples folder
         run: |
           cd TextUR
           cp -r examples bin/
 
-      # Step 6: Upload build artifact
+      # Step 7: Upload build artifact
       - name: Upload macOS build artifact
         uses: actions/upload-artifact@v4
         with:
