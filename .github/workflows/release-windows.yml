@@ -46,8 +46,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path "upload-temp"
           Copy-Item "TextUR/x64/Release/TextUR.exe" "upload-temp/"
           # Copy examples directory (if it exists)
-          if (Test-Path "../examples") {
-            Copy-Item -Recurse "../examples" "asciiroids-${{ github.ref_name }}/"
+          if (Test-Path "examples") {
+            Copy-Item -Recurse "examples" "asciiroids-${{ github.ref_name }}/"
           }
 
       # Step 4: Upload build artifact

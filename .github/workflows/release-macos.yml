@@ -39,8 +39,12 @@ jobs:
           cd TextUR
           ./build.sh
         continue-on-error: false
+        
+      # Step 5: Copy examples/ folder
+      - name: Copy examples folder
+        run: cp examples bin/
 
-      # Step 5: Upload build artifact
+      # Step 6: Upload build artifact
       - name: Upload macOS build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -70,8 +74,8 @@ jobs:
           # Copy the executable and necessary files
           chmod ugo+x textur
           cp textur textur-${{ github.ref_name }}/
-          if [ -d ../examples ]; then
-            cp -r ../examples textur-${{ github.ref_name }}/
+          if [ -d examples ]; then
+            cp -r examples textur-${{ github.ref_name }}/
           fi
           # Create zip archive
           zip -r textur-${{ github.ref_name }}-macos.zip textur-${{ github.ref_name }}/
