@@ -132,6 +132,11 @@ jobs:
           echo "- textur-glibc2.35: for legacy systems (WSL, Ubuntu 22.04)" >> textur-${{ github.ref_name }}/README.txt
           echo "" >> textur-${{ github.ref_name }}/README.txt
           echo "Run the binary that matches your system's glibc version." >> textur-${{ github.ref_name }}/README.txt
+          echo "" >> textur-${{ github.ref_name }}/README.txt
+          echo "To run either executable, you might have to first do:" >> textur-${{ github.ref_name }}/README.txt
+          echo "  chmod ugo+x textur-glibc2.38" >> textur-${{ github.ref_name }}/README.txt
+          echo " or:" >> textur-${{ github.ref_name }}/README.txt
+          echo "  chmod ugo+x textur-glibc2.35" >> textur-${{ github.ref_name }}/README.txt
           tar -czf textur-${{ github.ref_name }}-linux.tar.gz textur-${{ github.ref_name }}/
 
       - name: Upload Linux package to release

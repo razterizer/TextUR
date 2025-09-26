@@ -84,6 +84,12 @@ jobs:
           if (Test-Path "examples") {
             Copy-Item -Recurse "examples" "textur-${{ github.ref_name }}/"
           }
+          echo "Unblock instructions:" > textur-${{ github.ref_name }}/README.txt
+          echo "=====================" >> textur-${{ github.ref_name }}/README.txt
+          echo "To tell Windows that this executable is fine" >> textur-${{ github.ref_name }}/README.txt
+          echo " you can unblock the executable by" >> textur-${{ github.ref_name }}/README.txt
+          echo " rightclicking the exe, then:" >> textur-${{ github.ref_name }}/README.txt
+          echo "   Properties -> Unblock (check this)." >> textur-${{ github.ref_name }}/README.txt
           # Create zip archive
           Compress-Archive -Path "textur-${{ github.ref_name }}" -DestinationPath "textur-${{ github.ref_name }}-windows.zip"
           

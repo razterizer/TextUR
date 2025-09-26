@@ -76,6 +76,12 @@ jobs:
           if [ -d examples ]; then
             cp -r examples textur-${{ github.ref_name }}/
           fi
+          echo "Unblock instructions:" > textur-${{ github.ref_name }}/README.txt
+          echo "=====================" >> textur-${{ github.ref_name }}/README.txt
+          echo "To tell the gatekeeper that this executable is fine" >> textur-${{ github.ref_name }}/README.txt
+          echo " you can unblock the executable with" >> textur-${{ github.ref_name }}/README.txt
+          echo " the following command:" >> textur-${{ github.ref_name }}/README.txt
+          echo "   xattr -dr com.apple.quarantine textur" >> textur-${{ github.ref_name }}/README.txt
           # Create zip archive
           zip -r textur-${{ github.ref_name }}-macos.zip textur-${{ github.ref_name }}/
           
