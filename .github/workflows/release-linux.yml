@@ -113,6 +113,11 @@ jobs:
         with:
           name: textur-glibc2.35
           path: glibc2.35
+          
+      - name: List files
+        run: |
+          sudo apt install tree
+          tree
 
       - name: Create combined Linux distribution package
         run: |
