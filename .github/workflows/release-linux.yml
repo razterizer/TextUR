@@ -121,7 +121,7 @@ jobs:
 
       - name: Create combined Linux distribution package
         run: |
-          mkdir dunggine_demo-${{ github.ref_name }}
+          mkdir textur-${{ github.ref_name }}
           cp glibc2.38/textur textur-${{ github.ref_name }}/textur-glibc2.38
           cp glibc2.35/textur textur-${{ github.ref_name }}/textur-glibc2.35
           if [ -d glibc2.38/examples ]; then
