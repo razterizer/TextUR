@@ -21,6 +21,7 @@ Text-based texture UI and Rasterizer.
 
 TextUR is a terminal-based editor for text-based textures or images.
 This is a tool for generating textures to be used with [`DungGine`](https://github.com/razterizer/DungGine/).
+The recommended file extension for texture files is `*.tx`, though the program doesn't really care about the extension however.
 
 <img width="568" alt="image" src="https://github.com/user-attachments/assets/bfb04801-8969-418f-b5bd-0c24d37eb0b3">
 
