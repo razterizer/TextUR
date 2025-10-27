@@ -18,7 +18,7 @@ while true; do
     case "$response" in
         yes|y|Y|YES|Yes)
             echo "Running the program..."
-            bin/textur -f examples/test_day.tex
+            bin/textur -f examples/test_day.tx
             break
             ;;
         no|n|N|NO|No)

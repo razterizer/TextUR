@@ -21,7 +21,7 @@ set /p response=Do you want to run the program? (yes/no):
 REM Process the response
 if /i "%response%"=="yes" (
     echo Running the program...
-    call x64\Release\TextUR.exe -f examples\test_day.tex
+    call x64\Release\TextUR.exe -f examples\test_day.tx
     goto end
 ) else if /i "%response%"=="no" (
     echo Alright. Have a nice day!
