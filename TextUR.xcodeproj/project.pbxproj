@@ -27,6 +27,7 @@
 		072AE7EC2D08BAC3004F92D3 /* dependencies */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dependencies; sourceTree = SOURCE_ROOT; };
 		072AE7F52D09ED26004F92D3 /* setup_and_build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = setup_and_build.sh; sourceTree = SOURCE_ROOT; };
 		072AE7F62D09ED26004F92D3 /* setup_and_build.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = setup_and_build.bat; sourceTree = SOURCE_ROOT; };
+		0733A5F22EC085220045BCFD /* RELEASE_NOTES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_NOTES.md; sourceTree = "<group>"; };
 		075C5B092C5A16CE00E6A6C0 /* test_day.tx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_day.tx; sourceTree = "<group>"; };
 		075C5B0A2C5A16CE00E6A6C0 /* test_night.tx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_night.tx; sourceTree = "<group>"; };
 		075C5B0B2C5A1C4700E6A6C0 /* textel_presets_day.tx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = textel_presets_day.tx; sourceTree = "<group>"; };
@@ -100,6 +101,7 @@
 			children = (
 				075C651C2C3E00C000B15451 /* LICENSE */,
 				0775CB5F2C321B3A0078F60A /* README.md */,
+				0733A5F22EC085220045BCFD /* RELEASE_NOTES.md */,
 				07C2A7982C31E62700869A56 /* TextUR */,
 				07C2A7972C31E62700869A56 /* Products */,
 			);
