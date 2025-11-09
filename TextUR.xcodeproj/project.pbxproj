@@ -42,7 +42,7 @@
 		07980B9D2E83CEA6007A0EB4 /* release-linux.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "release-linux.yml"; path = ".github/workflows/release-linux.yml"; sourceTree = SOURCE_ROOT; };
 		07980B9E2E83CEA6007A0EB4 /* release-macos.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "release-macos.yml"; path = ".github/workflows/release-macos.yml"; sourceTree = SOURCE_ROOT; };
 		07980B9F2E83CEA6007A0EB4 /* release-windows.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = "release-windows.yml"; path = ".github/workflows/release-windows.yml"; sourceTree = SOURCE_ROOT; };
-		07980BA02E845EB4007A0EB4 /* retag_release.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = retag_release.sh; sourceTree = SOURCE_ROOT; };
+		07980BA02E845EB4007A0EB4 /* tag_release.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = tag_release.sh; sourceTree = SOURCE_ROOT; };
 		07C2A7962C31E62700869A56 /* TextUR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TextUR; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2A7992C31E62700869A56 /* textur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textur.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,7 +61,7 @@
 		072AE7EA2D08BAA3004F92D3 /* scripts */ = {
 			isa = PBXGroup;
 			children = (
-				07980BA02E845EB4007A0EB4 /* retag_release.sh */,
+				07980BA02E845EB4007A0EB4 /* tag_release.sh */,
 				072AE7F62D09ED26004F92D3 /* setup_and_build.bat */,
 				072AE7F52D09ED26004F92D3 /* setup_and_build.sh */,
 				072AE7EB2D08BAB8004F92D3 /* fetch-dependencies.py */,
