@@ -591,7 +591,10 @@ public:
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
         curr_texture = Texture { size };
       else
-        curr_texture.load(file_path_curr_texture);
+      {
+        if (!curr_texture.load(file_path_curr_texture))
+          exit(EXIT_FAILURE);
+      }
       
       if (!file_path_tracing_texture.empty())
         tracing_texture.load(file_path_tracing_texture);
