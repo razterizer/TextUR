@@ -45,6 +45,30 @@ class Game : public t8x::GameEngine<>
       return shadow ? textel_shadow : textel_normal;
     }
   };
+  
+  void show_help() const
+  {
+    std::cout << "textur --help |" << std::endl;
+    std::cout << "   -f <filepath_texture>" << std::endl;
+    std::cout << "   [-s <rows> <cols>]" << std::endl;
+    std::cout << "   [-t <filepath_tracing_texture>]" << std::endl;
+    std::cout << "   [-c <filepath_dark_texture>]" << std::endl;
+    std::cout << "   [--log_mode (record | replay)]" << std::endl;
+    std::cout << "   [--suppress_tty_output]" << std::endl;
+    std::cout << "   [--suppress_tty_input]" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
+    std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
+    std::cout << "                               then you need to supply the -s argument as well." << std::endl;
+    std::cout << "  -s                         : Specifies the size of a new texture." << std::endl;
+    std::cout << "                             : If <filepath_texture> already exists, then it will be overwritten." << std::endl;
+    std::cout << "  -t                         : Specifies a tracing texture." << std::endl;
+    std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Allows you to do animations." << std::endl;
+    std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
+    std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
+    std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
+    exit(EXIT_SUCCESS);
+  }
 
   void draw_menu(const t8::Style& ui_style, const int menu_width)
   {
@@ -516,28 +540,7 @@ public:
     for (int a_idx = 1; a_idx < argc; ++a_idx)
     {
       if (std::strcmp(argv[a_idx], "--help") == 0)
-      {
-        std::cout << "textur --help |" << std::endl;
-        std::cout << "   -f <filepath_texture>" << std::endl;
-        std::cout << "   [-s <rows> <cols>]" << std::endl;
-        std::cout << "   [-t <filepath_tracing_texture>]" << std::endl;
-        std::cout << "   [-c <filepath_dark_texture>]" << std::endl;
-        std::cout << "   [--log_mode (record | replay)]" << std::endl;
-        std::cout << "   [--suppress_tty_output]" << std::endl;
-        std::cout << "   [--suppress_tty_input]" << std::endl;
-        std::cout << std::endl;
-        std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
-        std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
-        std::cout << "                               then you need to supply the -s argument as well." << std::endl;
-        std::cout << "  -s                         : Specifies the size of a new texture." << std::endl;
-        std::cout << "                             : If <filepath_texture> already exists, then it will be overwritten." << std::endl;
-        std::cout << "  -t                         : Specifies a tracing texture." << std::endl;
-        std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Allows you to do animations." << std::endl;
-        std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
-        std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
-        std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
-        exit(EXIT_SUCCESS);
-      }
+        show_help();
 
       if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-f") == 0) // file
       {
@@ -566,6 +569,7 @@ public:
     if (file_path_curr_texture.empty())
     {
       std::cerr << "ERROR: You must supply a texture filename as a command line argument!" << std::endl;
+      show_help();
       request_exit();
     }
       
