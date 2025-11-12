@@ -517,7 +517,15 @@ public:
     {
       if (std::strcmp(argv[a_idx], "--help") == 0)
       {
-        std::cout << "textur --help | -f <filepath_texture> [-s <rows> <cols>] [-t <filepath_tracing_texture>] [-c <filepath_dark_texture>] [--log_mode (record | replay)] [--suppress_tty_output] [--suppress_tty_input]" << std::endl;
+        std::cout << "textur --help |" << std::endl;
+        std::cout << "   -f <filepath_texture>" << std::endl;
+        std::cout << "   [-s <rows> <cols>]" << std::endl;
+        std::cout << "   [-t <filepath_tracing_texture>]" << std::endl;
+        std::cout << "   [-c <filepath_dark_texture>]" << std::endl;
+        std::cout << "   [--log_mode (record | replay)]" << std::endl;
+        std::cout << "   [--suppress_tty_output]" << std::endl;
+        std::cout << "   [--suppress_tty_input]" << std::endl;
+        std::cout << std::endl;
         std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
         std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
         std::cout << "                               then you need to supply the -s argument as well." << std::endl;
