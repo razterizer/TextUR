@@ -1,0 +1,159 @@
+name: release linux
+
+on:
+  push:
+    tags:
+      - 'release-*'
+      - 'v*'
+
+jobs:
+  build-linux-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout the repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Step 2: Move to the parent directory and fetch dependencies.
+      - name: Fetch dependencies
+        run: |
+          cd ..
+          mkdir lib
+          cd lib
+          git clone https://github.com/razterizer/Core.git
+          git clone https://github.com/razterizer/Termin8or.git
+      
+      # Step 3: Build project.
+      - name: Build project
+        run: |
+          cd TextUR
+          ./build.sh
+        continue-on-error: false
+        
+      # Step 4: Debug list the directory tree.
+      - name: List files
+        run: |
+          sudo apt install tree
+          tree
+        
+      # Step 5: Copy examples/ folder
+      - name: Copy examples folder
+        run: |
+          cd TextUR
+          cp -r examples bin/
+
+      # Step 6: Upload build artifact.
+      - name: Upload Linux build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: textur-glibc2.38
+          path: TextUR/bin/
+          retention-days: 1
+
+  build-legacy-linux-release:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      # Step 1: Checkout the repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Move to the parent directory and fetch dependencies.
+      - name: Fetch dependencies
+        run: |
+          cd ..
+          mkdir lib
+          cd lib
+          git clone https://github.com/razterizer/Core.git
+          git clone https://github.com/razterizer/Termin8or.git
+
+      # Step 3: Build project.
+      - name: Build project
+        run: |
+          cd TextUR
+          ./build.sh
+        continue-on-error: false
+        
+      # Step 4: Debug list the directory tree.
+      - name: List files
+        run: |
+          sudo apt install tree
+          tree
+        
+      # Step 5: Copy examples/ folder
+      - name: Copy examples folder
+        run: |
+          cd TextUR
+          cp -r examples bin/
+
+      # Step 6: Upload build artifact.
+      - name: Upload Legacy Linux build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: textur-glibc2.35
+          path: TextUR/bin/
+          retention-days: 1
+
+  create-linux-release:
+    runs-on: ubuntu-latest
+    needs: [build-linux-release, build-legacy-linux-release]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download GLIBC 2.38 build
+        uses: actions/download-artifact@v4
+        with:
+          name: textur-glibc2.38
+          path: glibc2.38
+
+      - name: Download GLIBC 2.35 build
+        uses: actions/download-artifact@v4
+        with:
+          name: textur-glibc2.35
+          path: glibc2.35
+          
+      - name: List files
+        run: |
+          sudo apt install tree
+          tree
+
+      - name: Create combined Linux distribution package
+        run: |
+          mkdir textur-${{ github.ref_name }}
+          cp glibc2.38/textur textur-${{ github.ref_name }}/textur-glibc2.38
+          cp glibc2.35/textur textur-${{ github.ref_name }}/textur-glibc2.35
+          if [ -d glibc2.38/examples ]; then
+            cp -r glibc2.38/examples textur-${{ github.ref_name }}/
+          fi
+          echo "This package contains two binaries:" > textur-${{ github.ref_name }}/README.txt
+          echo "- textur-glibc2.38: for modern systems (Ubuntu 24.04+, Arch Linux)" >> textur-${{ github.ref_name }}/README.txt
+          echo "- textur-glibc2.35: for legacy systems (WSL, Ubuntu 22.04)" >> textur-${{ github.ref_name }}/README.txt
+          echo "" >> textur-${{ github.ref_name }}/README.txt
+          echo "Run the binary that matches your system's glibc version." >> textur-${{ github.ref_name }}/README.txt
+          echo "" >> textur-${{ github.ref_name }}/README.txt
+          echo "To run either executable, you might have to first do:" >> textur-${{ github.ref_name }}/README.txt
+          echo "  chmod ugo+x textur-glibc2.38" >> textur-${{ github.ref_name }}/README.txt
+          echo " or:" >> textur-${{ github.ref_name }}/README.txt
+          echo "  chmod ugo+x textur-glibc2.35" >> textur-${{ github.ref_name }}/README.txt
+          tar -czf textur-${{ github.ref_name }}-linux.tar.gz textur-${{ github.ref_name }}/
+
+      - name: Extract tag annotation as release notes
+        id: notes
+        run: |
+          git fetch --tags --force
+          TAG="${{ github.ref_name }}"
+          git tag -l --format='%(contents)' "$TAG" > RELEASE_NOTES.txt
+          echo "Release notes extracted from tag annotation:"
+          cat RELEASE_NOTES.txt
+
+      - name: Upload package to release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          artifacts: textur-${{ github.ref_name }}-linux.tar.gz
+          allowUpdates: true
+          bodyFile: RELEASE_NOTES.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
