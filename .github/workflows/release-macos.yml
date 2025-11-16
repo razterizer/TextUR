@@ -1,0 +1,107 @@
+name: release macos
+
+on:
+  push:
+    tags:
+      - 'release-*'
+      - 'v*'
+
+jobs:
+  build-macos-release:
+    runs-on: macos-latest
+    
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Step 2: Fetch dependencies
+      - name: Fetch dependencies
+        run: |
+          cd ..
+          mkdir lib
+          cd lib
+          git clone https://github.com/razterizer/Core.git
+          git clone https://github.com/razterizer/Termin8or.git
+      
+      # Step 3: Build project
+      - name: Build project
+        run: |
+          cd TextUR
+          ./build.sh
+        continue-on-error: false
+        
+      # Step 4: Debug list the directory tree.
+      - name: List files
+        run: |
+          brew install tree
+          tree
+        
+      # Step 5: Copy examples/ folder
+      - name: Copy examples folder
+        run: |
+          cd TextUR
+          cp -r examples bin/
+
+      # Step 6: Upload build artifact
+      - name: Upload macOS build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: textur-macos-build
+          path: TextUR/bin/
+          retention-days: 1
+
+  create-macos-release:
+    runs-on: ubuntu-latest
+    needs: build-macos-release
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Download macOS build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: textur-macos-build
+          path: macos-build
+          
+      - name: Create macOS distribution package
+        run: |
+          cd macos-build
+          # Create a clean distribution folder
+          mkdir -p textur-${{ github.ref_name }}
+          # Copy the executable and necessary files
+          chmod ugo+x textur
+          cp textur textur-${{ github.ref_name }}/
+          if [ -d examples ]; then
+            cp -r examples textur-${{ github.ref_name }}/
+          fi
+          echo "Unblock instructions:" > textur-${{ github.ref_name }}/README.txt
+          echo "=====================" >> textur-${{ github.ref_name }}/README.txt
+          echo "To tell the gatekeeper that this executable is fine" >> textur-${{ github.ref_name }}/README.txt
+          echo " you can unblock the executable with" >> textur-${{ github.ref_name }}/README.txt
+          echo " the following command:" >> textur-${{ github.ref_name }}/README.txt
+          echo "   xattr -dr com.apple.quarantine textur" >> textur-${{ github.ref_name }}/README.txt
+          # Create zip archive
+          zip -r textur-${{ github.ref_name }}-macos.zip textur-${{ github.ref_name }}/
+          
+      - name: Extract tag annotation as release notes
+        id: notes
+        run: |
+          git fetch --tags --force
+          TAG="${{ github.ref_name }}"
+          git tag -l --format='%(contents)' "$TAG" > RELEASE_NOTES.txt
+          echo "Release notes extracted from tag annotation:"
+          cat RELEASE_NOTES.txt
+          
+      - name: Upload package to release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          artifacts: macos-build/textur-${{ github.ref_name }}-macos.zip
+          allowUpdates: true
+          bodyFile: RELEASE_NOTES.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
