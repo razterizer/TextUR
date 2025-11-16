@@ -1060,8 +1060,8 @@ private:
             iss.str(dialog_goto.get_text_field_input(1));
             iss.clear();
             iss >> pos.c;
-            if (math::in_range<int>(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
-                && math::in_range<int>(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
+            if (math::in_range(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
+                && math::in_range(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
             {
               cursor_pos = pos;
               screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
