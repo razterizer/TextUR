@@ -18,7 +18,7 @@
 #include <stack>
 
 using namespace std::string_literals;
-using Color = t8::Color;
+using Color16 = t8::Color16;
 using RC = t8::RC;
 using Textel = t8::Textel;
 using Texture = t8x::Texture;
@@ -26,7 +26,7 @@ using Texture = t8x::Texture;
 enum class EditorFileMode { NEW_OR_OVERWRITE_FILE, OPEN_EXISTING_FILE };
 
 
-class Game : public t8x::GameEngine<>
+class Game : public t8x::GameEngine<44, 92>
 {
   struct TextelItem
   {
@@ -83,7 +83,7 @@ class Game : public t8x::GameEngine<>
       auto name_style = ui_style;
       if (p_idx == selected_textel_preset_idx)
       {
-        name_style.fg_color = Color::Cyan;
+        name_style.fg_color = Color16::Cyan;
         if (r + 2 >= nri)
           menu_r_offs -= 3;
         else if (r < 0)
@@ -108,7 +108,7 @@ class Game : public t8x::GameEngine<>
     {
       const int str_max_len = curr_texture.size.r == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.r - 1)));
       for (int r = 0; r < curr_texture.size.r; ++r)
-        sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, persist ? 1 : screen_pos.c + 1, Color::Red);
+        sh.write_buffer(str::adjust_str(std::to_string(r), str::Adjustment::Right, str_max_len), screen_pos.r + r + 1, persist ? 1 : screen_pos.c + 1, Color16::Red);
     }
     
     if (draw_h_coords)
@@ -121,17 +121,17 @@ class Game : public t8x::GameEngine<>
       {
         auto str = str::adjust_str(std::to_string(c), str::Adjustment::Right, str_max_len);
         for (int r = 0; r < str_max_len; ++r)
-          sh.write_buffer(std::string(1, str[r]), persist ? r + 1 : screen_pos.r + r + 1, screen_pos.c + c + 1, Color::Green);
+          sh.write_buffer(std::string(1, str[r]), persist ? r + 1 : screen_pos.r + r + 1, screen_pos.c + c + 1, Color16::Green);
       }
     }
     
     if (draw_h_cursor_line)
-      sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color::Red, Color::Transparent2);
+      sh.write_buffer(str::rep_char('-', screen_pos.c + cursor_pos.c), screen_pos.r + cursor_pos.r + 1, 1, Color16::Red, Color16::Transparent2);
 
     
     if (draw_v_cursor_line)
       for (int r = 0; r < cursor_pos.r + screen_pos.r; ++r)
-        sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color::Green, Color::Transparent2);
+        sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color16::Green, Color16::Transparent2);
   }
   
   void reset_goto_input()
@@ -152,12 +152,15 @@ class Game : public t8x::GameEngine<>
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_order(0);
-    dialog_editor = t8x::Dialog({ "Custom Textel Preset Editor (Normal)"s, "Textel:", "Idx:", "Name:", "Char:", "FG Color:", "", "BG Color:", "", "Mat:" });
+    dialog_editor = t8x::Dialog({ "Custom Textel Preset Editor (Normal)    "s, "Textel:", "Idx:", "Name:", "Char:",
+      "FG Color:", "", "", "", "", "", "", "", "",
+      "BG Color:", "", "", "", "", "", "", "", "",
+      "Mat:" });
     dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
     dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
     dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
-    dialog_editor.add_color_picker({ 8, 3 }, cp_textel_bg);
-    dialog_editor.add_text_field({ 9, 5 }, tf_textel_mat);
+    dialog_editor.add_color_picker({ 6 + cp_textel_fg.height() + 1, 3 }, cp_textel_bg);
+    dialog_editor.add_text_field({ 6 + cp_textel_fg.height() + 1 + cp_textel_bg.height(), 5 }, tf_textel_mat);
     dialog_editor.set_tab_order(0);
   }
   
@@ -165,311 +168,311 @@ class Game : public t8x::GameEngine<>
   {
     textel_presets.clear();
     custom_textel_presets.clear();
-    textel_presets.emplace_back(Textel { ' ', Color::Default, Color::Black, 0 },
-                                Textel { ' ', Color::Default, Color::Black, 0 },
+    textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, 0 },
+                                Textel { ' ', Color16::Default, Color16::Black, 0 },
                                 "Void");
-    textel_presets.emplace_back(Textel { '~', Color::DarkCyan, Color::Cyan, 2 },
-                                Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
+    textel_presets.emplace_back(Textel { '~', Color16::DarkCyan, Color16::Cyan, 2 },
+                                Textel { '~', Color16::Cyan, Color16::DarkCyan, 2 },
                                 "Water0");
-    textel_presets.emplace_back(Textel { '*', Color::White, Color::Cyan, 2 },
-                                Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
+    textel_presets.emplace_back(Textel { '*', Color16::White, Color16::Cyan, 2 },
+                                Textel { '*', Color16::LightGray, Color16::DarkCyan, 2 },
                                 "Water1");
-    textel_presets.emplace_back(Textel { '~', Color::Cyan, Color::DarkCyan, 2 },
-                                Textel { '~', Color::DarkCyan, Color::Blue, 2 },
+    textel_presets.emplace_back(Textel { '~', Color16::Cyan, Color16::DarkCyan, 2 },
+                                Textel { '~', Color16::DarkCyan, Color16::Blue, 2 },
                                 "Water2");
-    textel_presets.emplace_back(Textel { '*', Color::LightGray, Color::DarkCyan, 2 },
-                                Textel { '*', Color::DarkGray, Color::Blue, 2 },
+    textel_presets.emplace_back(Textel { '*', Color16::LightGray, Color16::DarkCyan, 2 },
+                                Textel { '*', Color16::DarkGray, Color16::Blue, 2 },
                                 "Water3");
-    textel_presets.emplace_back(Textel { '~', Color::DarkBlue, Color::Blue, 2 },
-                                Textel { '~', Color::Blue, Color::DarkBlue, 2 },
+    textel_presets.emplace_back(Textel { '~', Color16::DarkBlue, Color16::Blue, 2 },
+                                Textel { '~', Color16::Blue, Color16::DarkBlue, 2 },
                                 "Water4");
-    textel_presets.emplace_back(Textel { '*', Color::White, Color::Blue, 2 },
-                                Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
+    textel_presets.emplace_back(Textel { '*', Color16::White, Color16::Blue, 2 },
+                                Textel { '*', Color16::LightGray, Color16::DarkBlue, 2 },
                                 "Water5");
-    textel_presets.emplace_back(Textel { '~', Color::Blue, Color::DarkBlue, 2 },
-                                Textel { '~', Color::DarkBlue, Color::Black, 2 },
+    textel_presets.emplace_back(Textel { '~', Color16::Blue, Color16::DarkBlue, 2 },
+                                Textel { '~', Color16::DarkBlue, Color16::Black, 2 },
                                 "Water6");
-    textel_presets.emplace_back(Textel { '*', Color::LightGray, Color::DarkBlue, 2 },
-                                Textel { '*', Color::DarkGray, Color::Black, 2 },
+    textel_presets.emplace_back(Textel { '*', Color16::LightGray, Color16::DarkBlue, 2 },
+                                Textel { '*', Color16::DarkGray, Color16::Black, 2 },
                                 "Water7");
-    textel_presets.emplace_back(Textel { ':', Color::DarkYellow, Color::Yellow, 3 },
-                                Textel { ':', Color::Yellow, Color::DarkYellow, 3 },
+    textel_presets.emplace_back(Textel { ':', Color16::DarkYellow, Color16::Yellow, 3 },
+                                Textel { ':', Color16::Yellow, Color16::DarkYellow, 3 },
                                 "Sand0");
-    textel_presets.emplace_back(Textel { '.', Color::DarkYellow, Color::Yellow, 3 },
-                                Textel { '.', Color::Yellow, Color::DarkYellow, 3 },
+    textel_presets.emplace_back(Textel { '.', Color16::DarkYellow, Color16::Yellow, 3 },
+                                Textel { '.', Color16::Yellow, Color16::DarkYellow, 3 },
                                 "Sand1");
-    textel_presets.emplace_back(Textel { '.', Color::DarkGray, Color::LightGray, 22 },
-                                Textel { '.', Color::LightGray, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { '.', Color16::DarkGray, Color16::LightGray, 22 },
+                                Textel { '.', Color16::LightGray, Color16::DarkGray, 22 },
                                 "Gravel0");
-    textel_presets.emplace_back(Textel { ':', Color::DarkGray, Color::LightGray, 22 },
-                                Textel { ':', Color::LightGray, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { ':', Color16::DarkGray, Color16::LightGray, 22 },
+                                Textel { ':', Color16::LightGray, Color16::DarkGray, 22 },
                                 "Gravel1");
-    textel_presets.emplace_back(Textel { '.', Color::Black, Color::LightGray, 22 },
-                                Textel { '.', Color::Black, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { '.', Color16::Black, Color16::LightGray, 22 },
+                                Textel { '.', Color16::Black, Color16::DarkGray, 22 },
                                 "Gravel2");
-    textel_presets.emplace_back(Textel { ':', Color::Black, Color::LightGray, 22 },
-                                Textel { ':', Color::Black, Color::DarkGray, 22 },
+    textel_presets.emplace_back(Textel { ':', Color16::Black, Color16::LightGray, 22 },
+                                Textel { ':', Color16::Black, Color16::DarkGray, 22 },
                                 "Gravel3");
-    textel_presets.emplace_back(Textel { '8', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { '8', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { '8', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { '8', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone0");
-    textel_presets.emplace_back(Textel { 'o', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'o', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'o', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone1");
-    textel_presets.emplace_back(Textel { 'O', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'O', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'O', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone2");
-    textel_presets.emplace_back(Textel { 'b', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'b', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'b', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone3");
-    textel_presets.emplace_back(Textel { 'B', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'B', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'B', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone4");
-    textel_presets.emplace_back(Textel { 'p', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'p', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'p', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone5");
-    textel_presets.emplace_back(Textel { 'P', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'P', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'P', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone6");
-    textel_presets.emplace_back(Textel { 'q', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'q', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'q', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone7");
-    textel_presets.emplace_back(Textel { '6', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { '6', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { '6', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { '6', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone8");
-    textel_presets.emplace_back(Textel { '9', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { '9', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { '9', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { '9', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone9");
-    textel_presets.emplace_back(Textel { 'c', Color::DarkGray, Color::LightGray, 4 },
-                                Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
+    textel_presets.emplace_back(Textel { 'c', Color16::DarkGray, Color16::LightGray, 4 },
+                                Textel { 'c', Color16::LightGray, Color16::DarkGray, 4 },
                                 "Stone10");
-    textel_presets.emplace_back(Textel { '8', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { '8', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { '8', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { '8', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone11");
-    textel_presets.emplace_back(Textel { 'o', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'o', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'o', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'o', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone12");
-    textel_presets.emplace_back(Textel { 'O', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'O', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'O', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'O', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone13");
-    textel_presets.emplace_back(Textel { 'b', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'b', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'b', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'b', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone14");
-    textel_presets.emplace_back(Textel { 'B', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'B', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'B', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'B', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone15");
-    textel_presets.emplace_back(Textel { 'p', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'p', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'p', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'p', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone16");
-    textel_presets.emplace_back(Textel { 'P', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'P', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'P', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'P', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone17");
-    textel_presets.emplace_back(Textel { 'q', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'q', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'q', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'q', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone18");
-    textel_presets.emplace_back(Textel { '6', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { '6', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { '6', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { '6', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone19");
-    textel_presets.emplace_back(Textel { '9', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { '9', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { '9', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { '9', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone20");
-    textel_presets.emplace_back(Textel { 'c', Color::LightGray, Color::DarkGray, 4 },
-                                Textel { 'c', Color::DarkGray, Color::Black, 4 },
+    textel_presets.emplace_back(Textel { 'c', Color16::LightGray, Color16::DarkGray, 4 },
+                                Textel { 'c', Color16::DarkGray, Color16::Black, 4 },
                                 "Stone21");
-    textel_presets.emplace_back(Textel { '^', Color::DarkGray, Color::LightGray, 13 },
-                                Textel { '^', Color::LightGray, Color::DarkGray, 13 },
+    textel_presets.emplace_back(Textel { '^', Color16::DarkGray, Color16::LightGray, 13 },
+                                Textel { '^', Color16::LightGray, Color16::DarkGray, 13 },
                                 "Mountain0");
-    textel_presets.emplace_back(Textel { '^', Color::LightGray, Color::White, 13 },
-                                Textel { '^', Color::DarkGray, Color::LightGray, 13 },
+    textel_presets.emplace_back(Textel { '^', Color16::LightGray, Color16::White, 13 },
+                                Textel { '^', Color16::DarkGray, Color16::LightGray, 13 },
                                 "Mountain1");
-    textel_presets.emplace_back(Textel { 'W', Color::DarkRed, Color::Red, 14 },
-                                Textel { 'W', Color::Red, Color::DarkRed, 14 },
+    textel_presets.emplace_back(Textel { 'W', Color16::DarkRed, Color16::Red, 14 },
+                                Textel { 'W', Color16::Red, Color16::DarkRed, 14 },
                                 "Lava");
-    textel_presets.emplace_back(Textel { 'C', Color::DarkYellow, Color::Yellow, 15 },
-                                Textel { 'C', Color::Yellow, Color::DarkYellow, 15 },
+    textel_presets.emplace_back(Textel { 'C', Color16::DarkYellow, Color16::Yellow, 15 },
+                                Textel { 'C', Color16::Yellow, Color16::DarkYellow, 15 },
                                 "Cave0");
-    textel_presets.emplace_back(Textel { 'U', Color::DarkYellow, Color::Yellow, 15 },
-                                Textel { 'U', Color::Yellow, Color::DarkYellow, 15 },
+    textel_presets.emplace_back(Textel { 'U', Color16::DarkYellow, Color16::Yellow, 15 },
+                                Textel { 'U', Color16::Yellow, Color16::DarkYellow, 15 },
                                 "Cave1");
-    textel_presets.emplace_back(Textel { 'S', Color::DarkRed, Color::Green, 16 },
-                                Textel { 'S', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'S', Color16::DarkRed, Color16::Green, 16 },
+                                Textel { 'S', Color16::Red, Color16::DarkGreen, 16 },
                                 "Swamp0");
-    textel_presets.emplace_back(Textel { 'B', Color::DarkRed, Color::Green, 16 },
-                                Textel { 'B', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'B', Color16::DarkRed, Color16::Green, 16 },
+                                Textel { 'B', Color16::Red, Color16::DarkGreen, 16 },
                                 "Swamp1");
-    textel_presets.emplace_back(Textel { 'C', Color::DarkRed, Color::Green, 16 },
-                                Textel { 'C', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'C', Color16::DarkRed, Color16::Green, 16 },
+                                Textel { 'C', Color16::Red, Color16::DarkGreen, 16 },
                                 "Swamp2");
-    textel_presets.emplace_back(Textel { 'P', Color::DarkRed, Color::Green, 16 },
-                                Textel { 'P', Color::Red, Color::DarkGreen, 16 },
+    textel_presets.emplace_back(Textel { 'P', Color16::DarkRed, Color16::Green, 16 },
+                                Textel { 'P', Color16::Red, Color16::DarkGreen, 16 },
                                 "Swamp3");
-    textel_presets.emplace_back(Textel { 'S', Color::Green, Color::DarkRed, 16 },
-                                Textel { 'S', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'S', Color16::Green, Color16::DarkRed, 16 },
+                                Textel { 'S', Color16::DarkGreen, Color16::DarkRed, 16 },
                                 "Swamp4");
-    textel_presets.emplace_back(Textel { 'B', Color::Green, Color::DarkRed, 16 },
-                                Textel { 'B', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'B', Color16::Green, Color16::DarkRed, 16 },
+                                Textel { 'B', Color16::DarkGreen, Color16::DarkRed, 16 },
                                 "Swamp5");
-    textel_presets.emplace_back(Textel { 'C', Color::Green, Color::DarkRed, 16 },
-                                Textel { 'C', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'C', Color16::Green, Color16::DarkRed, 16 },
+                                Textel { 'C', Color16::DarkGreen, Color16::DarkRed, 16 },
                                 "Swamp6");
-    textel_presets.emplace_back(Textel { 'P', Color::Green, Color::DarkRed, 16 },
-                                Textel { 'P', Color::DarkGreen, Color::DarkRed, 16 },
+    textel_presets.emplace_back(Textel { 'P', Color16::Green, Color16::DarkRed, 16 },
+                                Textel { 'P', Color16::DarkGreen, Color16::DarkRed, 16 },
                                 "Swamp7");
-    textel_presets.emplace_back(Textel { '~', Color::DarkGreen, Color::Green, 17 },
-                                Textel { '~', Color::Green, Color::DarkGreen, 17 },
+    textel_presets.emplace_back(Textel { '~', Color16::DarkGreen, Color16::Green, 17 },
+                                Textel { '~', Color16::Green, Color16::DarkGreen, 17 },
                                 "Poison0");
-    textel_presets.emplace_back(Textel { 'o', Color::DarkGreen, Color::Green, 17 },
-                                Textel { 'o', Color::Green, Color::DarkGreen, 17 },
+    textel_presets.emplace_back(Textel { 'o', Color16::DarkGreen, Color16::Green, 17 },
+                                Textel { 'o', Color16::Green, Color16::DarkGreen, 17 },
                                 "Poison1");
-    textel_presets.emplace_back(Textel { '~', Color::Magenta, Color::Cyan, 24 },
-                                Textel { '~', Color::DarkMagenta, Color::DarkCyan, 24 },
+    textel_presets.emplace_back(Textel { '~', Color16::Magenta, Color16::Cyan, 24 },
+                                Textel { '~', Color16::DarkMagenta, Color16::DarkCyan, 24 },
                                 "Acid0");
-    textel_presets.emplace_back(Textel { 'o', Color::Magenta, Color::Cyan, 24 },
-                                Textel { 'o', Color::DarkMagenta, Color::DarkCyan, 24 },
+    textel_presets.emplace_back(Textel { 'o', Color16::Magenta, Color16::Cyan, 24 },
+                                Textel { 'o', Color16::DarkMagenta, Color16::DarkCyan, 24 },
                                 "Acid1");
-    textel_presets.emplace_back(Textel { '~', Color::LightGray, Color::Black, 26 },
-                                Textel { '~', Color::DarkGray, Color::Black, 26 },
+    textel_presets.emplace_back(Textel { '~', Color16::LightGray, Color16::Black, 26 },
+                                Textel { '~', Color16::DarkGray, Color16::Black, 26 },
                                 "Tar");
-    textel_presets.emplace_back(Textel { '#', Color::DarkYellow, Color::Green, 18 },
-                                Textel { '#', Color::Yellow, Color::DarkGreen, 18 },
+    textel_presets.emplace_back(Textel { '#', Color16::DarkYellow, Color16::Green, 18 },
+                                Textel { '#', Color16::Yellow, Color16::DarkGreen, 18 },
                                 "Path");
-    textel_presets.emplace_back(Textel { 'M', Color::DarkGray, Color::LightGray, 19 },
-                                Textel { 'M', Color::LightGray, Color::DarkGray, 19 },
+    textel_presets.emplace_back(Textel { 'M', Color16::DarkGray, Color16::LightGray, 19 },
+                                Textel { 'M', Color16::LightGray, Color16::DarkGray, 19 },
                                 "Mine");
-    textel_presets.emplace_back(Textel { '|', Color::DarkGreen, Color::Green, 7 },
-                                Textel { '|', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '|', Color16::DarkGreen, Color16::Green, 7 },
+                                Textel { '|', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass0");
-    textel_presets.emplace_back(Textel { '.', Color::DarkGreen, Color::Green, 7 },
-                                Textel { '.', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '.', Color16::DarkGreen, Color16::Green, 7 },
+                                Textel { '.', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass1");
-    textel_presets.emplace_back(Textel { ':', Color::DarkGreen, Color::Green, 7 },
-                                Textel { ':', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { ':', Color16::DarkGreen, Color16::Green, 7 },
+                                Textel { ':', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass2");
-    textel_presets.emplace_back(Textel { '/', Color::DarkGreen, Color::Green, 7 },
-                                Textel { '/', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '/', Color16::DarkGreen, Color16::Green, 7 },
+                                Textel { '/', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass3");
-    textel_presets.emplace_back(Textel { '\\', Color::DarkGreen, Color::Green, 7 },
-                                Textel { '\\', Color::Green, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '\\', Color16::DarkGreen, Color16::Green, 7 },
+                                Textel { '\\', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass4");
-    textel_presets.emplace_back(Textel { '|', Color::DarkYellow, Color::Green, 7 },
-                                Textel { '|', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '|', Color16::DarkYellow, Color16::Green, 7 },
+                                Textel { '|', Color16::Yellow, Color16::DarkGreen, 7 },
                                 "Grass5");
-    textel_presets.emplace_back(Textel { '.', Color::DarkYellow, Color::Green, 7 },
-                                Textel { '.', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '.', Color16::DarkYellow, Color16::Green, 7 },
+                                Textel { '.', Color16::Yellow, Color16::DarkGreen, 7 },
                                 "Grass6");
-    textel_presets.emplace_back(Textel { ':', Color::DarkYellow, Color::Green, 7 },
-                                Textel { ':', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { ':', Color16::DarkYellow, Color16::Green, 7 },
+                                Textel { ':', Color16::Yellow, Color16::DarkGreen, 7 },
                                 "Grass7");
-    textel_presets.emplace_back(Textel { '/', Color::DarkYellow, Color::Green, 7 },
-                                Textel { '/', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '/', Color16::DarkYellow, Color16::Green, 7 },
+                                Textel { '/', Color16::Yellow, Color16::DarkGreen, 7 },
                                 "Grass8");
-    textel_presets.emplace_back(Textel { '\\', Color::DarkYellow, Color::Green, 7 },
-                                Textel { '\\', Color::Yellow, Color::DarkGreen, 7 },
+    textel_presets.emplace_back(Textel { '\\', Color16::DarkYellow, Color16::Green, 7 },
+                                Textel { '\\', Color16::Yellow, Color16::DarkGreen, 7 },
                                 "Grass9");
-    textel_presets.emplace_back(Textel { '&', Color::DarkYellow, Color::Green, 8 },
-                                Textel { '&', Color::Yellow, Color::DarkGreen, 8 },
+    textel_presets.emplace_back(Textel { '&', Color16::DarkYellow, Color16::Green, 8 },
+                                Textel { '&', Color16::Yellow, Color16::DarkGreen, 8 },
                                 "Shrub0");
-    textel_presets.emplace_back(Textel { '@', Color::DarkGray, Color::Green, 8 },
-                                Textel { '@', Color::LightGray, Color::DarkGreen, 8 },
+    textel_presets.emplace_back(Textel { '@', Color16::DarkGray, Color16::Green, 8 },
+                                Textel { '@', Color16::LightGray, Color16::DarkGreen, 8 },
                                 "Shrub1");
-    textel_presets.emplace_back(Textel { '*', Color::DarkGreen, Color::Green, 8 },
-                                Textel { '*', Color::Green, Color::DarkGreen, 8 },
+    textel_presets.emplace_back(Textel { '*', Color16::DarkGreen, Color16::Green, 8 },
+                                Textel { '*', Color16::Green, Color16::DarkGreen, 8 },
                                 "Shrub2");
-    textel_presets.emplace_back(Textel { 'T', Color::DarkRed, Color::Green, 9 },
-                                Textel { 'T', Color::Red, Color::DarkGreen, 9 },
+    textel_presets.emplace_back(Textel { 'T', Color16::DarkRed, Color16::Green, 9 },
+                                Textel { 'T', Color16::Red, Color16::DarkGreen, 9 },
                                 "Tree0");
-    textel_presets.emplace_back(Textel { 'Y', Color::DarkRed, Color::Green, 9 },
-                                Textel { 'Y', Color::Red, Color::DarkGreen, 9 },
+    textel_presets.emplace_back(Textel { 'Y', Color16::DarkRed, Color16::Green, 9 },
+                                Textel { 'Y', Color16::Red, Color16::DarkGreen, 9 },
                                 "Tree1");
-    textel_presets.emplace_back(Textel { '_', Color::Default, Color::LightGray, 1 },
-                                Textel { '_', Color::Black, Color::DarkGray, 1 },
+    textel_presets.emplace_back(Textel { '_', Color16::Default, Color16::LightGray, 1 },
+                                Textel { '_', Color16::Black, Color16::DarkGray, 1 },
                                 "Tile0");
-    textel_presets.emplace_back(Textel { '_', Color::White, Color::DarkGray, 1 },
-                                Textel { '_', Color::LightGray, Color::Black, 1 },
+    textel_presets.emplace_back(Textel { '_', Color16::White, Color16::DarkGray, 1 },
+                                Textel { '_', Color16::LightGray, Color16::Black, 1 },
                                 "Tile1");
-    textel_presets.emplace_back(Textel { '_', Color::LightGray, Color::White, 1 },
-                                Textel { '_', Color::White, Color::LightGray, 1 },
+    textel_presets.emplace_back(Textel { '_', Color16::LightGray, Color16::White, 1 },
+                                Textel { '_', Color16::White, Color16::LightGray, 1 },
                                 "Tile2");
-    textel_presets.emplace_back(Textel { 'L', Color::Default, Color::LightGray, 1 },
-                                Textel { 'L', Color::Black, Color::DarkGray, 1 },
+    textel_presets.emplace_back(Textel { 'L', Color16::Default, Color16::LightGray, 1 },
+                                Textel { 'L', Color16::Black, Color16::DarkGray, 1 },
                                 "Tile3");
-    textel_presets.emplace_back(Textel { 'L', Color::White, Color::DarkGray, 1 },
-                                Textel { 'L', Color::LightGray, Color::Black, 1 },
+    textel_presets.emplace_back(Textel { 'L', Color16::White, Color16::DarkGray, 1 },
+                                Textel { 'L', Color16::LightGray, Color16::Black, 1 },
                                 "Tile4");
-    textel_presets.emplace_back(Textel { 'L', Color::LightGray, Color::White, 1 },
-                                Textel { 'L', Color::White, Color::LightGray, 1 },
+    textel_presets.emplace_back(Textel { 'L', Color16::LightGray, Color16::White, 1 },
+                                Textel { 'L', Color16::White, Color16::LightGray, 1 },
                                 "Tile5");
-    textel_presets.emplace_back(Textel { 'H', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { 'H', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'H', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { 'H', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry0");
-    textel_presets.emplace_back(Textel { 'M', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { 'M', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'M', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { 'M', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry1");
-    textel_presets.emplace_back(Textel { 'W', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { 'W', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'W', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { 'W', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry2");
-    textel_presets.emplace_back(Textel { '=', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { '=', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { '=', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { '=', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry3");
-    textel_presets.emplace_back(Textel { '#', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { '#', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { '#', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { '#', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry4");
-    textel_presets.emplace_back(Textel { '@', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { '@', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { '@', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { '@', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry5");
-    textel_presets.emplace_back(Textel { 'O', Color::LightGray, Color::DarkGray, 5 },
-                                Textel { 'O', Color::DarkGray, Color::Black, 5 },
+    textel_presets.emplace_back(Textel { 'O', Color16::LightGray, Color16::DarkGray, 5 },
+                                Textel { 'O', Color16::DarkGray, Color16::Black, 5 },
                                 "Masonry6");
-    textel_presets.emplace_back(Textel { 'I', Color::White, Color::LightGray, 25 },
-                                Textel { 'I', Color::LightGray, Color::DarkGray, 25 },
+    textel_presets.emplace_back(Textel { 'I', Color16::White, Color16::LightGray, 25 },
+                                Textel { 'I', Color16::LightGray, Color16::DarkGray, 25 },
                                 "Column0");
-    textel_presets.emplace_back(Textel { '=', Color::White, Color::LightGray, 25 },
-                                Textel { '=', Color::LightGray, Color::DarkGray, 25 },
+    textel_presets.emplace_back(Textel { '=', Color16::White, Color16::LightGray, 25 },
+                                Textel { '=', Color16::LightGray, Color16::DarkGray, 25 },
                                 "Column1");
-    textel_presets.emplace_back(Textel { '#', Color::DarkRed, Color::Red, 6 },
-                                Textel { '#', Color::Red, Color::DarkRed, 6 },
+    textel_presets.emplace_back(Textel { '#', Color16::DarkRed, Color16::Red, 6 },
+                                Textel { '#', Color16::Red, Color16::DarkRed, 6 },
                                 "Brick");
-    textel_presets.emplace_back(Textel { 'W', Color::DarkRed, Color::Yellow, 11 },
-                                Textel { 'W', Color::Yellow, Color::DarkRed, 11 },
+    textel_presets.emplace_back(Textel { 'W', Color16::DarkRed, Color16::Yellow, 11 },
+                                Textel { 'W', Color16::Yellow, Color16::DarkRed, 11 },
                                 "Wood0");
-    textel_presets.emplace_back(Textel { 'E', Color::DarkRed, Color::Yellow, 11 },
-                                Textel { 'E', Color::Yellow, Color::DarkRed, 11 },
+    textel_presets.emplace_back(Textel { 'E', Color16::DarkRed, Color16::Yellow, 11 },
+                                Textel { 'E', Color16::Yellow, Color16::DarkRed, 11 },
                                 "Wood1");
-    textel_presets.emplace_back(Textel { 'Z', Color::DarkRed, Color::Yellow, 11 },
-                                Textel { 'Z', Color::Yellow, Color::DarkRed, 11 },
+    textel_presets.emplace_back(Textel { 'Z', Color16::DarkRed, Color16::Yellow, 11 },
+                                Textel { 'Z', Color16::Yellow, Color16::DarkRed, 11 },
                                 "Wood2");
-    textel_presets.emplace_back(Textel { 'X', Color::DarkBlue, Color::Cyan, 12 },
-                                Textel { 'X', Color::Cyan, Color::DarkBlue, 12 },
+    textel_presets.emplace_back(Textel { 'X', Color16::DarkBlue, Color16::Cyan, 12 },
+                                Textel { 'X', Color16::Cyan, Color16::DarkBlue, 12 },
                                 "Ice");
-    textel_presets.emplace_back(Textel { '=', Color::DarkGray, Color::LightGray, 10 },
-                                Textel { '=', Color::LightGray, Color::DarkGray, 10 },
+    textel_presets.emplace_back(Textel { '=', Color16::DarkGray, Color16::LightGray, 10 },
+                                Textel { '=', Color16::LightGray, Color16::DarkGray, 10 },
                                 "Metal");
-    textel_presets.emplace_back(Textel { 'S', Color::White, Color::LightGray, 21 },
-                                Textel { 'S', Color::LightGray, Color::DarkGray, 21 },
+    textel_presets.emplace_back(Textel { 'S', Color16::White, Color16::LightGray, 21 },
+                                Textel { 'S', Color16::LightGray, Color16::DarkGray, 21 },
                                 "Silver");
-    textel_presets.emplace_back(Textel { 'G', Color::DarkYellow, Color::Yellow, 20 },
-                                Textel { 'G', Color::Yellow, Color::DarkYellow, 20 },
+    textel_presets.emplace_back(Textel { 'G', Color16::DarkYellow, Color16::Yellow, 20 },
+                                Textel { 'G', Color16::Yellow, Color16::DarkYellow, 20 },
                                 "Gold");
-    textel_presets.emplace_back(Textel { '@', Color::White, Color::DarkGray, 23 },
-                                Textel { '@', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '@', Color16::White, Color16::DarkGray, 23 },
+                                Textel { '@', Color16::LightGray, Color16::Black, 23 },
                                 "Skull");
-    textel_presets.emplace_back(Textel { '+', Color::White, Color::DarkGray, 23 },
-                                Textel { '+', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '+', Color16::White, Color16::DarkGray, 23 },
+                                Textel { '+', Color16::LightGray, Color16::Black, 23 },
                                 "Bone0");
-    textel_presets.emplace_back(Textel { '|', Color::White, Color::DarkGray, 23 },
-                                Textel { '|', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '|', Color16::White, Color16::DarkGray, 23 },
+                                Textel { '|', Color16::LightGray, Color16::Black, 23 },
                                 "Bone1");
-    textel_presets.emplace_back(Textel { '-', Color::White, Color::DarkGray, 23 },
-                                Textel { '-', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '-', Color16::White, Color16::DarkGray, 23 },
+                                Textel { '-', Color16::LightGray, Color16::Black, 23 },
                                 "Bone2");
-    textel_presets.emplace_back(Textel { '/', Color::White, Color::DarkGray, 23 },
-                                Textel { '/', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '/', Color16::White, Color16::DarkGray, 23 },
+                                Textel { '/', Color16::LightGray, Color16::Black, 23 },
                                 "Bone3");
-    textel_presets.emplace_back(Textel { '\\', Color::White, Color::DarkGray, 23 },
-                                Textel { '\\', Color::LightGray, Color::Black, 23 },
+    textel_presets.emplace_back(Textel { '\\', Color16::White, Color16::DarkGray, 23 },
+                                Textel { '\\', Color16::LightGray, Color16::Black, 23 },
                                 "Bone4");
-    textel_presets.emplace_back(Textel { '%', Color::Red, Color::Yellow, 27 },
-                                Textel { '%', Color::DarkRed, Color::DarkYellow, 27 },
+    textel_presets.emplace_back(Textel { '%', Color16::Red, Color16::Yellow, 27 },
+                                Textel { '%', Color16::DarkRed, Color16::DarkYellow, 27 },
                                 "Rope");
     
     std::vector<std::string> lines_custom_textel_presets;
@@ -483,12 +486,15 @@ class Game : public t8x::GameEngine<>
           continue;
         if (part == 0)
         {
-          auto tokens = str::tokenize(line, { ' ', ',' }, { '\'' });
+          auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
             textel_normal.ch = tokens[0][0];
-            textel_normal.fg_color = t8::string2color(tokens[1]);
-            textel_normal.bg_color = t8::string2color(tokens[2]);
+            // "1, 2, 3" -> "rgb6:[1, 2, 3]
+            if (str::count_substr(tokens[1], ", ") == 2)
+              tokens[1] = "rgb6:[" + tokens[1] + "]";
+            textel_normal.fg_color.parse(tokens[1]);
+            textel_normal.bg_color.parse(tokens[2]);
             textel_normal.mat = std::atoi(tokens[3].c_str());
           }
           else
@@ -497,12 +503,15 @@ class Game : public t8x::GameEngine<>
         }
         else if (part == 1)
         {
-          auto tokens = str::tokenize(line, { ' ', ',' }, { '\'' });
+          auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
             textel_shadow.ch = tokens[0][0];
-            textel_shadow.fg_color = t8::string2color(tokens[1]);
-            textel_shadow.bg_color = t8::string2color(tokens[2]);
+            // "1, 2, 3" -> "rgb6:[1, 2, 3]
+            if (str::count_substr(tokens[1], ", ") == 2)
+              tokens[1] = "rgb6:[" + tokens[1] + "]";
+            textel_shadow.fg_color.parse(tokens[1]);
+            textel_shadow.bg_color.parse(tokens[2]);
             textel_shadow.mat = std::atoi(tokens[3].c_str());
           }
           else
@@ -979,7 +988,7 @@ private:
 
   virtual void update() override
   {
-    t8::Style ui_style { Color::LightGray, Color::Black };
+    t8::Style ui_style { Color16::LightGray, Color16::Black };
     
     int cursor_anim_ctr = get_anim_count(1) % 2 == 0;
     
@@ -993,7 +1002,7 @@ private:
 #ifdef SHOW_DEBUG_WINDOW
     TextBoxDrawingArgsAlign tbd_args;
     tbd_args.v_align = VerticalAlignment::TOP;
-    tbd_args.base.box_style = { Color::Blue, Color::Yellow };
+    tbd_args.base.box_style = { Color16::Blue, Color16::Yellow };
     tbd_args.framed_mode = true;
     tbd.calc_pre_draw(str::Adjustment::Left);
     tbd.draw(sh, tbd_args);
@@ -1010,19 +1019,19 @@ private:
     }
   
     if (is_modified)
-      sh.write_buffer("*", 0, 0, Color::Red, Color::White);
-    draw_frame(sh, Color::White);
+      sh.write_buffer("*", 0, 0, Color16::Red, Color16::White);
+    draw_frame(sh, Color16::White);
     
     message_handler->update(sh, static_cast<float>(get_real_time_s()));
     
     if (show_confirm_overwrite)
     {
-      bg_color = Color::DarkCyan;
+      bg_color = Color16::DarkCyan;
       draw_confirm(sh, { "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?" },
                    overwrite_confirm_button,
-                   { Color::Black, Color::DarkCyan },
-                   { Color::Black, Color::DarkCyan, Color::Cyan },
-                   { Color::White, Color::DarkCyan });
+                   { Color16::Black, Color16::DarkCyan },
+                   { Color16::Black, Color16::DarkCyan, Color16::Cyan },
+                   { Color16::White, Color16::DarkCyan });
       if (curr_special_key == t8::SpecialKey::Left)
         overwrite_confirm_button = t8x::YesNoButtons::Yes;
       else if (curr_special_key == t8::SpecialKey::Right)
@@ -1077,12 +1086,12 @@ private:
         }
 
         t8x::TextBoxDrawingArgsAlign tb_args;
-        tb_args.base.box_style = { Color::White, Color::DarkBlue };
+        tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
         tb_args.base.box_padding_lr = 1;
         dialog_goto.calc_pre_draw(str::Adjustment::Left);
         dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
         
-        tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
+        tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
         tb_ui_help_goto.calc_pre_draw(str::Adjustment::Left);
@@ -1119,7 +1128,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             dialog_edit_or_add.calc_pre_draw(str::Adjustment::Left);
             dialog_edit_or_add.draw(sh, tb_args, cursor_anim_ctr);
@@ -1181,7 +1190,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             dialog_edit_mat.calc_pre_draw(str::Adjustment::Left);
             dialog_edit_mat.draw(sh, tb_args, cursor_anim_ctr);
@@ -1241,7 +1250,7 @@ private:
                 dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
                 dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
                 dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
-                dialog_editor[0] = "Custom Textel Preset Editor (Shadow)";
+                dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 dialog_editor[1] = "Textel:   ( )";
                 dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
                 dialog_editor.set_tab_order(0);
@@ -1255,7 +1264,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
             dialog_editor.calc_pre_draw(str::Adjustment::Left);
@@ -1310,12 +1319,12 @@ private:
                     // '%', DarkMagenta, DarkCyan, 28
                     // Magic Stone
                     lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.ch + "', "
-                      + t8::color2string(ctp.textel_normal.fg_color) + ", "
-                      + t8::color2string(ctp.textel_normal.bg_color) + ", "
+                      + ctp.textel_normal.fg_color.str() + ", "
+                      + ctp.textel_normal.bg_color.str() + ", "
                       + std::to_string(ctp.textel_normal.mat));
                     lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.ch + "', "
-                      + t8::color2string(ctp.textel_shadow.fg_color) + ", "
-                      + t8::color2string(ctp.textel_shadow.bg_color) + ", "
+                      + ctp.textel_shadow.fg_color.str() + ", "
+                      + ctp.textel_shadow.bg_color.str() + ", "
                       + std::to_string(ctp.textel_shadow.mat));
                     lines_custom_textel_presets.emplace_back(ctp.name);
                   }
@@ -1341,7 +1350,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color::White, Color::DarkBlue };
+            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
             dialog_editor.calc_pre_draw(str::Adjustment::Left);
@@ -1351,7 +1360,7 @@ private:
         }
         
         t8x::TextBoxDrawingArgsAlign tb_args;
-        tb_args.base.box_style = { Color::LightGray, Color::DarkBlue };
+        tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
         tb_args.base.box_padding_lr = 1;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
@@ -1461,8 +1470,8 @@ private:
   
   t8x::TextBoxDebug tbd;
   
-  t8::ButtonStyle btn_style { Color::White, Color::DarkBlue, Color::Blue };
-  t8::PromptStyle tf_style { Color::White, Color::DarkBlue, Color::White };
+  t8::ButtonStyle btn_style { Color16::White, Color16::DarkBlue, Color16::Blue };
+  t8::PromptStyle tf_style { Color16::White, Color16::DarkBlue, Color16::White };
   t8x::ButtonFrame btn_frame = t8x::ButtonFrame::SquareBrackets;
   
   t8x::TextBox tb_ui_help_goto {{
@@ -1496,8 +1505,22 @@ private:
   t8x::Dialog dialog_editor;
   t8x::TextField tf_textel_name = { 16, t8x::TextFieldMode::AlphaNumeric, tf_style, 0 };
   t8x::TextField tf_textel_symbol = { 1, t8x::TextFieldMode::All, tf_style, 1 };
-  t8x::ColorPicker cp_textel_fg = { Color::Blue, Color::White, t8x::ColorPickerCursorColoring::BlackWhite, 2, true, '*', ' ' };
-  t8x::ColorPicker cp_textel_bg = { Color::Blue, Color::White, t8x::ColorPickerCursorColoring::BlackWhite, 3, true, '*', ' ' };
+  t8x::ColorPickerParams cp_params
+  {
+    t8x::ColorPickerCursorColoring::BlackWhite,
+    t8x::ColorPickerCursorBlinking::EveryOther,
+    Color16::Cyan, // special_color_fg_hilite_color
+    true, // enable_special_colors
+    true, // enable_4bit_colors
+    true, // enable_rgb6_colors
+    true  // enable_gray24_colors
+  };
+  t8x::ColorPicker cp_textel_fg = { Color16::Blue, Color16::White,
+    cp_params,
+    2, true, '*', ' ' };
+  t8x::ColorPicker cp_textel_bg = { Color16::Blue, Color16::White,
+    cp_params,
+    3, true, '*', ' ' };
   t8x::TextField tf_textel_mat = { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
   Textel edit_textel_normal;
@@ -1514,9 +1537,9 @@ int main(int argc, char** argv)
   params.quit_confirm_unsaved_changes = true;
   params.enable_hiscores = false;
   params.enable_pause = false;
-  params.screen_bg_color_default = Color::Black;
-  params.screen_bg_color_title = Color::DarkYellow;
-  params.screen_bg_color_instructions = Color::Black;
+  params.screen_bg_color_default = Color16::Black;
+  params.screen_bg_color_title = Color16::DarkYellow;
+  params.screen_bg_color_instructions = Color16::Black;
   
   for (int a_idx = 1; a_idx < argc; ++a_idx)
   {
