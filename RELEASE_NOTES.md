@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.2.0.7
+- TextUR now works with Termin8or version 2.0.0.2.
+- Now uses full 256 color support by Termin8or 2.0.0.2.
+- Uses new redesigned UI widget ColorPicker with all 256 colors (Termin8or 2.0.0.2).
+- To make the new ColorPicker widgets fit into the textel edit dialogs, I thus had to increase the size of the TextUR window/screen/area/canvas (or whatever is best to call it).
+- Indented help text.
+- Now the help text is printed out if we didn't supply any command line arguments.
+- If `-f <filename>` (with no `-s` argument supplied) fails to find the file, we simply exit.
+
 ## 1.1.2.6
 - Renaming extension for example textures from .tex to .tx so that github doesn't think I have a lot of LaTeX or TeX files in this repo :P.
 
