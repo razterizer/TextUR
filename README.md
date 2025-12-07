@@ -17,7 +17,7 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/razterizer/TextUR/total)
 
 
-*Text*-based texture *U*I and *R*asterizer.
+**Text**-based texture **U**I and **R**asterizer.
 
 TextUR is a terminal-based editor for text-based textures or images.
 This is a tool for generating textures to be used with [`DungGine`](https://github.com/razterizer/DungGine/).
