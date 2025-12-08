@@ -230,15 +230,11 @@ class Game : public t8x::GameEngine<44, 92>
     dialog_edit_mat.set_tab_order(0);
     std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)    "s, "Textel:", "Idx:", "Name:", "Char:" };
     rows.emplace_back("FG Color:");
-    rows.emplace_back("");
-    if (!sys::is_windows_cmd())
-      for (int i = 0; i < 7; ++i)
-        rows.emplace_back("");
+    for (int i = 0; i < cp_textel_fg.height(); ++i)
+      rows.emplace_back("");
     rows.emplace_back("BG Color:");
-    rows.emplace_back("");
-    if (!sys::is_windows_cmd())
-      for (int i = 0; i < 7; ++i)
-        rows.emplace_back("");
+    for (int i = 0; i < cp_textel_bg.height(); ++i)
+      rows.emplace_back("");
     rows.emplace_back("Mat:");
     dialog_editor = t8x::Dialog(rows);
     dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
