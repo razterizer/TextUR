@@ -178,7 +178,35 @@ class Game : public t8x::GameEngine<44, 92>
       "M : toggle show/hide of material id:s.",
       "Q : quit."
     });
-    //dialog_keys.set_textel_pre(const RC& local_pos, char ch, Color fg_color, Color bg_color)
+    t8::Color fg_key = Color16::Cyan; //{ 4, 3, 2 };
+    t8::Color bg_key = Color16::Transparent2;
+    dialog_keys.set_textel_pre({ 2, 0 }, 'K', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 3, 0 }, "Esc", fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 4, 0 }, "WASD", fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 4, 8 }, "arrow keys", fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 6, 0 }, "SHIFT + WASD", fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 7, 0 }, "Space", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 8, 0 }, 'Z', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 9, 0 }, "SHIFT + Z", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 10, 0 }, 'C', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 11, 0 }, 'V', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 12, 0 }, 'H', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 13, 0 }, "SHIFT + V", fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 14, 0 }, "SHIFT + H", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 15, 0 }, '-', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 16, 0 }, 'X', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 17, 0 }, 'B', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 18, 0 }, "SHIFT + B", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 19, 0 }, 'R', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 22, 0 }, "SHIFT + R", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 25, 0 }, 'F', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 27, 0 }, 'P', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 28, 0 }, 'L', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 29, 0 }, 'G', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 30, 0 }, 'T', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 31, 0 }, 'I', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 32, 0 }, 'M', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 33, 0 }, 'Q', fg_key, bg_key);
     dialog_keys.set_tab_order(0);
   }
   
