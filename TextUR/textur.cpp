@@ -228,10 +228,19 @@ class Game : public t8x::GameEngine<44, 92>
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_order(0);
-    dialog_editor = t8x::Dialog({ "Custom Textel Preset Editor (Normal)    "s, "Textel:", "Idx:", "Name:", "Char:",
-      "FG Color:", "", "", "", "", "", "", "", "",
-      "BG Color:", "", "", "", "", "", "", "", "",
-      "Mat:" });
+    std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)    "s, "Textel:", "Idx:", "Name:", "Char:" };
+    rows.emplace_back("FG Color:");
+    rows.emplace_back("");
+    if (!sys::is_windows_cmd())
+      for (int i = 0; i < 7; ++i)
+        rows.emplace_back("");
+    rows.emplace_back("BG Color:");
+    rows.emplace_back("");
+    if (!sys::is_windows_cmd())
+      for (int i = 0; i < 7; ++i)
+        rows.emplace_back("");
+    rows.emplace_back("Mat:");
+    dialog_editor = t8x::Dialog(rows);
     dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
     dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
     dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
@@ -1618,8 +1627,8 @@ private:
     Color16::Cyan, // special_color_fg_hilite_color
     true, // enable_special_colors
     true, // enable_4bit_colors
-    true, // enable_rgb6_colors
-    true  // enable_gray24_colors
+    !sys::is_windows_cmd(), // enable_rgb6_colors
+    !sys::is_windows_cmd()  // enable_gray24_colors
   };
   t8x::ColorPicker cp_textel_fg = { Color16::Blue, Color16::White,
     cp_params,
