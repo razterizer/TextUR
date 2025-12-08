@@ -67,6 +67,8 @@ class Game : public t8x::GameEngine<44, 92>
     std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
     std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
     std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Press 'K' in editor for list of supported key presses." << std::endl;
     exit(EXIT_SUCCESS);
   }
 
@@ -132,6 +134,52 @@ class Game : public t8x::GameEngine<44, 92>
     if (draw_v_cursor_line)
       for (int r = 0; r < cursor_pos.r + screen_pos.r; ++r)
         sh.write_buffer(std::string(1, '|'), r + 1, screen_pos.c + cursor_pos.c + 1, Color16::Green, Color16::Transparent2);
+  }
+  
+  void init_keys_legend()
+  {
+    int padding = 2; // #FIXME: No source of truth yet.
+    int dialog_ext_padding = 8;
+    auto nc = sh.num_cols_inset() - padding - dialog_ext_padding;
+    std::string title = " Keys: ";
+    auto hw = (nc - str::lenI(title))/2 - 2;
+    dialog_keys = t8x::Dialog({ str::rep_char('=', hw) + title + str::rep_char('=', hw),
+      "",
+      "K : open or close this window.",
+      "Esc : close windows.",
+      "WASD or arrow keys : cursor navigation or textel preset selection (menu).",
+      "  In textel menu, a or left / d or right scrolls from material to material.",
+      "SHIFT + WASD : scrolls the texture page-wise.",
+      "Space : insert selected textel preset under cursor.",
+      "Z : undo.",
+      "SHIFT + Z : redo.",
+      "C : clear textel under cursor.",
+      "V : toggle drawing of vertical coordinates.",
+      "H : toggle drawing of horizontal coordinates.",
+      "SHIFT + V : toggle drawing of vertical guide line from the horiz coord axis.",
+      "SHIFT + H : toggle drawing of horizontal guide line from the vert coord axis.",
+      "- : toggle hide/show textel presets menu.",
+      "X : export (save) work to current file.",
+      "B : Circle-shaped brush stroke, filled with selected textel preset.",
+      "SHIFT + B : big brush-stroke.",
+      "R : randomized brush-stroke.",
+      "  Same as the B key, but fills the circle with textels according to a",
+      "  normal distribution. You can re-generate until you get the desired result.",
+      "SHIFT + R : randomized big brush-stroke.",
+      "  Same as the SHIFT + B key, but fills the circle with textels according to a",
+      "  normal distribution. You can re-generate until you get the desired result.",
+      "F : fill screen. Fills the texture with the currently selected textel preset",
+      "  where the bounding boxof the screen is currently located over the texture.",
+      "P : pick a textel from cursor and hilite the matching preset in the menu.",
+      "L : show location of cursor.",
+      "G : goto new cursor location.",
+      "T : toggle show/hide of tracing texture.",
+      "I : toggle between dark and bright textel presets.",
+      "M : toggle show/hide of material id:s.",
+      "Q : quit."
+    });
+    //dialog_keys.set_textel_pre(const RC& local_pos, char ch, Color fg_color, Color bg_color)
+    dialog_keys.set_tab_order(0);
   }
   
   void reset_goto_input()
@@ -644,6 +692,7 @@ public:
     tbd.add(PARAM(cursor_pos.c));
     
     reset_goto_input();
+    init_keys_legend();
     
     reset_textel_editor();
   }
@@ -984,6 +1033,8 @@ private:
         show_confirm_overwrite = false;
       }
     }
+    else if (str::to_lower(curr_key) == 'k')
+      math::toggle(show_keys_legend);
   }
 
   virtual void update() override
@@ -1096,6 +1147,26 @@ private:
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
         tb_ui_help_goto.calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_goto.draw(sh, tb_args);
+      }
+      else if (show_keys_legend)
+      {
+        allow_editing = false;
+        dialog_keys.update(curr_key, curr_special_key);
+        if (curr_special_key == t8::SpecialKey::Escape || str::to_lower(curr_key) == 'k')
+          show_keys_legend = false;
+          
+        t8x::TextBoxDrawingArgsAlign tb_args;
+        tb_args.v_align = t8x::VerticalAlignment::TOP;
+        tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+        tb_args.base.box_padding_lr = 1;
+        dialog_keys.calc_pre_draw(str::Adjustment::Left);
+        dialog_keys.draw(sh, tb_args, cursor_anim_ctr);
+        
+        tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
+        tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
+        tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
+        tb_ui_help_keys.calc_pre_draw(str::Adjustment::Left);
+        tb_ui_help_keys.draw(sh, tb_args);
       }
       else if (show_textel_editor)
       {
@@ -1445,6 +1516,7 @@ private:
   bool show_confirm_overwrite = false;
   bool show_tracing = true;
   bool show_goto_pos = false;
+  bool show_keys_legend = false;
   bool show_textel_editor = false;
   bool show_materials = false;
   
@@ -1485,6 +1557,12 @@ private:
   t8x::Dialog dialog_goto;
   t8x::TextField tf_goto_r { 8, t8x::TextFieldMode::Numeric, tf_style, 0 };
   t8x::TextField tf_goto_c { 8, t8x::TextFieldMode::Numeric, tf_style, 1 };
+  
+  t8x::TextBox tb_ui_help_keys {{
+    "UI Help"s,
+    "Press [ESCAPE] or [K] to close."
+  }};
+  t8x::Dialog dialog_keys;
   
   enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
   std::array<t8x::TextBox, 4> tb_ui_help_edit_textel
