@@ -56,6 +56,7 @@ class Game : public t8x::GameEngine<44, 92>
     std::cout << "   [--log_mode (record | replay)]" << std::endl;
     std::cout << "   [--suppress_tty_output]" << std::endl;
     std::cout << "   [--suppress_tty_input]" << std::endl;
+    std::cout << "   [--force_8bit_colors_on_win_cmd]" << std::endl;
     std::cout << std::endl;
     std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
     std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
@@ -654,8 +655,28 @@ public:
         file_path_curr_texture = argv[a_idx + 1];
         convert = true;
       }
+      else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd"))
+        force_8bit_colors_on_win_cmd = true;
     }
-  
+    
+    cp_params = {
+      t8x::ColorPickerCursorColoring::BlackWhite,
+      t8x::ColorPickerCursorBlinking::EveryOther,
+      Color16::Cyan, // special_color_fg_hilite_color
+      true, // enable_special_colors
+      true, // enable_4bit_colors
+      force_8bit_colors_on_win_cmd || !sys::is_windows_cmd(), // enable_rgb6_colors
+      force_8bit_colors_on_win_cmd || !sys::is_windows_cmd()  // enable_gray24_colors
+    };
+    
+    // Reconstruct color pickers.
+    cp_textel_fg = { Color16::Blue, Color16::White,
+      cp_params,
+      2, true, '*', ' ' };
+    cp_textel_bg = { Color16::Blue, Color16::White,
+      cp_params,
+      3, true, '*', ' ' };
+    
     if (file_path_curr_texture.empty())
     {
       std::cerr << "ERROR: You must supply a texture filename as a command line argument!" << std::endl;
@@ -1614,25 +1635,17 @@ private:
   t8x::Dialog dialog_edit_mat;
   t8x::TextField tf_textel_idx { 4, t8x::TextFieldMode::Numeric, tf_style, 0 };
   t8x::Dialog dialog_editor;
-  t8x::TextField tf_textel_name = { 16, t8x::TextFieldMode::AlphaNumeric, tf_style, 0 };
-  t8x::TextField tf_textel_symbol = { 1, t8x::TextFieldMode::All, tf_style, 1 };
-  t8x::ColorPickerParams cp_params
-  {
-    t8x::ColorPickerCursorColoring::BlackWhite,
-    t8x::ColorPickerCursorBlinking::EveryOther,
-    Color16::Cyan, // special_color_fg_hilite_color
-    true, // enable_special_colors
-    true, // enable_4bit_colors
-    !sys::is_windows_cmd(), // enable_rgb6_colors
-    !sys::is_windows_cmd()  // enable_gray24_colors
-  };
-  t8x::ColorPicker cp_textel_fg = { Color16::Blue, Color16::White,
+  t8x::TextField tf_textel_name { 16, t8x::TextFieldMode::AlphaNumeric, tf_style, 0 };
+  t8x::TextField tf_textel_symbol { 1, t8x::TextFieldMode::All, tf_style, 1 };
+  bool force_8bit_colors_on_win_cmd = false;
+  t8x::ColorPickerParams cp_params;
+  t8x::ColorPicker cp_textel_fg { Color16::Blue, Color16::White,
     cp_params,
     2, true, '*', ' ' };
-  t8x::ColorPicker cp_textel_bg = { Color16::Blue, Color16::White,
+  t8x::ColorPicker cp_textel_bg { Color16::Blue, Color16::White,
     cp_params,
     3, true, '*', ' ' };
-  t8x::TextField tf_textel_mat = { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
+  t8x::TextField tf_textel_mat { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
   Textel edit_textel_normal;
   Textel edit_textel_shadow;
