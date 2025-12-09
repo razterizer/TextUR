@@ -655,7 +655,7 @@ public:
         file_path_curr_texture = argv[a_idx + 1];
         convert = true;
       }
-      else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd"))
+      else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd") == 0)
         force_8bit_colors_on_win_cmd = true;
     }
     
