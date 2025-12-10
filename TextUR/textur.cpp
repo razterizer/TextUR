@@ -1572,6 +1572,13 @@ private:
         tb_args.v_align_offs = -2;
         dialog_editor_adhoc.calc_pre_draw(str::Adjustment::Left);
         dialog_editor_adhoc.draw(sh, tb_args, cursor_anim_ctr);
+        
+        tb_args.base.box_style.fg_color = Color16::LightGray;
+        tb_args.v_align_offs = 0;
+        tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
+        tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
+        tb_ui_help_edit_adhoc.calc_pre_draw(str::Adjustment::Left);
+        tb_ui_help_edit_adhoc.draw(sh, tb_args);
       }
       
       // Caret
@@ -1733,6 +1740,14 @@ private:
   Textel edit_textel_shadow;
   std::string edit_textel_name;
   
+  t8x::TextBox tb_ui_help_edit_adhoc {{
+    "UI Help"s,
+    "Navigate widgets using [TAB].",
+    "Erase characters with [BACKSPACE].",
+    "Use arrow keys to select a color.",
+    "Press [ENTER] to submit the changes.",
+    "Press [ESCAPE] to cancel."
+  }};
   t8x::Dialog dialog_editor_adhoc;
   t8x::TextField tf_textel_symbol_adhoc { 1, t8x::TextFieldMode::All, tf_style, 0 };
   t8x::ColorPicker cp_textel_fg_adhoc { Color16::Blue, Color16::White,
