@@ -27,11 +27,13 @@ The recommended file extension for texture files is `*.tx`, though the program d
 
 ## Command Line Arguments
 
+ * Command line arguments help : `./textur --help`. It lists additional command line arguments.
  * Load existing texture : `./textur -f <filename>`.
  * Create new texture or overwrite existing texture : `./textur -f <filename> -s <num_rows> <num_cols>`.
  * Trace over another texture : `./textur -f <main_texture_filename> -t <trace_texture_filename>`.
  * Convert texture made up of bright textels from the textel presets in TextUR to a corresponding dark texture which then can be used for rendering shadows in e.g. `DungGine`. The program exits when conversion is completed : 
 `./textur -f <source_texture_filename> -c <target_texture_filename>`.
+
 ## Keys
 
  * `K` : to get a list of all support key presses.
@@ -58,7 +60,9 @@ The recommended file extension for texture files is `*.tx`, though the program d
  * `G` : goto new cursor location. Press backspace to clear the last digit, press tab to toggle between R and C coordinate fields and press enter to confirm. Pressing `G` again toggles the input box.
  * `T` : toggle show/hide of tracing texture.
  * `I` : toggle inverted textels (i.e. toggle between dark and bright textel presets).
- * `M` : toggle show/hide of material id:s. 
+ * `M` : toggle show/hide of material id:s.
+ * `SHIFT + E` : edit or add custom textel preset.
+ * `E` : edit Ad Hoc textel preset (the first in the list). Mat = -1.
  * `Q` : quit.
 
 ## Custom Textel Presets
