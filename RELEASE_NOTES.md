@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.3.0.8
+- Added Ad Hoc textel feature. This textel preset is at the top of the list and can be quickly edited with 'e' whereas 'E' works like "any-case" 'e' before, i.e. edit or add a custom textel preset.
+- Added key press legend ('k').
+- Only supporting 4-bit colors on Windows cmd.exe unless explicitly setting command line argument `--force_8bit_colors_on_win_cmd`.
+
 ## 1.2.0.7
 - TextUR now works with Termin8or version 2.0.0.2.
 - Now uses full 256 color support by Termin8or 2.0.0.2.
