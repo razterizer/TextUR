@@ -1071,6 +1071,7 @@ private:
             textel_presets[0].textel_normal.ch = curr_textel.ch;
             textel_presets[0].textel_normal.fg_color = curr_textel.fg_color;
             textel_presets[0].textel_normal.bg_color = curr_textel.bg_color;
+            textel_presets[0].textel_shadow = textel_presets[0].textel_normal;
           }
         }
       }
@@ -1554,6 +1555,7 @@ private:
         {
           edit_textel_preset = &textel_presets[0];
           edit_textel_preset->textel_normal = edit_textel_normal;
+          edit_textel_preset->textel_shadow = edit_textel_normal;
           
           reset_adhoc_textel_editor();
           show_adhoc_textel_editor = false;
