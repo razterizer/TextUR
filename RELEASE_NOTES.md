@@ -2,6 +2,7 @@
 
 ## 1.3.1.9
 - Making sure the shadow textel of the Ad Hoc preset is set to the same values as the normal textel to avoid certain problems that may arise.
+- Adding missing UI help (guide) for the edit Ad Hoc textel command ('e').
 
 ## 1.3.0.8
 - Added Ad Hoc textel feature. This textel preset is at the top of the list and can be quickly edited with 'e' whereas 'E' works like "any-case" 'e' before, i.e. edit or add a custom textel preset.
