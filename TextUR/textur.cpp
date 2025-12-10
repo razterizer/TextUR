@@ -176,8 +176,8 @@ class Game : public t8x::GameEngine<44, 92>
       "T : toggle show/hide of tracing texture.",
       "I : toggle between dark and bright textel preset modes.",
       "M : toggle show/hide of material id:s.",
-      "SHIFT + E : edit existing or add new textel preset.",
-      "E : edit Ad Hoc textel preset (the first in the list). Mat = -1",
+      "SHIFT + E : edit existing or add new custom textel preset.",
+      "E : edit Ad Hoc textel preset (the first in the list). Mat = -1.",
       "Q : quit."
     });
     t8::Color fg_key = Color16::Cyan; //{ 4, 3, 2 };
