@@ -169,14 +169,15 @@ class Game : public t8x::GameEngine<44, 92>
       "SHIFT + R : randomized big brush-stroke.",
       "  Same as the SHIFT + B key, but fills the circle with textels according to a",
       "  normal distribution. You can re-generate until you get the desired result.",
-      "F : fill screen. Fills the texture with the currently selected textel preset",
-      "  where the bounding boxof the screen is currently located over the texture.",
+      "F : fill screen with selected preset inside current bounding box of screen.",
       "P : pick a textel from cursor and hilite the matching preset in the menu.",
       "L : show location of cursor.",
       "G : goto new cursor location.",
       "T : toggle show/hide of tracing texture.",
-      "I : toggle between dark and bright textel presets.",
+      "I : toggle between dark and bright textel preset modes.",
       "M : toggle show/hide of material id:s.",
+      "SHIFT + E : edit existing or add new textel preset.",
+      "E : edit Ad Hoc textel preset (the first in the list). Mat = -1",
       "Q : quit."
     });
     t8::Color fg_key = Color16::Cyan; //{ 4, 3, 2 };
@@ -201,13 +202,15 @@ class Game : public t8x::GameEngine<44, 92>
     dialog_keys.set_textel_pre({ 19, 0 }, 'R', fg_key, bg_key);
     dialog_keys.set_textel_str_pre({ 22, 0 }, "SHIFT + R", fg_key, bg_key);
     dialog_keys.set_textel_pre({ 25, 0 }, 'F', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 27, 0 }, 'P', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 28, 0 }, 'L', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 29, 0 }, 'G', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 30, 0 }, 'T', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 31, 0 }, 'I', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 32, 0 }, 'M', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 33, 0 }, 'Q', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 26, 0 }, 'P', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 27, 0 }, 'L', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 28, 0 }, 'G', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 29, 0 }, 'T', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 30, 0 }, 'I', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 31, 0 }, 'M', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 32, 0 }, "SHIFT + E", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 33, 0 }, 'E', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 34, 0 }, 'Q', fg_key, bg_key);
     dialog_keys.set_tab_order(0);
   }
   
@@ -246,10 +249,36 @@ class Game : public t8x::GameEngine<44, 92>
     dialog_editor.set_tab_order(0);
   }
   
+  void reset_adhoc_textel_editor()
+  {
+    edit_textel_preset = &textel_presets[0];
+    edit_textel_normal = edit_textel_preset->textel_normal;
+    
+    std::vector<std::string> rows = { "Ad Hoc Textel Preset Editor             "s, "Textel:", "Char:" };
+    rows.emplace_back("FG Color:");
+    for (int i = 0; i < cp_textel_fg_adhoc.height(); ++i)
+      rows.emplace_back("");
+    rows.emplace_back("BG Color:");
+    for (int i = 0; i < cp_textel_bg_adhoc.height(); ++i)
+      rows.emplace_back("");
+    dialog_editor_adhoc = t8x::Dialog(rows);
+    dialog_editor_adhoc.add_text_field({ 2, 6 }, tf_textel_symbol_adhoc);
+    dialog_editor_adhoc.add_color_picker({ 4, 3 }, cp_textel_fg_adhoc);
+    dialog_editor_adhoc.add_color_picker({ 4 + cp_textel_fg_adhoc.height() + 1, 3 }, cp_textel_bg_adhoc);
+    dialog_editor_adhoc.set_tab_order(0);
+    
+    dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.ch));
+    dialog_editor_adhoc.set_color_picker_color(1, edit_textel_normal.fg_color);
+    dialog_editor_adhoc.set_color_picker_color(2, edit_textel_normal.bg_color);
+  }
+  
   void reload_textel_presets()
   {
     textel_presets.clear();
     custom_textel_presets.clear();
+    textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, -1 },
+                                Textel { ' ', Color16::Default, Color16::Black, -1 },
+                                "Ad Hoc [e]");
     textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, 0 },
                                 Textel { ' ', Color16::Default, Color16::Black, 0 },
                                 "Void");
@@ -676,6 +705,12 @@ public:
     cp_textel_bg = { Color16::Blue, Color16::White,
       cp_params,
       3, true, '*', ' ' };
+    cp_textel_fg_adhoc = { Color16::Blue, Color16::White,
+      cp_params,
+      1, true, '*', ' ' };
+    cp_textel_bg_adhoc = { Color16::Blue, Color16::White,
+      cp_params,
+      2, true, '*', ' ' };
     
     if (file_path_curr_texture.empty())
     {
@@ -749,6 +784,7 @@ public:
     init_keys_legend();
     
     reset_textel_editor();
+    reset_adhoc_textel_editor();
   }
   
 private:
@@ -1023,11 +1059,18 @@ private:
         else
         {
           auto idx_shadow = stlutils::find_if_idx(textel_presets,
-          [&curr_textel](const auto& tp) { return tp.get_textel(true) == curr_textel; });
+            [&curr_textel](const auto& tp) { return tp.get_textel(true) == curr_textel; });
           if (0 <= idx_shadow)
           {
             selected_textel_preset_idx = idx_shadow;
             menu_r_offs = -3*selected_textel_preset_idx;
+          }
+          else
+          {
+            selected_textel_preset_idx = 0;
+            textel_presets[0].textel_normal.ch = curr_textel.ch;
+            textel_presets[0].textel_normal.fg_color = curr_textel.fg_color;
+            textel_presets[0].textel_normal.bg_color = curr_textel.bg_color;
           }
         }
       }
@@ -1040,10 +1083,15 @@ private:
         if (!math::toggle(show_goto_pos))
           reset_goto_input();
       }
-      else if (str::to_lower(curr_key) == 'e')
+      else if (curr_key == 'E')
       {
         if (!math::toggle(show_textel_editor))
           reset_textel_editor();
+      }
+      else if (curr_key == 'e')
+      {
+        if (!math::toggle(show_adhoc_textel_editor))
+          reset_adhoc_textel_editor();
       }
       else if (str::to_lower(curr_key) == 't')
         math::toggle(show_tracing);
@@ -1492,6 +1540,37 @@ private:
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].draw(sh, tb_args);
       }
+      else if (show_adhoc_textel_editor)
+      {
+        allow_editing = false;
+        dialog_editor_adhoc.update(curr_key, curr_special_key);
+        
+        edit_textel_normal.ch = dialog_editor_adhoc.text_field_empty(0) ? ' ' : dialog_editor_adhoc.get_text_field_input(0)[0];
+        edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(1);
+        edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(2);
+        dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+        
+        if (curr_special_key == t8::SpecialKey::Enter)
+        {
+          edit_textel_preset = &textel_presets[0];
+          edit_textel_preset->textel_normal = edit_textel_normal;
+          
+          reset_adhoc_textel_editor();
+          show_adhoc_textel_editor = false;
+        }
+        else if (curr_special_key == t8::SpecialKey::Escape)
+        {
+          reset_adhoc_textel_editor();
+          show_adhoc_textel_editor = false;
+        }
+        
+        t8x::TextBoxDrawingArgsAlign tb_args;
+        tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+        tb_args.base.box_padding_lr = 1;
+        tb_args.v_align_offs = -2;
+        dialog_editor_adhoc.calc_pre_draw(str::Adjustment::Left);
+        dialog_editor_adhoc.draw(sh, tb_args, cursor_anim_ctr);
+      }
       
       // Caret
       if (get_anim_count(0) % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
@@ -1572,6 +1651,7 @@ private:
   bool show_goto_pos = false;
   bool show_keys_legend = false;
   bool show_textel_editor = false;
+  bool show_adhoc_textel_editor = false;
   bool show_materials = false;
   
   t8x::YesNoButtons overwrite_confirm_button = t8x::YesNoButtons::No;
@@ -1650,6 +1730,15 @@ private:
   Textel edit_textel_normal;
   Textel edit_textel_shadow;
   std::string edit_textel_name;
+  
+  t8x::Dialog dialog_editor_adhoc;
+  t8x::TextField tf_textel_symbol_adhoc { 1, t8x::TextFieldMode::All, tf_style, 0 };
+  t8x::ColorPicker cp_textel_fg_adhoc { Color16::Blue, Color16::White,
+    cp_params,
+    1, true, '*', ' ' };
+  t8x::ColorPicker cp_textel_bg_adhoc { Color16::Blue, Color16::White,
+    cp_params,
+    2, true, '*', ' ' };
 };
 
 int main(int argc, char** argv)
