@@ -134,7 +134,17 @@ Custom textel "Magic Stone":
 
 <img width="566" alt="image" src="https://github.com/user-attachments/assets/f91f3af1-dec0-4cf3-bf25-1af7567f3d99">
 
+Editing Ad Hoc textel preset using `E` key:
 
+<img width="647" height="659" alt="image" src="https://github.com/user-attachments/assets/e353c753-4a85-4966-9123-8a1d1ce12e11" />
+
+Editing custom textel preset using `SHIFT + E` key:
+(see section **Custom Textel Presets** above for more info)
+
+<img width="647" height="657" alt="image" src="https://github.com/user-attachments/assets/814df42e-115f-4c0f-84e9-dd7df389cbf0" />
+<img width="402" height="222" alt="image" src="https://github.com/user-attachments/assets/a3eb7a14-80b2-4cec-8eb7-1c090d5f4814" />
+<img width="287" height="90" alt="image" src="https://github.com/user-attachments/assets/d9fd92a2-b55f-4765-aa1d-5d433afc68b2" />
+<img width="647" height="660" alt="image" src="https://github.com/user-attachments/assets/b0ee779b-9914-4f82-9449-338b683ae748" />
 
 ## Build & Run Instructions
 
