@@ -83,10 +83,15 @@ So e.g.
 '%', Magenta, Cyan, 28
 '%', DarkMagenta, DarkCyan, 28
 Magic Stone
+'7', rgb6:[0, 1, 5], gray24:{19}, 0
+'7', rgb6:[0, 3, 4], Transparent2, 0
+8-bit test
 ```
 produces the following textel preset at the end of the list:
 
-<img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992">
+<!-- <img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992"> -->
+<img width="144" height="84" alt="image" src="https://github.com/user-attachments/assets/11446585-2c95-4ff0-86b4-91aa32e82d2a" />
+
 
 Look in the source code for which material number that is appropriate to use for your custom presets.
 
