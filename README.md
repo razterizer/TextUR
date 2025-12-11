@@ -90,8 +90,7 @@ Magic Stone
 produces the following textel preset at the end of the list:
 
 <!-- <img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992"> -->
-<img width="144" height="84" alt="image" src="https://github.com/user-attachments/assets/11446585-2c95-4ff0-86b4-91aa32e82d2a" />
-
+<img width="220" height="224" alt="image" src="https://github.com/user-attachments/assets/9dc55ab8-5657-49d8-a73a-93749b7353f9" />
 
 Look in the source code for which material number that is appropriate to use for your custom presets.
 
