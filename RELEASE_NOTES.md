@@ -1,5 +1,8 @@
 # Release Notes
 
+## 1.3.2.10
+- Bugfix: picked non-preset textel didn't properly propagate to the Ad Hoc textel editor.
+
 ## 1.3.1.9
 - Making sure the shadow textel of the Ad Hoc preset is set to the same values as the normal textel to avoid certain problems that may arise.
 - Adding missing UI help (guide) for the edit Ad Hoc textel command ('e').
