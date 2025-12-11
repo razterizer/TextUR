@@ -967,7 +967,7 @@ private:
         for (int i = -2; i <= 2; ++i)
         {
           int j_offs = std::abs(i) == 2 ? 2 : 4;
-          for (int j = -j_offs; j <= j_offs; ++j)
+          for (int j = -j_offs; j <= j_offs + 1; ++j)
           {
             RC pos = cursor_pos + RC { i, j };
             auto dist = math::length(2.f*i, static_cast<float>(j));
@@ -986,17 +986,17 @@ private:
       }
       else if (curr_key == 'B' || curr_key == 'R')
       {
-        //                 ~~~~~
-        //              ~~~~~~~~~~~
-        //            ~~~~~~~~~~~~~~~
-        //           ~~~~~~~~~~~~~~~~~
-        //          ~~~~~~~~~~~~~~~~~~~
-        //          ~~~~~~~~~*~~~~~~~~~
-        //          ~~~~~~~~~~~~~~~~~~~
-        //           ~~~~~~~~~~~~~~~~~
-        //            ~~~~~~~~~~~~~~~
-        //              ~~~~~~~~~~~
-        //                 ~~~~~
+        //                  ~~~~~~~
+        //              ~~~~~~~~~~~~~~~
+        //            ~~~~~~~~~~~~~~~~~~~
+        //           ~~~~~~~~~~~~~~~~~~~~~
+        //          ~~~~~~~~~~~~~~~~~~~~~~~
+        //          ~~~~~~~~~~~*~~~~~~~~~~~
+        //          ~~~~~~~~~~~~~~~~~~~~~~~
+        //           ~~~~~~~~~~~~~~~~~~~~~
+        //            ~~~~~~~~~~~~~~~~~~~
+        //              ~~~~~~~~~~~~~~~
+        //                  ~~~~~~
         UndoItem undo;
         for (int i = -5; i <= 5; ++i)
         {
@@ -1005,12 +1005,12 @@ private:
           {
             case 0:
             case 1:
-              j_offs = 9;
+              j_offs = 11;
               break;
-            case 2: j_offs = 8; break;
-            case 3: j_offs = 7; break;
-            case 4: j_offs = 5; break;
-            case 5: j_offs = 2; break;
+            case 2: j_offs = 10; break;
+            case 3: j_offs = 9; break;
+            case 4: j_offs = 7; break;
+            case 5: j_offs = 3; break;
           }
           for (int j = -j_offs; j <= j_offs; ++j)
           {
