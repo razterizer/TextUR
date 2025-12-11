@@ -991,8 +991,20 @@ private:
         auto positions = t8x::filled_circle_positions(cursor_pos, 10.5f, c_aspect_ratio);
         for (const auto& p : positions)
         {
-          undo.emplace_back(p, curr_texture(p));
-          curr_texture.set_textel(p, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+          float anrnd = 0.f;
+          if (curr_key == 'R')
+          {
+            int i = p.r - cursor_pos.r;
+            int j = p.c - cursor_pos.c;
+            auto dist = math::length(2.f*i, static_cast<float>(j));
+            auto nrnd = rnd::randn(0.f, dist);
+            anrnd = std::abs(nrnd);
+          }
+          if (anrnd < 0.1f)
+          {
+            undo.emplace_back(p, curr_texture(p));
+            curr_texture.set_textel(p, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+          }
         }
         undo_buffer.push(undo);
         redo_buffer = {};
