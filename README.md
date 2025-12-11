@@ -83,10 +83,14 @@ So e.g.
 '%', Magenta, Cyan, 28
 '%', DarkMagenta, DarkCyan, 28
 Magic Stone
+'7', rgb6:[0, 1, 5], gray24:{19}, 0
+'7', rgb6:[0, 3, 4], Transparent2, 0
+8-bit test
 ```
 produces the following textel preset at the end of the list:
 
-<img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992">
+<!-- <img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992"> -->
+<img width="220" height="224" alt="image" src="https://github.com/user-attachments/assets/9dc55ab8-5657-49d8-a73a-93749b7353f9" />
 
 Look in the source code for which material number that is appropriate to use for your custom presets.
 
@@ -132,7 +136,8 @@ Custom textel "Magic Stone":
 * Small randomized brush stroke using `R` key (upper right corner).
 * Big randomized brush stroke using `SHIFT + R` key (lower right corner).
 
-<img width="566" alt="image" src="https://github.com/user-attachments/assets/f91f3af1-dec0-4cf3-bf25-1af7567f3d99">
+<!-- <img width="566" alt="image" src="https://github.com/user-attachments/assets/f91f3af1-dec0-4cf3-bf25-1af7567f3d99"> -->
+<img width="645" height="657" alt="image" src="https://github.com/user-attachments/assets/0bcf266e-3d81-4698-8f3f-8a1d9a827ded" />
 
 Editing Ad Hoc textel preset using `E` key:
 
