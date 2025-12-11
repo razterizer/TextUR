@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.3.3.11
+- Better shaped big brush strokes using mathematical algorithm rather than hard hacked pattern.
+- Feature: Added command line arguments that allows you to configure the size and aspect ratio of big brush strokes.
+
 ## 1.3.2.10
 - Bugfix: picked non-preset textel didn't properly propagate to the Ad Hoc textel editor.
 
