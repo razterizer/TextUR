@@ -146,6 +146,11 @@ Editing custom textel preset using `SHIFT + E` key:
 <img width="287" height="90" alt="image" src="https://github.com/user-attachments/assets/d9fd92a2-b55f-4765-aa1d-5d433afc68b2" />
 <img width="647" height="660" alt="image" src="https://github.com/user-attachments/assets/b0ee779b-9914-4f82-9449-338b683ae748" />
 
+Keybinds legend invoked by pressing `K`:
+
+<img width="646" height="660" alt="image" src="https://github.com/user-attachments/assets/99c14892-56d2-451e-91df-d52ae45fee8b" />
+
+
 ## Build & Run Instructions
 
 There are two options on dealing with repo dependencies:
