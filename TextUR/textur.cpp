@@ -987,7 +987,8 @@ private:
       else if (curr_key == 'B' || curr_key == 'R')
       {
         UndoItem undo;
-        auto positions = t8x::filled_circle_positions(cursor_pos, 10.f, 1.85f);
+        const float c_aspect_ratio = 1.84f; // Measured on huge font on MacOS Terminal.
+        auto positions = t8x::filled_circle_positions(cursor_pos, 10.5f, c_aspect_ratio);
         for (const auto& p : positions)
         {
           undo.emplace_back(p, curr_texture(p));
