@@ -132,7 +132,8 @@ Custom textel "Magic Stone":
 * Small randomized brush stroke using `R` key (upper right corner).
 * Big randomized brush stroke using `SHIFT + R` key (lower right corner).
 
-<img width="566" alt="image" src="https://github.com/user-attachments/assets/f91f3af1-dec0-4cf3-bf25-1af7567f3d99">
+<!-- <img width="566" alt="image" src="https://github.com/user-attachments/assets/f91f3af1-dec0-4cf3-bf25-1af7567f3d99"> -->
+<img width="645" height="657" alt="image" src="https://github.com/user-attachments/assets/0bcf266e-3d81-4698-8f3f-8a1d9a827ded" />
 
 Editing Ad Hoc textel preset using `E` key:
 
