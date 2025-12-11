@@ -57,6 +57,8 @@ class Game : public t8x::GameEngine<44, 92>
     std::cout << "   [--suppress_tty_output]" << std::endl;
     std::cout << "   [--suppress_tty_input]" << std::endl;
     std::cout << "   [--force_8bit_colors_on_win_cmd]" << std::endl;
+    std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
+    std::cout << "   [--set_big_brush_radius <br>]" << std::endl;
     std::cout << std::endl;
     std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
     std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
@@ -68,6 +70,8 @@ class Game : public t8x::GameEngine<44, 92>
     std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
     std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
     std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
+    std::cout << "  <bar>                      : Aspect ratio for big brushes. Default value = 1.84." << std::endl;
+    std::cout << "  <br>                       : Radius for big brushes. Default value = 10.5." << std::endl;
     std::cout << std::endl;
     std::cout << "  Press 'K' in editor for list of supported key presses." << std::endl;
     exit(EXIT_SUCCESS);
@@ -686,6 +690,10 @@ public:
       }
       else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd") == 0)
         force_8bit_colors_on_win_cmd = true;
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_aspect_ratio") == 0)
+        big_brush_aspect_ratio = std::stof(argv[a_idx + 1]);
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_radius") == 0)
+        big_brush_radius = std::stof(argv[a_idx + 1]);
     }
     
     cp_params = {
@@ -987,8 +995,7 @@ private:
       else if (curr_key == 'B' || curr_key == 'R')
       {
         UndoItem undo;
-        const float c_aspect_ratio = 1.84f; // Measured on huge font on MacOS Terminal.
-        auto positions = t8x::filled_circle_positions(cursor_pos, 10.5f, c_aspect_ratio);
+        auto positions = t8x::filled_circle_positions(cursor_pos, big_brush_radius, big_brush_aspect_ratio);
         for (const auto& p : positions)
         {
           float anrnd = 0.f;
@@ -1665,6 +1672,9 @@ private:
   bool draw_horiz_coord_line = false;
   
   bool use_shadow_textels = false;
+  
+  float big_brush_aspect_ratio = 1.84f; // Measured on huge font on MacOS Terminal.
+  float big_brush_radius = 10.5f; // Good radius that creates a fairly symmetrically circurlar brush stroke.
   
   t8x::TextBoxDebug tbd;
   
