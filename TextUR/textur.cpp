@@ -986,44 +986,12 @@ private:
       }
       else if (curr_key == 'B' || curr_key == 'R')
       {
-        //                  ~~~~~~~
-        //              ~~~~~~~~~~~~~~~
-        //            ~~~~~~~~~~~~~~~~~~~
-        //           ~~~~~~~~~~~~~~~~~~~~~
-        //          ~~~~~~~~~~~~~~~~~~~~~~~
-        //          ~~~~~~~~~~~*~~~~~~~~~~~
-        //          ~~~~~~~~~~~~~~~~~~~~~~~
-        //           ~~~~~~~~~~~~~~~~~~~~~
-        //            ~~~~~~~~~~~~~~~~~~~
-        //              ~~~~~~~~~~~~~~~
-        //                  ~~~~~~
         UndoItem undo;
-        for (int i = -5; i <= 5; ++i)
+        auto positions = t8x::filled_circle_positions(cursor_pos, 10.f, 1.85f);
+        for (const auto& p : positions)
         {
-          int j_offs = 0;
-          switch (std::abs(i))
-          {
-            case 0:
-            case 1:
-              j_offs = 11;
-              break;
-            case 2: j_offs = 10; break;
-            case 3: j_offs = 9; break;
-            case 4: j_offs = 7; break;
-            case 5: j_offs = 3; break;
-          }
-          for (int j = -j_offs; j <= j_offs; ++j)
-          {
-            RC pos = cursor_pos + RC { i, j };
-            auto dist = math::length(2.f*i, static_cast<float>(j));
-            auto nrnd = rnd::randn(0.f, dist);
-            auto anrnd = std::abs(nrnd);
-            if (curr_key == 'B' || (curr_key == 'R' && anrnd < 0.1f))
-            {
-              undo.emplace_back(pos, curr_texture(pos));
-              curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
-            }
-          }
+          undo.emplace_back(p, curr_texture(p));
+          curr_texture.set_textel(p, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
         }
         undo_buffer.push(undo);
         redo_buffer = {};
