@@ -1661,7 +1661,7 @@ private:
   int selected_textel_preset_idx = 0;
   std::vector<TextelItem> custom_textel_presets;
   
-  std::unique_ptr<t8x::MessageHandler> message_handler;
+  std::unique_ptr<t8x::MessageHandler<std::string>> message_handler;
   using UndoItem = std::vector<std::pair<t8::RC, Textel>>;
   std::stack<UndoItem> undo_buffer;
   std::stack<UndoItem> redo_buffer;
