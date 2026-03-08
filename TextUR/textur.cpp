@@ -1680,7 +1680,7 @@ private:
   t8x::TextBoxDebug tbd;
   
   t8::ButtonStyle btn_style { Color16::White, Color16::DarkBlue, Color16::Blue };
-  t8::PromptStyle tf_style { Color16::White, Color16::DarkBlue, Color16::White };
+  t8::PromptStyle tf_style { Color16::White, Color16::DarkBlue, Color16::White, Color16::Cyan };
   t8x::ButtonFrame btn_frame = t8x::ButtonFrame::SquareBrackets;
   
   t8x::TextBox<std::string> tb_ui_help_goto {{
