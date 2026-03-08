@@ -605,7 +605,16 @@ class Game : public t8x::GameEngine<44, 92, CharT>
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
-            textel_normal.ch = tokens[0][0];
+            auto glyph_tokens = str::tokenize(tokens[0], { '\'' });
+            if (glyph_tokens.size() == 1)
+            {
+              if (glyph_tokens[0].find('[') == std::string::npos)
+                textel_normal.glyph.parse(tokens[0], true); // Presumably ASCII character.
+              else
+                textel_normal.glyph.parse(tokens[0], false); // Presumably Unicode + ASCII character.
+            }
+            else
+              std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
             // "1, 2, 3" -> "rgb6:[1, 2, 3]
             if (str::count_substr(tokens[1], ", ") == 2)
               tokens[1] = "rgb6:[" + tokens[1] + "]";
@@ -622,7 +631,16 @@ class Game : public t8x::GameEngine<44, 92, CharT>
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
           if (tokens.size() == 4 && tokens[0].length() == 1)
           {
-            textel_shadow.ch = tokens[0][0];
+            auto glyph_tokens = str::tokenize(tokens[0], { '\'' });
+            if (glyph_tokens.size() == 1)
+            {
+              if (glyph_tokens[0].find('[') == std::string::npos)
+                textel_shadow.glyph.parse(tokens[0], true); // Presumably ASCII character.
+              else
+                textel_shadow.glyph.parse(tokens[0], false); // Presumably Unicode + ASCII character.
+            }
+            else
+              std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
             // "1, 2, 3" -> "rgb6:[1, 2, 3]
             if (str::count_substr(tokens[1], ", ") == 2)
               tokens[1] = "rgb6:[" + tokens[1] + "]";
