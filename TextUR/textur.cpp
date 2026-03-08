@@ -1069,7 +1069,7 @@ private:
       else if (str::to_lower(curr_key) == 'l')
         message_handler->add_message(static_cast<float>(get_real_time_s()),
                                      "Cursor @ " + cursor_pos.str(),
-                                     t8x::MessageHandler::Level::Guide);
+                                     t8x::Level::Guide);
       else if (str::to_lower(curr_key) == 'g')
       {
         if (!math::toggle(show_goto_pos))
@@ -1114,14 +1114,14 @@ private:
         {
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "Your work was successfully saved.",
-                                       t8x::MessageHandler::Level::Guide);
+                                       t8x::Level::Guide);
                                        
           is_modified = false;
         }
         else
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "An error occurred while saving your work!",
-                                       t8x::MessageHandler::Level::Fatal);
+                                       t8x::Level::Fatal);
                                        
         safe_to_save = false;
         show_confirm_overwrite = false;
@@ -1204,7 +1204,7 @@ private:
           {
             message_handler->add_message(static_cast<float>(get_real_time_s()),
                                          "You must type both row and col coordinates.",
-                                         t8x::MessageHandler::Level::Guide);
+                                         t8x::Level::Guide);
           }
           else
           {
@@ -1313,7 +1313,7 @@ private:
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must type a valid custom textel preset id.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else
               {
@@ -1324,7 +1324,7 @@ private:
                 {
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                "Successfully loaded custom textel preset " + std::to_string(ctp_idx) + "!",
-                                               t8x::MessageHandler::Level::Guide);
+                                               t8x::Level::Guide);
                   edit_textel_preset = &custom_textel_presets[ctp_idx];
                   edit_textel_normal = edit_textel_preset->textel_normal;
                   edit_textel_shadow = edit_textel_preset->textel_shadow;
@@ -1342,7 +1342,7 @@ private:
                   int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
                   message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!\n" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
-                                               t8x::MessageHandler::Level::Guide,
+                                               t8x::Level::Guide,
                                                3.f);
                   dialog_edit_mat.clear_text_field_input(0);
                 }
@@ -1388,19 +1388,19 @@ private:
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel preset name.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(1))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel character.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else
               {
@@ -1451,19 +1451,19 @@ private:
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel preset name.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(1))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel character.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
-                                             t8x::MessageHandler::Level::Guide);
+                                             t8x::Level::Guide);
               }
               else
               {
@@ -1496,11 +1496,11 @@ private:
                   if (TextIO::write_file(filepath_custom_textel_presets, lines_custom_textel_presets))
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Successfully wrote to custom textel presets file!",
-                                                 t8x::MessageHandler::Level::Guide);
+                                                 t8x::Level::Guide);
                   else
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
                                                  "Unable to write to custom textel presets file!",
-                                                 t8x::MessageHandler::Level::Fatal);
+                                                 t8x::Level::Fatal);
                                                  
                   reload_textel_presets();
                 }
