@@ -1683,7 +1683,7 @@ private:
   t8::PromptStyle tf_style { Color16::White, Color16::DarkBlue, Color16::White };
   t8x::ButtonFrame btn_frame = t8x::ButtonFrame::SquareBrackets;
   
-  t8x::TextBox tb_ui_help_goto {{
+  t8x::TextBox<std::string> tb_ui_help_goto {{
       "UI Help"s,
       "Type coordinates using number keys.",
       "Erase characters by pressing [BACKSPACE].",
@@ -1691,18 +1691,18 @@ private:
       "Press [ENTER] when done.",
       "Press [ESCAPE] to cancel."
     }};
-  t8x::Dialog dialog_goto;
+  t8x::Dialog<std::string> dialog_goto;
   t8x::TextField tf_goto_r { 8, t8x::TextFieldMode::Numeric, tf_style, 0 };
   t8x::TextField tf_goto_c { 8, t8x::TextFieldMode::Numeric, tf_style, 1 };
   
-  t8x::TextBox tb_ui_help_keys {{
+  t8x::TextBox<std::string> tb_ui_help_keys {{
     "UI Help"s,
     "Press [ESCAPE] or [K] to close."
   }};
-  t8x::Dialog dialog_keys;
+  t8x::Dialog<std::string> dialog_keys;
   
   enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
-  std::array<t8x::TextBox, 4> tb_ui_help_edit_textel
+  std::array<t8x::TextBox<std::string>, 4> tb_ui_help_edit_textel
   {
     {
       { { "UI Help"s, "Use arrow keys or [TAB] to select button,", "Then press [ENTER] when done.", "Press [ESCAPE] to cancel." } },
@@ -1712,13 +1712,13 @@ private:
     }
   };
   EditTextelMode edit_mode = EditTextelMode::EditOrAdd;
-  t8x::Dialog dialog_edit_or_add;
+  t8x::Dialog<std::string> dialog_edit_or_add;
   t8x::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
   t8x::Button btn_add { "Add", btn_style, btn_frame, 1 };
-  t8x::Dialog dialog_edit_mat;
+  t8x::Dialog<std::string> dialog_edit_mat;
   t8x::TextField tf_textel_idx { 4, t8x::TextFieldMode::Numeric, tf_style, 0 };
-  t8x::Dialog dialog_editor;
-  t8x::TextField tf_textel_name { 16, t8x::TextFieldMode::AlphaNumeric, tf_style, 0 };
+  t8x::Dialog<std::string> dialog_editor;
+  t8x::TextField tf_textel_name { 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0 };
   t8x::TextField tf_textel_symbol { 1, t8x::TextFieldMode::All, tf_style, 1 };
   bool force_8bit_colors_on_win_cmd = false;
   t8x::ColorPickerParams cp_params;
@@ -1734,7 +1734,7 @@ private:
   Textel edit_textel_shadow;
   std::string edit_textel_name;
   
-  t8x::TextBox tb_ui_help_edit_adhoc {{
+  t8x::TextBox<std::string> tb_ui_help_edit_adhoc {{
     "UI Help"s,
     "Navigate widgets using [TAB].",
     "Erase characters with [BACKSPACE].",
@@ -1742,7 +1742,7 @@ private:
     "Press [ENTER] to submit the changes.",
     "Press [ESCAPE] to cancel."
   }};
-  t8x::Dialog dialog_editor_adhoc;
+  t8x::Dialog<std::string> dialog_editor_adhoc;
   t8x::TextField tf_textel_symbol_adhoc { 1, t8x::TextFieldMode::All, tf_style, 0 };
   t8x::ColorPicker cp_textel_fg_adhoc { Color16::Blue, Color16::White,
     cp_params,
