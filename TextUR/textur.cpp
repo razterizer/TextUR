@@ -99,7 +99,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       }
       const auto& preset = textel_presets[p_idx];
       const auto& textel = preset.get_textel(use_shadow_textels);
-      sh.write_buffer(textel.str(), r + 1, nc - menu_width + 2, textel.get_style());
+      sh.write_buffer(textel.glyph, r + 1, nc - menu_width + 2, textel.get_style());
       sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
       // Does not need to be qualified with t8x::drawing, but I'm not sure why.
       t8x::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::OutlineType::Line, ui_style);
@@ -272,7 +272,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_editor_adhoc.add_color_picker({ 4 + cp_textel_fg_adhoc.height() + 1, 3 }, cp_textel_bg_adhoc);
     dialog_editor_adhoc.set_tab_order(0);
     
-    dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.ch));
+    dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
     dialog_editor_adhoc.set_color_picker_color(1, edit_textel_normal.fg_color);
     dialog_editor_adhoc.set_color_picker_color(2, edit_textel_normal.bg_color);
   }
@@ -770,7 +770,7 @@ public:
           const auto& curr_textel = bright_texture(r, c);
           auto it = stlutils::find_if(textel_presets, [&curr_textel](const auto& tp)
           {
-            return tp.textel_normal.ch == curr_textel.ch
+            return tp.textel_normal.glyph == curr_textel.glyph
             && tp.textel_normal.fg_color == curr_textel.fg_color
             && tp.textel_normal.bg_color == curr_textel.bg_color
             && tp.textel_normal.mat == curr_textel.mat;
@@ -1057,7 +1057,7 @@ private:
           else
           {
             selected_textel_preset_idx = 0;
-            textel_presets[0].textel_normal.ch = curr_textel.ch;
+            textel_presets[0].textel_normal.glyph = curr_textel.glyph;
             textel_presets[0].textel_normal.fg_color = curr_textel.fg_color;
             textel_presets[0].textel_normal.bg_color = curr_textel.bg_color;
             textel_presets[0].textel_shadow = textel_presets[0].textel_normal;
@@ -1331,7 +1331,7 @@ private:
                   edit_textel_name = edit_textel_preset->name;
                   dialog_editor[2] = "Idx: " + std::to_string(ctp_idx);
                   dialog_editor.set_text_field_input(0, edit_textel_name);
-                  dialog_editor.set_text_field_input(1, std::string(1, edit_textel_normal.ch));
+                  dialog_editor.set_text_field_input(1, std::string(1, edit_textel_normal.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
                   dialog_editor.set_color_picker_color(2, edit_textel_normal.fg_color);
                   dialog_editor.set_color_picker_color(3, edit_textel_normal.bg_color);
                   dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
@@ -1378,10 +1378,10 @@ private:
             // +--------------------------------------+
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
-            edit_textel_normal.ch = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
+            edit_textel_normal.glyph = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
-            dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+            dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
             if (curr_special_key == t8::SpecialKey::Enter)
             {
               if (dialog_editor.text_field_empty(0))
@@ -1411,13 +1411,13 @@ private:
                   edit_textel_preset->textel_normal = edit_textel_normal;
                 }
                 dialog_editor.set_text_field_input(0, edit_textel_name);
-                dialog_editor.set_text_field_input(1, std::string(1, edit_textel_shadow.ch));
+                dialog_editor.set_text_field_input(1, std::string(1, edit_textel_shadow.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
                 dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
                 dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
                 dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 dialog_editor[1] = "Textel:   ( )";
-                dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+                dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
                 dialog_editor.set_tab_order(0);
                 edit_mode = EditTextelMode::EditTextelShadow;
               }
@@ -1441,10 +1441,10 @@ private:
           {
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
-            edit_textel_shadow.ch = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
+            edit_textel_shadow.glyph = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
             edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
-            dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.ch, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
+            dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.glyph, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
             if (curr_special_key == t8::SpecialKey::Enter)
             {
               if (dialog_editor.text_field_empty(0))
@@ -1537,10 +1537,10 @@ private:
         allow_editing = false;
         dialog_editor_adhoc.update(curr_key, curr_special_key);
         
-        edit_textel_normal.ch = dialog_editor_adhoc.text_field_empty(0) ? ' ' : dialog_editor_adhoc.get_text_field_input(0)[0];
+        edit_textel_normal.glyph = dialog_editor_adhoc.text_field_empty(0) ? ' ' : dialog_editor_adhoc.get_text_field_input(0)[0];
         edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(1);
         edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(2);
-        dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.ch, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
+        dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
         
         if (curr_special_key == t8::SpecialKey::Enter)
         {
