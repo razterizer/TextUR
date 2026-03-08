@@ -647,7 +647,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
 public:
   Game(int argc, char** argv, const t8x::GameEngineParams& params)
     : GameEngine(argv[0], params)
-    , message_handler(std::make_unique<t8x::MessageHandler>())
+    , message_handler(std::make_unique<t8x::MessageHandler<std::string>>())
   {
     GameEngine::set_anim_rate(0, 5);
     GameEngine::set_anim_rate(1, 6);
