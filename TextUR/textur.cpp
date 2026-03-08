@@ -703,8 +703,8 @@ public:
       Color16::Cyan, // special_color_fg_hilite_color
       true, // enable_special_colors
       true, // enable_4bit_colors
-      force_8bit_colors_on_win_cmd || !sys::is_windows_cmd(), // enable_rgb6_colors
-      force_8bit_colors_on_win_cmd || !sys::is_windows_cmd()  // enable_gray24_colors
+      force_8bit_colors_on_win_cmd || !sys::is_non_wt_console(), // enable_rgb6_colors
+      force_8bit_colors_on_win_cmd || !sys::is_non_wt_console()  // enable_gray24_colors
     };
     
     // Reconstruct color pickers.
