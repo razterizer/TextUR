@@ -1501,11 +1501,11 @@ private:
                     // '%', Magenta, Cyan, 28
                     // '%', DarkMagenta, DarkCyan, 28
                     // Magic Stone
-                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.ch + "', "
+                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.glyph.str(false) + "', "
                       + ctp.textel_normal.fg_color.str() + ", "
                       + ctp.textel_normal.bg_color.str() + ", "
                       + std::to_string(ctp.textel_normal.mat));
-                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.ch + "', "
+                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.glyph.str(false) + "', "
                       + ctp.textel_shadow.fg_color.str() + ", "
                       + ctp.textel_shadow.bg_color.str() + ", "
                       + std::to_string(ctp.textel_shadow.mat));
