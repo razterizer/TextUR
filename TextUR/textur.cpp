@@ -281,8 +281,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   {
     textel_presets.clear();
     custom_textel_presets.clear();
-    textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, -1 },
-                                Textel { ' ', Color16::Default, Color16::Black, -1 },
+    textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, t8::texture::mat_none },
+                                Textel { ' ', Color16::Default, Color16::Black, t8::texture::mat_none },
                                 "Ad Hoc [e]");
     textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, 0 },
                                 Textel { ' ', Color16::Default, Color16::Black, 0 },
