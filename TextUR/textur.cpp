@@ -603,7 +603,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
         if (part == 0)
         {
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
-          if (tokens.size() == 4 && tokens[0].length() == 1)
+          if (tokens.size() == 4)
           {
             auto glyph_tokens = str::tokenize(tokens[0], { '\'' });
             if (glyph_tokens.size() == 1)
@@ -629,7 +629,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
         else if (part == 1)
         {
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
-          if (tokens.size() == 4 && tokens[0].length() == 1)
+          if (tokens.size() == 4)
           {
             auto glyph_tokens = str::tokenize(tokens[0], { '\'' });
             if (glyph_tokens.size() == 1)
@@ -1501,11 +1501,11 @@ private:
                     // '%', Magenta, Cyan, 28
                     // '%', DarkMagenta, DarkCyan, 28
                     // Magic Stone
-                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_normal.glyph.str(false) + "', "
+                    lines_custom_textel_presets.emplace_back(ctp.textel_normal.glyph.str(false) + ", "
                       + ctp.textel_normal.fg_color.str() + ", "
                       + ctp.textel_normal.bg_color.str() + ", "
                       + std::to_string(ctp.textel_normal.mat));
-                    lines_custom_textel_presets.emplace_back("'"s + ctp.textel_shadow.glyph.str(false) + "', "
+                    lines_custom_textel_presets.emplace_back(ctp.textel_shadow.glyph.str(false) + ", "
                       + ctp.textel_shadow.fg_color.str() + ", "
                       + ctp.textel_shadow.bg_color.str() + ", "
                       + std::to_string(ctp.textel_shadow.mat));
