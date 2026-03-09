@@ -230,6 +230,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   void reset_textel_editor()
   {
     edit_mode = EditTextelMode::EditOrAdd;
+    edit_or_add = EditOrAdd::None;
     dialog_edit_or_add = t8x::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
     dialog_edit_or_add.add_button(btn_edit);
     dialog_edit_or_add.add_button(btn_add);
@@ -1296,12 +1297,16 @@ private:
             {
               auto sel_btn_text = dialog_edit_or_add.get_selected_button_text();
               if (sel_btn_text == "Edit")
+              {
                 edit_mode = EditTextelMode::EditEnterMat;
+                edit_or_add = EditOrAdd::Edit;
+              }
               else if (sel_btn_text == "Add")
               {
                 int last_valid_idx = stlutils::sizeI(custom_textel_presets) - 1;
                 dialog_editor[2] = "Idx: " + std::to_string(last_valid_idx + 1);
                 edit_mode = EditTextelMode::EditTextelNormal;
+                edit_or_add = EditOrAdd::Add;
               }
             }
             else if (curr_special_key == t8::SpecialKey::Escape)
@@ -1486,12 +1491,12 @@ private:
               else
               {
                 edit_textel_shadow.mat = std::stoi(dialog_editor.get_text_field_input(4));
-                if (edit_textel_preset != nullptr)
+                if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
                   edit_textel_preset->textel_shadow = edit_textel_shadow;
                 }
-                else
+                else if (edit_or_add == EditOrAdd::Add)
                   custom_textel_presets.emplace_back(edit_textel_normal, edit_textel_shadow, edit_textel_name);
                 
                 {
@@ -1720,6 +1725,7 @@ private:
   t8x::Dialog<std::string> dialog_keys;
   
   enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
+  enum class EditOrAdd { None, Edit, Add };
   std::array<t8x::TextBox<std::string>, 4> tb_ui_help_edit_textel
   {
     {
@@ -1730,6 +1736,7 @@ private:
     }
   };
   EditTextelMode edit_mode = EditTextelMode::EditOrAdd;
+  EditOrAdd edit_or_add = EditOrAdd::None;
   t8x::Dialog<std::string> dialog_edit_or_add;
   t8x::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
   t8x::Button btn_add { "Add", btn_style, btn_frame, 1 };
