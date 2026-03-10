@@ -216,7 +216,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_keys.set_textel_str_pre({ 32, 0 }, "SHIFT + E", fg_key, bg_key);
     dialog_keys.set_textel_pre({ 33, 0 }, 'E', fg_key, bg_key);
     dialog_keys.set_textel_pre({ 34, 0 }, 'Q', fg_key, bg_key);
-    dialog_keys.set_tab_order(0);
+    dialog_keys.set_tab_selection(0);
   }
   
   void reset_goto_input()
@@ -224,7 +224,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_goto = t8x::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
     dialog_goto.add_text_field({ 1, 0 }, tf_goto_r);
     dialog_goto.add_text_field({ 1, 10 }, tf_goto_c);
-    dialog_goto.set_tab_order(0);
+    dialog_goto.set_tab_selection(0);
   }
   
   void reset_textel_editor()
@@ -237,7 +237,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_edit_or_add.set_button_selection(0, true);
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
-    dialog_edit_mat.set_tab_order(0);
+    dialog_edit_mat.set_tab_selection(0);
     std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)    "s, "Textel:", "Idx:", "Name:", "Char:" };
     rows.emplace_back("FG Color:");
     for (int i = 0; i < cp_textel_fg.height(); ++i)
@@ -252,7 +252,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
     dialog_editor.add_color_picker({ 6 + cp_textel_fg.height() + 1, 3 }, cp_textel_bg);
     dialog_editor.add_text_field({ 6 + cp_textel_fg.height() + 1 + cp_textel_bg.height(), 5 }, tf_textel_mat);
-    dialog_editor.set_tab_order(0);
+    dialog_editor.set_tab_selection(0);
   }
   
   void reset_adhoc_textel_editor()
@@ -271,7 +271,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_editor_adhoc.add_text_field({ 2, 6 }, tf_textel_symbol_adhoc);
     dialog_editor_adhoc.add_color_picker({ 4, 3 }, cp_textel_fg_adhoc);
     dialog_editor_adhoc.add_color_picker({ 4 + cp_textel_fg_adhoc.height() + 1, 3 }, cp_textel_bg_adhoc);
-    dialog_editor_adhoc.set_tab_order(0);
+    dialog_editor_adhoc.set_tab_selection(0);
     
     dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
     dialog_editor_adhoc.set_color_picker_color(1, edit_textel_normal.fg_color);
@@ -1441,7 +1441,7 @@ private:
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 dialog_editor[1] = "Textel:   ( )";
                 dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
-                dialog_editor.set_tab_order(0);
+                dialog_editor.set_tab_selection(0);
                 edit_mode = EditTextelMode::EditTextelShadow;
               }
             }
