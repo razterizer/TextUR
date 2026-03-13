@@ -1250,7 +1250,7 @@ private:
         }
 
         t8x::TextBoxDrawingArgsAlign tb_args;
-        tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+        tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
         dialog_goto.calc_pre_draw(str::Adjustment::Left);
         dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
@@ -1270,7 +1270,7 @@ private:
           
         t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.v_align = t8x::VerticalAlignment::TOP;
-        tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+        tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
         dialog_keys.calc_pre_draw(str::Adjustment::Left);
         dialog_keys.draw(sh, tb_args, cursor_anim_ctr);
@@ -1316,7 +1316,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+            tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
             dialog_edit_or_add.calc_pre_draw(str::Adjustment::Left);
             dialog_edit_or_add.draw(sh, tb_args, cursor_anim_ctr);
@@ -1378,7 +1378,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+            tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
             dialog_edit_mat.calc_pre_draw(str::Adjustment::Left);
             dialog_edit_mat.draw(sh, tb_args, cursor_anim_ctr);
@@ -1452,7 +1452,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+            tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
             dialog_editor.calc_pre_draw(str::Adjustment::Left);
@@ -1538,7 +1538,7 @@ private:
             }
             
             t8x::TextBoxDrawingArgsAlign tb_args;
-            tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+            tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
             dialog_editor.calc_pre_draw(str::Adjustment::Left);
@@ -1581,7 +1581,7 @@ private:
         }
         
         t8x::TextBoxDrawingArgsAlign tb_args;
-        tb_args.base.box_style = { Color16::White, Color16::DarkBlue };
+        tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
         tb_args.v_align_offs = -2;
         dialog_editor_adhoc.calc_pre_draw(str::Adjustment::Left);
@@ -1702,6 +1702,7 @@ private:
   
   t8x::TextBoxDebug tbd;
   
+  t8::Style dlg_style { Color16::White, Color16::DarkBlue };
   t8::ButtonStyle btn_style { Color16::White, Color16::DarkBlue, Color16::Blue };
   t8::PromptStyle tf_style { Color16::White, Color16::DarkBlue, Color16::White, Color16::Cyan };
   t8x::ButtonFrame btn_frame = t8x::ButtonFrame::SquareBrackets;
