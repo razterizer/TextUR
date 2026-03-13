@@ -238,19 +238,21 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_selection(0);
-    std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)    "s, "Textel:", "Idx:", "Name:", "Char:" };
-    rows.emplace_back("FG Color:");
-    for (int i = 0; i < cp_textel_fg.height(); ++i)
+    std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)    "s, };
+    for (int i = 0; i < cp_textel_fg.height() + cp_textel_bg.height() + 7; ++i)
       rows.emplace_back("");
-    rows.emplace_back("BG Color:");
-    for (int i = 0; i < cp_textel_bg.height(); ++i)
-      rows.emplace_back("");
-    rows.emplace_back("Mat:");
     dialog_editor = t8x::Dialog(rows);
+    dialog_editor.add_label({ 1, 0 }, t8x::Label { "Textel:", dlg_style });
+    dialog_editor.add_label({ 2, 0 }, t8x::Label { "Idx:", dlg_style });
+    dialog_editor.add_label({ 3, 0 }, t8x::Label { "Name:", dlg_style });
     dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
+    dialog_editor.add_label({ 4, 0 }, t8x::Label { "Char:", dlg_style });
     dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
+    dialog_editor.add_label({ 5, 0 }, t8x::Label { "FG Color:", dlg_style });
     dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
+    dialog_editor.add_label({ 6 + cp_textel_fg.height(), 0 }, t8x::Label { "BG Color:", dlg_style });
     dialog_editor.add_color_picker({ 6 + cp_textel_fg.height() + 1, 3 }, cp_textel_bg);
+    dialog_editor.add_label({ 6 + cp_textel_fg.height() + 1 + cp_textel_bg.height(), 0 }, t8x::Label { "Mat:", dlg_style });
     dialog_editor.add_text_field({ 6 + cp_textel_fg.height() + 1 + cp_textel_bg.height(), 5 }, tf_textel_mat);
     dialog_editor.set_tab_selection(0);
   }
