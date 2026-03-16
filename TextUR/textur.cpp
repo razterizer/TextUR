@@ -238,8 +238,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_selection(0);
-    std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)    "s, };
-    for (int i = 0; i < cp_textel_fg.height() + cp_textel_bg.height() + 7; ++i)
+    std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)"s, };
+    for (int i = 1; i < 3; ++i) // Required for later indexing.
       rows.emplace_back("");
     dialog_editor = t8x::Dialog(rows);
     dialog_editor.add_label({ 1, 0 }, t8x::Label { "Textel:", dlg_style });
@@ -1170,7 +1170,6 @@ private:
     tbd_args.v_align = VerticalAlignment::TOP;
     tbd_args.base.box_style = { Color16::Blue, Color16::Yellow };
     tbd_args.framed_mode = true;
-    tbd.calc_pre_draw(str::Adjustment::Left);
     tbd.draw(sh, tbd_args);
 #endif
 
@@ -1254,13 +1253,11 @@ private:
         t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
-        dialog_goto.calc_pre_draw(str::Adjustment::Left);
         dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
-        tb_ui_help_goto.calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_goto.draw(sh, tb_args);
       }
       else if (show_keys_legend)
@@ -1274,13 +1271,11 @@ private:
         tb_args.v_align = t8x::VerticalAlignment::TOP;
         tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
-        dialog_keys.calc_pre_draw(str::Adjustment::Left);
         dialog_keys.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
-        tb_ui_help_keys.calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_keys.draw(sh, tb_args);
       }
       else if (show_textel_editor)
@@ -1320,7 +1315,6 @@ private:
             t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
-            dialog_edit_or_add.calc_pre_draw(str::Adjustment::Left);
             dialog_edit_or_add.draw(sh, tb_args, cursor_anim_ctr);
             break;
           }
@@ -1382,7 +1376,6 @@ private:
             t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
-            dialog_edit_mat.calc_pre_draw(str::Adjustment::Left);
             dialog_edit_mat.draw(sh, tb_args, cursor_anim_ctr);
             break;
           }
@@ -1457,7 +1450,6 @@ private:
             tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
-            dialog_editor.calc_pre_draw(str::Adjustment::Left);
             dialog_editor.draw(sh, tb_args, cursor_anim_ctr);
             break;
           }
@@ -1543,7 +1535,6 @@ private:
             tb_args.base.box_style = dlg_style;
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
-            dialog_editor.calc_pre_draw(str::Adjustment::Left);
             dialog_editor.draw(sh, tb_args, cursor_anim_ctr);
             break;
           }
@@ -1554,7 +1545,6 @@ private:
         tb_args.base.box_padding_lr = 1;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
-        tb_ui_help_edit_textel[static_cast<int>(edit_mode)].calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_edit_textel[static_cast<int>(edit_mode)].draw(sh, tb_args);
       }
       else if (show_adhoc_textel_editor)
@@ -1586,14 +1576,12 @@ private:
         tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
         tb_args.v_align_offs = -2;
-        dialog_editor_adhoc.calc_pre_draw(str::Adjustment::Left);
         dialog_editor_adhoc.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style.fg_color = Color16::LightGray;
         tb_args.v_align_offs = 0;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
-        tb_ui_help_edit_adhoc.calc_pre_draw(str::Adjustment::Left);
         tb_ui_help_edit_adhoc.draw(sh, tb_args);
       }
       
@@ -1702,7 +1690,7 @@ private:
   float big_brush_aspect_ratio = 1.84f; // Measured on huge font on MacOS Terminal.
   float big_brush_radius = 10.5f; // Good radius that creates a fairly symmetrically circurlar brush stroke.
   
-  t8x::TextBoxDebug tbd;
+  t8x::TextBoxDebug tbd { str::Adjustment::Left };
   
   t8::Style dlg_style { Color16::White, Color16::DarkBlue };
   t8::ButtonStyle btn_style { Color16::White, Color16::DarkBlue, Color16::Blue };
