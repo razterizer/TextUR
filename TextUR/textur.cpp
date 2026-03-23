@@ -242,18 +242,22 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     for (int i = 1; i < 3; ++i) // Required for later indexing.
       rows.emplace_back("");
     dialog_editor = t8x::Dialog(rows);
-    dialog_editor.add_label({ 1, 0 }, t8x::Label { "Textel:", dlg_style });
-    dialog_editor.add_label({ 2, 0 }, t8x::Label { "Idx:", dlg_style });
-    dialog_editor.add_label({ 3, 0 }, t8x::Label { "Name:", dlg_style });
-    dialog_editor.add_text_field({ 3, 6 }, tf_textel_name);
-    dialog_editor.add_label({ 4, 0 }, t8x::Label { "Char:", dlg_style });
-    dialog_editor.add_text_field({ 4, 6 }, tf_textel_symbol);
-    dialog_editor.add_label({ 5, 0 }, t8x::Label { "FG Color:", dlg_style });
-    dialog_editor.add_color_picker({ 6, 3 }, cp_textel_fg);
-    dialog_editor.add_label({ 6 + cp_textel_fg.height(), 0 }, t8x::Label { "BG Color:", dlg_style });
-    dialog_editor.add_color_picker({ 6 + cp_textel_fg.height() + 1, 3 }, cp_textel_bg);
-    dialog_editor.add_label({ 6 + cp_textel_fg.height() + 1 + cp_textel_bg.height(), 0 }, t8x::Label { "Mat:", dlg_style });
-    dialog_editor.add_text_field({ 6 + cp_textel_fg.height() + 1 + cp_textel_bg.height(), 5 }, tf_textel_mat);
+    int v_offs = 1;
+    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "Textel:", dlg_style });
+    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "Idx:", dlg_style });
+    dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Name:", dlg_style });
+    dialog_editor.add_text_field({ v_offs++, 6 }, tf_textel_name);
+    dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Char:", dlg_style });
+    dialog_editor.add_text_field({ v_offs, 6 }, tf_textel_symbol);
+    v_offs += tf_textel_symbol.height();
+    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "FG Color:", dlg_style });
+    dialog_editor.add_color_picker({ v_offs, 3 }, cp_textel_fg);
+    v_offs += cp_textel_fg.height();
+    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "BG Color:", dlg_style });
+    dialog_editor.add_color_picker({ v_offs, 3 }, cp_textel_bg);
+    v_offs += cp_textel_bg.height();
+    dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Mat:", dlg_style });
+    dialog_editor.add_text_field({ v_offs++, 5 }, tf_textel_mat);
     dialog_editor.set_tab_selection(0);
   }
   
