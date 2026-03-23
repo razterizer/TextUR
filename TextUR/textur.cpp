@@ -25,7 +25,7 @@ using Texture = t8x::Texture;
 
 enum class EditorFileMode { NEW_OR_OVERWRITE_FILE, OPEN_EXISTING_FILE };
 
-using CharT = char; // char or char32_t.
+using CharT = char32_t; // char or char32_t.
 
 class Game : public t8x::GameEngine<44, 92, CharT>
 {
