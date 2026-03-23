@@ -1740,6 +1740,7 @@ private:
   t8x::Dialog<std::string> dialog_editor;
   t8x::TextField tf_textel_name { 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0 };
   t8x::TextField tf_textel_symbol { 1, t8x::TextFieldMode::All, tf_style, 1 };
+  t8x::GlyphPicker gp_textel_symbol { tf_style, dlg_style, { Color16::Cyan, Color16::Transparent2 }, { Color16::DarkCyan, Color16::Transparent2 }, 1 };
   bool force_8bit_colors_on_win_cmd = false;
   t8x::ColorPickerParams cp_params;
   t8x::ColorPicker cp_textel_fg { Color16::Blue, Color16::White,
