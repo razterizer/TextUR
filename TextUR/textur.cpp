@@ -58,6 +58,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [--suppress_tty_output]" << std::endl;
     std::cout << "   [--suppress_tty_input]" << std::endl;
     std::cout << "   [--force_8bit_colors_on_win_cmd]" << std::endl;
+    std::cout << "   [--ascii_only_textures]" << std::endl;
     std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
     std::cout << "   [--set_big_brush_radius <br>]" << std::endl;
     std::cout << std::endl;
