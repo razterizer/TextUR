@@ -717,6 +717,8 @@ public:
       }
       else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd") == 0)
         force_8bit_colors_on_win_cmd = true;
+      else if (std::strcmp(argv[a_idx], "--ascii_only_textures") == 0)
+        ascii_only_textures = true;
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_aspect_ratio") == 0)
         big_brush_aspect_ratio = std::stof(argv[a_idx + 1]);
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_radius") == 0)
@@ -1743,6 +1745,7 @@ private:
   t8x::TextField tf_textel_symbol { 1, t8x::TextFieldMode::All, tf_style, 1 };
   t8x::GlyphPicker gp_textel_symbol { tf_style, dlg_style, { Color16::Cyan, Color16::Transparent2 }, { Color16::DarkCyan, Color16::Transparent2 }, 1 };
   bool force_8bit_colors_on_win_cmd = false;
+  bool ascii_only_textures = false;
   t8x::ColorPickerParams cp_params;
   t8x::ColorPicker cp_textel_fg { Color16::Blue, Color16::White,
     cp_params,
