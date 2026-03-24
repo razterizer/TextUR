@@ -232,13 +232,16 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   {
     edit_mode = EditTextelMode::EditOrAdd;
     edit_or_add = EditOrAdd::None;
+    
     dialog_edit_or_add = t8x::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
     dialog_edit_or_add.add_button(btn_edit);
     dialog_edit_or_add.add_button(btn_add);
     dialog_edit_or_add.set_button_selection(0, true);
+    
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
     dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
     dialog_edit_mat.set_tab_selection(0);
+    
     std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)"s, };
     for (int i = 1; i < 3; ++i) // Required for later indexing.
       rows.emplace_back("");
