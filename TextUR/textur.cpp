@@ -248,9 +248,18 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "Idx:", dlg_style });
     dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Name:", dlg_style });
     dialog_editor.add_text_field({ v_offs++, 6 }, tf_textel_name);
-    dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Char:", dlg_style });
-    dialog_editor.add_text_field({ v_offs, 6 }, tf_textel_symbol);
-    v_offs += tf_textel_symbol.height();
+    if (ascii_only_textures)
+    {
+      dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Char:", dlg_style });
+      dialog_editor.add_text_field({ v_offs, 6 }, tf_textel_symbol);
+      v_offs += tf_textel_symbol.height();
+    }
+    else
+    {
+      dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Glyph:", dlg_style });
+      dialog_editor.add_glyph_picker({ ++v_offs, 3 }, gp_textel_symbol);
+      v_offs += gp_textel_symbol.height();
+    }
     dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "FG Color:", dlg_style });
     dialog_editor.add_color_picker({ v_offs, 3 }, cp_textel_fg);
     v_offs += cp_textel_fg.height();
