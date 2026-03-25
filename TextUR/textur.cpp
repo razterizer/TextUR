@@ -1430,7 +1430,7 @@ private:
               else if ((ascii_only_textures && dialog_editor.text_field_empty(1)) || (!ascii_only_textures && dialog_editor.glyph_picker_empty(1)))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
-                                             "You must enter a textel character.",
+                                             "You must enter a textel " + (ascii_only_textures ? "character"s : "glyph"s) + ".",
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
@@ -1492,7 +1492,7 @@ private:
               else if ((ascii_only_textures && dialog_editor.text_field_empty(1)) || (!ascii_only_textures && dialog_editor.glyph_picker_empty(1)))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
-                                             "You must enter a textel character.",
+                                             "You must enter a textel " + (ascii_only_textures ? "character"s : "glyph"s) + ".",
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
