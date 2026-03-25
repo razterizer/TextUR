@@ -1513,6 +1513,9 @@ private:
                   custom_textel_presets.emplace_back(edit_textel_normal, edit_textel_shadow, edit_textel_name);
                 
                 {
+                  if (!ascii_only_textures)
+                    gp_textel_symbol.push_recent();
+                
                   std::vector<std::string> lines_custom_textel_presets;
                   for (const auto& ctp : custom_textel_presets)
                   {
