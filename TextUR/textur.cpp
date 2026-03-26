@@ -223,8 +223,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   void reset_goto_input()
   {
     dialog_goto = t8x::Dialog({ "Cursor Goto @"s, str::rep_char(' ', 8) + ", " + str::rep_char(' ', 8) });
-    dialog_goto.add_text_field({ 1, 0 }, tf_goto_r);
-    dialog_goto.add_text_field({ 1, 10 }, tf_goto_c);
+    dialog_goto.emplace_text_field({ 1, 0 }, 8, t8x::TextFieldMode::Numeric, tf_style, 0);
+    dialog_goto.emplace_text_field({ 1, 10 }, 8, t8x::TextFieldMode::Numeric, tf_style, 1);
     dialog_goto.set_tab_selection(0);
   }
   
@@ -234,12 +234,12 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     edit_or_add = EditOrAdd::None;
     
     dialog_edit_or_add = t8x::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
-    dialog_edit_or_add.add_button(btn_edit);
-    dialog_edit_or_add.add_button(btn_add);
+    dialog_edit_or_add.emplace_button("Edit", btn_style, btn_frame, 0);
+    dialog_edit_or_add.emplace_button("Add", btn_style, btn_frame, 1);
     dialog_edit_or_add.set_button_selection(0, true);
     
     dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
-    dialog_edit_mat.add_text_field({ 1, 5 }, tf_textel_idx);
+    dialog_edit_mat.emplace_text_field({ 1, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 0);
     dialog_edit_mat.set_tab_selection(0);
     
     std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)"s, };
@@ -247,30 +247,36 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       rows.emplace_back("");
     dialog_editor = t8x::Dialog(rows);
     int v_offs = 1;
-    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "Textel:", dlg_style });
-    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "Idx:", dlg_style });
-    dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Name:", dlg_style });
-    dialog_editor.add_text_field({ v_offs++, 6 }, tf_textel_name);
+    dialog_editor.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
+    dialog_editor.emplace_label({ v_offs++, 0 }, "Idx:", dlg_style);
+    dialog_editor.emplace_label({ v_offs, 0 }, "Name:", dlg_style);
+    dialog_editor.emplace_text_field({ v_offs++, 6 }, 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0);
     if (ascii_only_textures)
     {
-      dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Char:", dlg_style });
-      dialog_editor.add_text_field({ v_offs, 6 }, tf_textel_symbol);
+      dialog_editor.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
+      auto& tf_textel_symbol = dialog_editor.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 1);
       v_offs += tf_textel_symbol.height();
     }
     else
     {
-      dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Glyph:", dlg_style });
-      dialog_editor.add_glyph_picker({ ++v_offs, 3 }, gp_textel_symbol);
-      v_offs += gp_textel_symbol.height();
+      dialog_editor.emplace_label({ v_offs, 0 }, "Glyph:", dlg_style);
+      gp_textel_symbol = &dialog_editor.emplace_glyph_picker({ ++v_offs, 3 }, tf_style, dlg_style, { Color16::Cyan, Color16::Transparent2 }, { Color16::DarkCyan, Color16::Transparent2 }, 1);
+      v_offs += gp_textel_symbol->height();
     }
-    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "FG Color:", dlg_style });
-    dialog_editor.add_color_picker({ v_offs, 3 }, cp_textel_fg);
+    dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
+    const auto& cp_textel_fg = dialog_editor.emplace_color_picker({ v_offs, 3 },
+                                                                  Color16::Blue, Color16::White,
+                                                                  cp_params,
+                                                                  2, true, '*', ' ' );
     v_offs += cp_textel_fg.height();
-    dialog_editor.add_label({ v_offs++, 0 }, t8x::Label { "BG Color:", dlg_style });
-    dialog_editor.add_color_picker({ v_offs, 3 }, cp_textel_bg);
+    dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
+    const auto& cp_textel_bg = dialog_editor.emplace_color_picker({ v_offs, 3 },
+                                                                  Color16::Blue, Color16::White,
+                                                                  cp_params,
+                                                                  3, true, '*', ' ');
     v_offs += cp_textel_bg.height();
-    dialog_editor.add_label({ v_offs, 0 }, t8x::Label { "Mat:", dlg_style });
-    dialog_editor.add_text_field({ v_offs++, 5 }, tf_textel_mat);
+    dialog_editor.emplace_label({ v_offs, 0 }, "Mat:", dlg_style);
+    dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 4);
     dialog_editor.set_tab_selection(0);
   }
   
@@ -279,17 +285,21 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     edit_textel_preset = &textel_presets[0];
     edit_textel_normal = edit_textel_preset->textel_normal;
     
-    std::vector<std::string> rows = { "Ad Hoc Textel Preset Editor             "s, "Textel:", "Char:" };
-    rows.emplace_back("FG Color:");
-    for (int i = 0; i < cp_textel_fg_adhoc.height(); ++i)
-      rows.emplace_back("");
-    rows.emplace_back("BG Color:");
-    for (int i = 0; i < cp_textel_bg_adhoc.height(); ++i)
-      rows.emplace_back("");
+    std::vector<std::string> rows = { "Ad Hoc Textel Preset Editor"s, "Textel:", "Char:" };
     dialog_editor_adhoc = t8x::Dialog(rows);
-    dialog_editor_adhoc.add_text_field({ 2, 6 }, tf_textel_symbol_adhoc);
-    dialog_editor_adhoc.add_color_picker({ 4, 3 }, cp_textel_fg_adhoc);
-    dialog_editor_adhoc.add_color_picker({ 4 + cp_textel_fg_adhoc.height() + 1, 3 }, cp_textel_bg_adhoc);
+    dialog_editor_adhoc.emplace_label({ 1, 0 }, "Textel:", dlg_style);
+    dialog_editor_adhoc.emplace_label({ 2, 0 }, "Char:", dlg_style);
+    dialog_editor_adhoc.emplace_text_field({ 2, 6 }, 1, t8x::TextFieldMode::All, tf_style, 0);
+    dialog_editor_adhoc.emplace_label({ 3, 0 }, "FG Color:", dlg_style);
+    const auto& cp_textel_fg_adhoc = dialog_editor_adhoc.emplace_color_picker({ 4, 3 },
+                                                                              Color16::Blue, Color16::White,
+                                                                              cp_params,
+                                                                              1, true, '*', ' ');
+    dialog_editor_adhoc.emplace_label({ 4 + cp_textel_fg_adhoc.height(), 0 }, "BG Color:", dlg_style);
+    dialog_editor_adhoc.emplace_color_picker({ 4 + cp_textel_fg_adhoc.height() + 1, 3 },
+                                             Color16::Blue, Color16::White,
+                                             cp_params,
+                                             2, true, '*', ' ');
     dialog_editor_adhoc.set_tab_selection(0);
     
     dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
@@ -746,20 +756,6 @@ public:
       force_8bit_colors_on_win_cmd || !sys::is_non_wt_console(), // enable_rgb6_colors
       force_8bit_colors_on_win_cmd || !sys::is_non_wt_console()  // enable_gray24_colors
     };
-    
-    // Reconstruct color pickers.
-    cp_textel_fg = { Color16::Blue, Color16::White,
-      cp_params,
-      2, true, '*', ' ' };
-    cp_textel_bg = { Color16::Blue, Color16::White,
-      cp_params,
-      3, true, '*', ' ' };
-    cp_textel_fg_adhoc = { Color16::Blue, Color16::White,
-      cp_params,
-      1, true, '*', ' ' };
-    cp_textel_bg_adhoc = { Color16::Blue, Color16::White,
-      cp_params,
-      2, true, '*', ' ' };
     
     if (file_path_curr_texture.empty())
     {
@@ -1513,8 +1509,8 @@ private:
                   custom_textel_presets.emplace_back(edit_textel_normal, edit_textel_shadow, edit_textel_name);
                 
                 {
-                  if (!ascii_only_textures)
-                    gp_textel_symbol.push_recent();
+                  if (!ascii_only_textures && gp_textel_symbol != nullptr)
+                    gp_textel_symbol->push_recent();
                 
                   std::vector<std::string> lines_custom_textel_presets;
                   for (const auto& ctp : custom_textel_presets)
@@ -1728,8 +1724,6 @@ private:
       "Press [ESCAPE] to cancel."
     }};
   t8x::Dialog<std::string> dialog_goto;
-  t8x::TextField tf_goto_r { 8, t8x::TextFieldMode::Numeric, tf_style, 0 };
-  t8x::TextField tf_goto_c { 8, t8x::TextFieldMode::Numeric, tf_style, 1 };
   
   t8x::TextBox<std::string> tb_ui_help_keys {{
     "UI Help"s,
@@ -1751,23 +1745,13 @@ private:
   EditTextelMode edit_mode = EditTextelMode::EditOrAdd;
   EditOrAdd edit_or_add = EditOrAdd::None;
   t8x::Dialog<std::string> dialog_edit_or_add;
-  t8x::Button btn_edit { "Edit", btn_style, btn_frame, 0 };
-  t8x::Button btn_add { "Add", btn_style, btn_frame, 1 };
   t8x::Dialog<std::string> dialog_edit_mat;
-  t8x::TextField tf_textel_idx { 4, t8x::TextFieldMode::Numeric, tf_style, 0 };
   t8x::Dialog<std::string> dialog_editor;
-  t8x::TextField tf_textel_name { 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0 };
   t8x::TextField tf_textel_symbol { 1, t8x::TextFieldMode::All, tf_style, 1 };
-  t8x::GlyphPicker gp_textel_symbol { tf_style, dlg_style, { Color16::Cyan, Color16::Transparent2 }, { Color16::DarkCyan, Color16::Transparent2 }, 1 };
+  t8x::GlyphPicker* gp_textel_symbol = nullptr;
   bool force_8bit_colors_on_win_cmd = false;
   bool ascii_only_textures = false;
   t8x::ColorPickerParams cp_params;
-  t8x::ColorPicker cp_textel_fg { Color16::Blue, Color16::White,
-    cp_params,
-    2, true, '*', ' ' };
-  t8x::ColorPicker cp_textel_bg { Color16::Blue, Color16::White,
-    cp_params,
-    3, true, '*', ' ' };
   t8x::TextField tf_textel_mat { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
   Textel edit_textel_normal;
@@ -1784,12 +1768,6 @@ private:
   }};
   t8x::Dialog<std::string> dialog_editor_adhoc;
   t8x::TextField tf_textel_symbol_adhoc { 1, t8x::TextFieldMode::All, tf_style, 0 };
-  t8x::ColorPicker cp_textel_fg_adhoc { Color16::Blue, Color16::White,
-    cp_params,
-    1, true, '*', ' ' };
-  t8x::ColorPicker cp_textel_bg_adhoc { Color16::Blue, Color16::White,
-    cp_params,
-    2, true, '*', ' ' };
 };
 
 int main(int argc, char** argv)
