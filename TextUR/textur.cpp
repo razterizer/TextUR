@@ -228,55 +228,79 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_goto.set_tab_selection(0);
   }
   
-  void reset_textel_editor()
+  void reset_textel_editor(bool init = false)
   {
     edit_mode = EditTextelMode::EditOrAdd;
     edit_or_add = EditOrAdd::None;
-    
-    dialog_edit_or_add = t8x::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
-    dialog_edit_or_add.emplace_button("Edit", btn_style, btn_frame, 0);
-    dialog_edit_or_add.emplace_button("Add", btn_style, btn_frame, 1);
+    if (init)
+    {
+      dialog_edit_or_add = t8x::Dialog {{ "Edit or Add Custom Textel Preset?"s }};
+      dialog_edit_or_add.emplace_button("Edit", btn_style, btn_frame, 0);
+      dialog_edit_or_add.emplace_button("Add", btn_style, btn_frame, 1);
+    }
     dialog_edit_or_add.set_button_selection(0, true);
     
-    dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" + str::rep_char(' ', 4) });
-    dialog_edit_mat.emplace_text_field({ 1, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 0);
-    dialog_edit_mat.set_tab_selection(0);
-    
-    std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)"s, };
-    for (int i = 1; i < 3; ++i) // Required for later indexing.
-      rows.emplace_back("");
-    dialog_editor = t8x::Dialog(rows);
-    int v_offs = 1;
-    dialog_editor.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
-    dialog_editor.emplace_label({ v_offs++, 0 }, "Idx:", dlg_style);
-    dialog_editor.emplace_label({ v_offs, 0 }, "Name:", dlg_style);
-    dialog_editor.emplace_text_field({ v_offs++, 6 }, 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0);
-    if (ascii_only_textures)
+    if (init)
     {
-      dialog_editor.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
-      auto& tf_textel_symbol = dialog_editor.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 1);
-      v_offs += tf_textel_symbol.height();
+      dialog_edit_mat = t8x::Dialog({ "Enter Custom Textel Preset Index"s, "Idx:" });
+      dialog_edit_mat.emplace_text_field({ 1, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 0);
     }
     else
     {
-      dialog_editor.emplace_label({ v_offs, 0 }, "Glyph:", dlg_style);
-      gp_textel_symbol = &dialog_editor.emplace_glyph_picker({ ++v_offs, 3 }, tf_style, dlg_style, { Color16::Cyan, Color16::Transparent2 }, { Color16::DarkCyan, Color16::Transparent2 }, 1);
-      v_offs += gp_textel_symbol->height();
+      dialog_edit_mat.clear_text_field_input(0);
     }
-    dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
-    const auto& cp_textel_fg = dialog_editor.emplace_color_picker({ v_offs, 3 },
-                                                                  Color16::Blue, Color16::White,
-                                                                  cp_params,
-                                                                  2, true, '*', ' ' );
-    v_offs += cp_textel_fg.height();
-    dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
-    const auto& cp_textel_bg = dialog_editor.emplace_color_picker({ v_offs, 3 },
-                                                                  Color16::Blue, Color16::White,
-                                                                  cp_params,
-                                                                  3, true, '*', ' ');
-    v_offs += cp_textel_bg.height();
-    dialog_editor.emplace_label({ v_offs, 0 }, "Mat:", dlg_style);
-    dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 4);
+    dialog_edit_mat.set_tab_selection(0);
+    
+    if (init)
+    {
+      std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)"s, };
+      for (int i = 1; i < 3; ++i) // Required for later indexing.
+        rows.emplace_back("");
+      dialog_editor = t8x::Dialog(rows);
+      int v_offs = 1;
+      dialog_editor.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
+      dialog_editor.emplace_label({ v_offs++, 0 }, "Idx:", dlg_style);
+      dialog_editor.emplace_label({ v_offs, 0 }, "Name:", dlg_style);
+      dialog_editor.emplace_text_field({ v_offs++, 6 }, 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0);
+      if (ascii_only_textures)
+      {
+        dialog_editor.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
+        auto& tf_textel_symbol = dialog_editor.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 1);
+        v_offs += tf_textel_symbol.height();
+      }
+      else
+      {
+        dialog_editor.emplace_label({ v_offs, 0 }, "Glyph:", dlg_style);
+        gp_textel_symbol = &dialog_editor.emplace_glyph_picker({ ++v_offs, 3 },
+                                                               tf_style, dlg_style,
+                                                               { Color16::Cyan, Color16::Transparent2 },
+                                                               { Color16::DarkCyan, Color16::Transparent2 }, 1);
+        v_offs += gp_textel_symbol->height();
+      }
+      dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
+      const auto& cp_textel_fg = dialog_editor.emplace_color_picker({ v_offs, 3 },
+                                                                    Color16::Blue, Color16::White,
+                                                                    cp_params,
+                                                                    2, true, '*', ' ' );
+      v_offs += cp_textel_fg.height();
+      dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
+      const auto& cp_textel_bg = dialog_editor.emplace_color_picker({ v_offs, 3 },
+                                                                    Color16::Blue, Color16::White,
+                                                                    cp_params,
+                                                                    3, true, '*', ' ');
+      v_offs += cp_textel_bg.height();
+      dialog_editor.emplace_label({ v_offs, 0 }, "Mat:", dlg_style);
+      dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 4);
+    }
+    else
+    {
+      // #FIXME: Perhaps all functions should be named clear_input_<widget>() for clearing inputs and reset_<widget>() for clearing of additional states.
+      dialog_editor.clear_text_field_input(0);
+      dialog_editor.clear_text_field_input(1);
+      dialog_editor.reset_glyph_picker(1);
+      dialog_editor.reset_color_picker(2);
+      dialog_editor.reset_color_picker(3);
+    }
     dialog_editor.set_tab_selection(0);
   }
   
@@ -828,7 +852,7 @@ public:
     reset_goto_input();
     init_keys_legend();
     
-    reset_textel_editor();
+    reset_textel_editor(true);
     reset_adhoc_textel_editor();
   }
   
