@@ -103,7 +103,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       sh.write_buffer(textel.glyph, r + 1, nc - menu_width + 2, textel.get_style());
       sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
       // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-      t8x::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::OutlineType::UTF8_SingleLine, ui_style);
+      t8x::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::OutlineType::Unicode_SingleLine, ui_style);
       r += 3;
     }
   }
@@ -781,7 +781,7 @@ public:
       force_8bit_colors_on_win_cmd || !sys::is_non_wt_console()  // enable_gray24_colors
     };
     
-    msg_box_drawing_args.outline_type = t8x::OutlineType::UTF8_SingleLine;
+    msg_box_drawing_args.outline_type = t8x::OutlineType::Unicode_SingleLine;
     
     if (file_path_curr_texture.empty())
     {
@@ -1210,7 +1210,7 @@ private:
     TextBoxDrawingArgsAlign tbd_args;
     tbd_args.v_align = VerticalAlignment::TOP;
     tbd_args.base.box_style = { Color16::Blue, Color16::Yellow };
-    tbd_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+    tbd_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
     tbd_args.framed_mode = true;
     tbd.draw(sh, tbd_args);
 #endif
@@ -1222,7 +1222,7 @@ private:
     if (!show_confirm_overwrite && show_menu)
     {
       // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-      t8x::draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, t8x::OutlineType::UTF8_SingleLine, ui_style);
+      t8x::draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, t8x::OutlineType::Unicode_SingleLine, ui_style);
     }
   
     if (is_modified)
@@ -1295,11 +1295,11 @@ private:
         t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = dlg_style;
         tb_args.base.box_padding_lr = 1;
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         dialog_goto.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
         tb_ui_help_goto.draw(sh, tb_args);
@@ -1314,12 +1314,12 @@ private:
         t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.v_align = t8x::VerticalAlignment::TOP;
         tb_args.base.box_style = dlg_style;
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         tb_args.base.box_padding_lr = 1;
         dialog_keys.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
         tb_ui_help_keys.draw(sh, tb_args);
@@ -1360,7 +1360,7 @@ private:
             
             t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = dlg_style;
-            tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+            tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
             tb_args.base.box_padding_lr = 1;
             dialog_edit_or_add.draw(sh, tb_args, cursor_anim_ctr);
             break;
@@ -1422,7 +1422,7 @@ private:
             
             t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = dlg_style;
-            tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+            tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
             tb_args.base.box_padding_lr = 1;
             dialog_edit_mat.draw(sh, tb_args, cursor_anim_ctr);
             break;
@@ -1496,7 +1496,7 @@ private:
             
             t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = dlg_style;
-            tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+            tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
             dialog_editor.draw(sh, tb_args, cursor_anim_ctr);
@@ -1585,7 +1585,7 @@ private:
             
             t8x::TextBoxDrawingArgsAlign tb_args;
             tb_args.base.box_style = dlg_style;
-            tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+            tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
             tb_args.base.box_padding_lr = 1;
             tb_args.v_align_offs = -2;
             dialog_editor.draw(sh, tb_args, cursor_anim_ctr);
@@ -1595,7 +1595,7 @@ private:
         
         t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = { Color16::LightGray, Color16::DarkBlue };
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         tb_args.base.box_padding_lr = 1;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
@@ -1628,13 +1628,13 @@ private:
         
         t8x::TextBoxDrawingArgsAlign tb_args;
         tb_args.base.box_style = dlg_style;
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         tb_args.base.box_padding_lr = 1;
         tb_args.v_align_offs = -2;
         dialog_editor_adhoc.draw(sh, tb_args, cursor_anim_ctr);
         
         tb_args.base.box_style.fg_color = Color16::LightGray;
-        tb_args.base.outline_type = t8x::OutlineType::UTF8_SingleLine;
+        tb_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
         tb_args.v_align_offs = 0;
         tb_args.v_align = t8x::VerticalAlignment::BOTTOM;
         tb_args.h_align = t8x::HorizontalAlignment::RIGHT;
