@@ -314,7 +314,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     edit_textel_preset = &textel_presets[0];
     edit_textel_normal = edit_textel_preset->textel_normal;
     
-    std::vector<std::string> rows = { "Ad Hoc Textel Preset Editor"s, "Textel:", "Char:" };
+    std::vector<std::string> rows = { "Ad Hoc Textel Preset Editor"s };
     dialog_editor_adhoc = t8x::Dialog(rows);
     dialog_editor_adhoc.emplace_label({ 1, 0 }, "Textel:", dlg_style);
     dialog_editor_adhoc.emplace_label({ 2, 0 }, "Char:", dlg_style);
