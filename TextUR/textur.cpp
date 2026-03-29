@@ -251,9 +251,10 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     }
     dialog_edit_mat.set_tab_selection(0);
     
+    std::string dialog_editor_title = "Custom Textel Preset Editor (Normal)";
     if (init)
     {
-      std::vector<std::string> rows = { "Custom Textel Preset Editor (Normal)"s, };
+      std::vector<std::string> rows = { dialog_editor_title };
       for (int i = 1; i < 3; ++i) // Required for later indexing.
         rows.emplace_back("");
       dialog_editor = t8x::Dialog(rows);
@@ -294,6 +295,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     }
     else
     {
+      dialog_editor[0] = dialog_editor_title;
       // #FIXME: Perhaps all functions should be named clear_input_<widget>() for clearing inputs and reset_<widget>() for clearing of additional states.
       dialog_editor.clear_text_field_input(0);
       dialog_editor.clear_text_field_input(1);
