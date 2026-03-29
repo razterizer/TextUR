@@ -296,6 +296,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     else
     {
       dialog_editor[0] = dialog_editor_title;
+      dialog_editor[1] = str::rep_char(' ', 13);
+      dialog_editor.set_textel_pre({ 1, 8 }, ' ', dlg_style.fg_color, dlg_style.bg_color);
+      dialog_editor.set_textel_pre({ 1, 11 }, ' ', dlg_style.fg_color, dlg_style.bg_color);
       // #FIXME: Perhaps all functions should be named clear_input_<widget>() for clearing inputs and reset_<widget>() for clearing of additional states.
       dialog_editor.clear_text_field_input(0);
       dialog_editor.clear_text_field_input(1);
