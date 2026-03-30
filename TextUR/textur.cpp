@@ -1481,11 +1481,6 @@ private:
                   edit_textel_preset->name = edit_textel_name;
                   edit_textel_preset->textel_normal = edit_textel_normal;
                 }
-                dialog_editor.set_text_field_input(0, edit_textel_name);
-                dialog_editor.set_text_field_input(1, std::string(1, edit_textel_shadow.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
-                dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
-                dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
-                dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 dialog_editor[1] = "          ( )";
                 dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
