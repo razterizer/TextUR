@@ -295,6 +295,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     }
     else
     {
+      //dialog_editor.clear_selections();
       dialog_editor[0] = dialog_editor_title;
       dialog_editor[1] = str::rep_char(' ', 13);
       dialog_editor.set_textel_pre({ 1, 8 }, ' ', dlg_style.fg_color, dlg_style.bg_color);
