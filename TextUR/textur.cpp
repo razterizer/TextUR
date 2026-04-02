@@ -41,6 +41,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     Textel textel_shadow;
     std::string name;
     
+    std::vector<t8::StyledString> disp_glyph_normal;
+    std::vector<t8::StyledString> disp_glyph_shadow;
+    
     Textel get_textel(bool shadow) const
     {
       return shadow ? textel_shadow : textel_normal;
