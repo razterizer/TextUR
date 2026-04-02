@@ -540,6 +540,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     textel_presets.emplace_back(Textel { '|', Color16::DarkGreen, Color16::Green, 7 },
                                 Textel { '|', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass0");
+    textel_presets.emplace_back(Textel { { 0x2506, '|' }, Color16::DarkGreen, Color16::Green, 7 },
+                                Textel { { 0x2506, '|' }, Color16::Green, Color16::DarkGreen, 7 },
+                                "Grass0u");
     textel_presets.emplace_back(Textel { '.', Color16::DarkGreen, Color16::Green, 7 },
                                 Textel { '.', Color16::Green, Color16::DarkGreen, 7 },
                                 "Grass1");
