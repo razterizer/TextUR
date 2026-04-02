@@ -124,9 +124,19 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       //const auto& textel = preset.get_textel(use_shadow_textels);
       auto disp_glyph = preset.get_glyph_disp_sstr(use_shadow_textels);
       auto fg_color_bracket = p_idx == selected_textel_preset_idx ? Color16::LightGray : Color16::DarkGray;
-      if (!disp_glyph.empty()) // #FIXME: Belt and suspenders code. Shouldn't be necessary.
-        for (int i = 0; i < 5; i += 2)
-          disp_glyph[i].style.fg_color = fg_color_bracket;
+      auto N_dg = disp_glyph.size();
+      if (N_dg == 5)
+      {
+        disp_glyph[0].style.fg_color = fg_color_bracket;
+        disp_glyph[2].style.fg_color = fg_color_bracket;
+        disp_glyph[4].style.fg_color = fg_color_bracket;
+      }
+      else if (N_dg == 4)
+      {
+        disp_glyph[0].style.fg_color = fg_color_bracket;
+        disp_glyph[2].style.fg_color = fg_color_bracket;
+        disp_glyph[3].style.fg_color = fg_color_bracket;
+      }
       sh.write_buffer(disp_glyph, r + 1, nc - menu_width + 2);
       sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
       // Does not need to be qualified with t8x::drawing, but I'm not sure why.
