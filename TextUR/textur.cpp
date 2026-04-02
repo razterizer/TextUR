@@ -62,6 +62,11 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     {
       return shadow ? textel_shadow : textel_normal;
     }
+    
+    const std::vector<t8::StyledString>& get_glyph_disp_sstr(bool shadow) const
+    {
+      return shadow ? disp_glyph_shadow : disp_glyph_normal;
+    }
   };
   
   void show_help() const
