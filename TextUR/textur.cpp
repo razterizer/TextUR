@@ -1415,6 +1415,7 @@ private:
             break;
           }
             
+          // #FIXME: Rename to EditEnterCustomPresetIdx
           case EditTextelMode::EditEnterMat:
           {
             // +----------------------------------+
