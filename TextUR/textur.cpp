@@ -691,9 +691,6 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                                 Textel { '%', Color16::DarkRed, Color16::DarkYellow, 27 },
                                 "Rope");
                                 
-    for (auto& tp : textel_presets)
-      tp.update_disp_strings<CharT>(t8::Style { Color16::DarkGray, Color16::Transparent2 });
-    
     std::vector<std::string> lines_custom_textel_presets;
     if (TextIO::read_file(filepath_custom_textel_presets, lines_custom_textel_presets))
     {
@@ -767,6 +764,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
         }
       }
     }
+    
+    for (auto& tp : textel_presets)
+      tp.update_disp_strings<CharT>(t8::Style { Color16::DarkGray, Color16::Transparent2 });
   }
   
 public:
