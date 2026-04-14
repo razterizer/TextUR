@@ -697,6 +697,14 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::vector<std::string> lines_custom_textel_presets;
     if (TextIO::read_file(filepath_custom_textel_presets, lines_custom_textel_presets))
     {
+      auto post_process_color_tokens = [](std::vector<std::string>& tokens)
+      {
+        // "1, 2, 3" -> "rgb6:[1, 2, 3]
+        for (int tok_idx = 1; tok_idx <= 2; ++tok_idx)
+          if (str::count_substr(tokens[tok_idx], ", ") == 2)
+            tokens[tok_idx] = "rgb6:[" + tokens[tok_idx] + "]";
+      };
+    
       int part = 0;
       Textel textel_normal, textel_shadow;
       for (const auto& line : lines_custom_textel_presets)
@@ -718,9 +726,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
             }
             else
               std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
-            // "1, 2, 3" -> "rgb6:[1, 2, 3]
-            if (str::count_substr(tokens[1], ", ") == 2)
-              tokens[1] = "rgb6:[" + tokens[1] + "]";
+            post_process_color_tokens(tokens);
             textel_normal.fg_color.parse(tokens[1]);
             textel_normal.bg_color.parse(tokens[2]);
             textel_normal.mat = std::atoi(tokens[3].c_str());
@@ -744,9 +750,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
             }
             else
               std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
-            // "1, 2, 3" -> "rgb6:[1, 2, 3]
-            if (str::count_substr(tokens[1], ", ") == 2)
-              tokens[1] = "rgb6:[" + tokens[1] + "]";
+            post_process_color_tokens(tokens);
             textel_shadow.fg_color.parse(tokens[1]);
             textel_shadow.bg_color.parse(tokens[2]);
             textel_shadow.mat = std::atoi(tokens[3].c_str());
