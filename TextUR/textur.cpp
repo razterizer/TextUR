@@ -719,10 +719,10 @@ class Game : public t8x::GameEngine<44, 92, CharT>
             auto glyph_tokens = str::tokenize(tokens[0], { '\'' });
             if (glyph_tokens.size() == 1)
             {
-              if (glyph_tokens[0].find('[') == std::string::npos)
+              if (glyph_tokens[0].length() == 1)
                 textel_normal.glyph.parse(tokens[0], true); // Presumably ASCII character.
               else
-                textel_normal.glyph.parse(tokens[0], false); // Presumably Unicode + ASCII character.
+                textel_normal.glyph.parse("[" + tokens[0] + "]", false); // Presumably Unicode + ASCII character.
             }
             else
               std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
@@ -743,10 +743,10 @@ class Game : public t8x::GameEngine<44, 92, CharT>
             auto glyph_tokens = str::tokenize(tokens[0], { '\'' });
             if (glyph_tokens.size() == 1)
             {
-              if (glyph_tokens[0].find('[') == std::string::npos)
+              if (glyph_tokens[0].length() == 1)
                 textel_shadow.glyph.parse(tokens[0], true); // Presumably ASCII character.
               else
-                textel_shadow.glyph.parse(tokens[0], false); // Presumably Unicode + ASCII character.
+                textel_shadow.glyph.parse("[" + tokens[0] + "]", false); // Presumably Unicode + ASCII character.
             }
             else
               std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
