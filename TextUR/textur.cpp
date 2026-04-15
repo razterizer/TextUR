@@ -895,7 +895,10 @@ public:
           else
             curr_texture.set_textel(r, c, curr_textel);
         }
-      curr_texture.save(file_path_curr_texture);
+      curr_texture.save(file_path_curr_texture,
+                        ascii_only_textures ?
+                          t8::TxGlyphEncoding::AsciiOnly :
+                          t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly);
       request_exit();
     }
 
@@ -1225,7 +1228,10 @@ private:
         
       if (safe_to_save)
       {
-        if (curr_texture.save(file_path_curr_texture))
+        if (curr_texture.save(file_path_curr_texture,
+                              ascii_only_textures ?
+                                t8::TxGlyphEncoding::AsciiOnly :
+                                t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly))
         {
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "Your work was successfully saved.",
