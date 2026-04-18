@@ -29,6 +29,16 @@ using CharT = char32_t; // char or char32_t.
 
 class Game : public t8x::GameEngine<44, 92, CharT>
 {
+  template<typename CharT>
+  static std::vector<t8::StyledString> format_long_glyph_disp_sstr(const Textel& textel,
+    const t8::Style& dlg_style, bool uncanonicalize_fallback = true)
+  {
+    t8::Style style = { textel.fg_color, textel.bg_color };
+      return textel.glyph.format_long<CharT>(
+        textel.glyph.preferred != t8::Glyph::none32, uncanonicalize_fallback,
+        style, style, dlg_style);
+  }
+
   struct TextelItem
   {
     TextelItem(Textel tn, Textel ts, std::string a_name)
@@ -45,17 +55,10 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::vector<t8::StyledString> disp_glyph_shadow;
     
     template<typename CharT>
-    void update_disp_strings(const t8::Style& dlg_style, bool uncanonicalize_fallback = true)
+    void update_disp_strings(const t8::Style& dlg_style, bool uncanonicalize_fallback)
     {
-      t8::Style style = { textel_normal.fg_color, textel_normal.bg_color };
-      disp_glyph_normal = textel_normal.glyph.format_long<CharT>(
-        textel_normal.glyph.preferred != t8::Glyph::none32, uncanonicalize_fallback,
-        style, style, dlg_style);
-        
-      style = { textel_shadow.fg_color, textel_shadow.bg_color };
-      disp_glyph_shadow = textel_shadow.glyph.format_long<CharT>(
-        textel_normal.glyph.preferred != t8::Glyph::none32, uncanonicalize_fallback,
-        style, style, dlg_style);
+      disp_glyph_normal = format_long_glyph_disp_sstr<CharT>(textel_normal, dlg_style, uncanonicalize_fallback);
+      disp_glyph_shadow = format_long_glyph_disp_sstr<CharT>(textel_shadow, dlg_style, uncanonicalize_fallback);
     }
     
     Textel get_textel(bool shadow) const
