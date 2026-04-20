@@ -1494,7 +1494,7 @@ private:
                   dialog_editor[2] = "Idx: " + std::to_string(ctp_idx);
                   dialog_editor.set_text_field_input(0, edit_textel_name);
                   if (ascii_only_textures)
-                    dialog_editor.set_text_field_input(1, std::string(1, edit_textel_normal.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support. Obsolete comment?
+                    dialog_editor.set_text_field_input(1, std::string(1, edit_textel_normal.glyph.fallback));
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_normal.glyph);
                   dialog_editor.set_color_picker_color(2, edit_textel_normal.fg_color);
