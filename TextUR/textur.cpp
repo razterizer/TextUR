@@ -352,9 +352,6 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   
   void reset_adhoc_textel_editor(bool init = false)
   {
-    edit_textel_preset = &textel_presets[0];
-    edit_textel_normal = edit_textel_preset->textel_normal;
-    
     std::string dialog_editor_title = "Ad Hoc Textel Preset Editor";
     if (init)
     {
@@ -390,11 +387,6 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                                                Color16::Blue, Color16::White,
                                                cp_params,
                                                2, true, '*', ' ');
-      dialog_editor_adhoc.set_tab_selection(0);
-      
-      //dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.glyph.fallback)); // #FIXME: Need to use Glyph picker for full glyph support.
-      dialog_editor_adhoc.set_color_picker_color(1, edit_textel_normal.fg_color);
-      dialog_editor_adhoc.set_color_picker_color(2, edit_textel_normal.bg_color);
     }
     else
     {
@@ -404,6 +396,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor_adhoc.reset_color_picker(1);
       dialog_editor_adhoc.reset_color_picker(2);
     }
+    dialog_editor_adhoc.set_tab_selection(0);
   }
   
   void reload_textel_presets()
