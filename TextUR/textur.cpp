@@ -1227,6 +1227,17 @@ private:
       {
         if (!math::toggle(show_adhoc_textel_editor))
           reset_adhoc_textel_editor();
+        else
+        {
+          edit_textel_preset = &textel_presets[0];
+          edit_textel_normal = edit_textel_preset->textel_normal;
+          if (ascii_only_textures)
+            dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.glyph.fallback));
+          else
+            dialog_editor_adhoc.set_glyph_picker_glyph(0, edit_textel_normal.glyph);
+          dialog_editor_adhoc.set_color_picker_color(1, edit_textel_normal.fg_color);
+          dialog_editor_adhoc.set_color_picker_color(2, edit_textel_normal.bg_color);
+        }
       }
       else if (str::to_lower(curr_key) == 't')
         math::toggle(show_tracing);
