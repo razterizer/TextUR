@@ -1204,6 +1204,7 @@ private:
             textel_presets[0].textel_normal.fg_color = curr_textel.fg_color;
             textel_presets[0].textel_normal.bg_color = curr_textel.bg_color;
             textel_presets[0].textel_shadow = textel_presets[0].textel_normal;
+            textel_presets[0].update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, false);
             // Make sure to propagate the picked textel to the Ad Hoc editor.
             reset_adhoc_textel_editor();
           }
