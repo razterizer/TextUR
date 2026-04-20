@@ -287,7 +287,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     }
     else
     {
-      dialog_edit_mat.clear_text_field_input(0);
+      dialog_edit_mat.clear_text_field(0);
     }
     dialog_edit_mat.set_tab_selection(0);
     
@@ -338,12 +338,11 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       //dialog_editor.clear_selections();
       dialog_editor[0] = dialog_editor_title;
       dialog_editor[1] = str::rep_char(' ', 13);
-      // #FIXME: Perhaps all functions should be named clear_input_<widget>() for clearing inputs and reset_<widget>() for clearing of additional states.
-      dialog_editor.clear_text_field_input(0);
-      dialog_editor.clear_text_field_input(1);
-      dialog_editor.reset_glyph_picker(1);
-      dialog_editor.reset_color_picker(2);
-      dialog_editor.reset_color_picker(3);
+      dialog_editor.clear_text_field(0);
+      dialog_editor.clear_text_field(1);
+      dialog_editor.clear_glyph_picker(1);
+      dialog_editor.clear_color_picker(2);
+      dialog_editor.clear_color_picker(3);
     }
     dialog_editor.set_tab_selection(0);
   }
@@ -389,10 +388,10 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     else
     {
       dialog_editor_adhoc[0] = dialog_editor_title;
-      dialog_editor_adhoc.clear_text_field_input(0);
-      dialog_editor_adhoc.reset_glyph_picker(0);
-      dialog_editor_adhoc.reset_color_picker(1);
-      dialog_editor_adhoc.reset_color_picker(2);
+      dialog_editor_adhoc.clear_text_field(0);
+      dialog_editor_adhoc.clear_glyph_picker(0);
+      dialog_editor_adhoc.clear_color_picker(1);
+      dialog_editor_adhoc.clear_color_picker(2);
     }
     dialog_editor_adhoc.set_tab_selection(0);
   }
@@ -1508,7 +1507,7 @@ private:
                                                "Unable to find custom textel preset: " + std::to_string(ctp_idx) + "!\n" + (last_valid_idx == -1 ? "There are no custom textel presets to edit!" : "\nLast valid index is: " + std::to_string(last_valid_idx) + "."),
                                                t8x::MessageHandlerLevel::Guide,
                                                3.f);
-                  dialog_edit_mat.clear_text_field_input(0);
+                  dialog_edit_mat.clear_text_field(0);
                 }
               }
             }
