@@ -349,10 +349,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   
   void reset_adhoc_textel_editor(bool init = false)
   {
-    std::string dialog_editor_title = "Ad Hoc Textel Preset Editor";
     if (init)
     {
-      std::vector<std::string> rows = { dialog_editor_title };
+      std::vector<std::string> rows = { "Ad Hoc Textel Preset Editor" };
       dialog_editor_adhoc = t8x::Dialog(rows);
       int v_offs = 1;
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
@@ -387,7 +386,6 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     }
     else
     {
-      dialog_editor_adhoc[0] = dialog_editor_title;
       dialog_editor_adhoc.clear_text_field(0);
       dialog_editor_adhoc.clear_glyph_picker(0);
       dialog_editor_adhoc.clear_color_picker(1);
