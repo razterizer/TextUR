@@ -355,8 +355,6 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor_adhoc = t8x::Dialog(rows);
       int v_offs = 1;
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
-      //dialog_editor_adhoc.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
-      //dialog_editor_adhoc.emplace_text_field({ v_offs++, 6 }, 1, t8x::TextFieldMode::All, tf_style, 0);
       if (ascii_only_textures)
       {
         dialog_editor_adhoc.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
