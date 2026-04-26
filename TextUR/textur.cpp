@@ -1574,7 +1574,7 @@ private:
               else
               {
                 edit_textel_normal.mat = std::stoi(dialog_editor.get_text_field_input(4));
-                if (edit_textel_preset != nullptr)
+                if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
                   edit_textel_preset->textel_normal = edit_textel_normal;
