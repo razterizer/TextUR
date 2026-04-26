@@ -1543,7 +1543,7 @@ private:
               edit_textel_normal.glyph = dialog_editor.get_glyph_picker_glyph(1);
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
-            edit_textel_preset->textel_normal = edit_textel_normal;
+            //edit_textel_preset->textel_normal = edit_textel_normal;
             if (ascii_only_textures)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
             else
@@ -1624,7 +1624,7 @@ private:
               edit_textel_shadow.glyph = dialog_editor.get_glyph_picker_glyph(1);
             edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
-            edit_textel_preset->textel_shadow = edit_textel_shadow;
+            //edit_textel_preset->textel_shadow = edit_textel_shadow;
             if (ascii_only_textures)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.glyph, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
             else
