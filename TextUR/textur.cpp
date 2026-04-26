@@ -338,6 +338,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       //dialog_editor.clear_selections();
       dialog_editor[0] = dialog_editor_title;
       dialog_editor[1] = str::rep_char(' ', 13);
+      dialog_editor.clear_all_sstr_vec_pre();
       dialog_editor.clear_text_field(0);
       dialog_editor.clear_text_field(1);
       dialog_editor.clear_glyph_picker(1);
