@@ -1548,8 +1548,10 @@ private:
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
             else
             {
-              edit_textel_preset->update_disp_strings<CharT>({ Color16::DarkCyan, Color16::Transparent2 }, false);
-              dialog_editor.set_sstr_vec_pre({ 1, 8 }, edit_textel_preset->get_glyph_disp_sstr(false));
+              //edit_textel_preset->update_disp_strings<CharT>({ Color16::DarkCyan, Color16::Transparent2 }, false);
+              //dialog_editor.set_sstr_vec_pre({ 1, 8 }, edit_textel_preset->get_glyph_disp_sstr(false));
+              auto disp_glyph_normal = format_long_glyph_disp_sstr<CharT>(edit_textel_normal, { Color16::DarkCyan, Color16::Transparent2 }, false);
+              dialog_editor.set_sstr_vec_pre({ 1, 8 }, disp_glyph_normal);
             }
             if (curr_special_key == t8::SpecialKey::Enter)
             {
@@ -1588,12 +1590,14 @@ private:
                 else
                 {
                   const int c_max_glyph_disp_width = 12;
-                  const auto& normal_disp_sstr_vec = edit_textel_preset->get_glyph_disp_sstr(false);
+                  //const auto& normal_disp_sstr_vec = edit_textel_preset->get_glyph_disp_sstr(false);
+                  auto disp_glyph_normal = format_long_glyph_disp_sstr<CharT>(edit_textel_normal, { Color16::DarkCyan, Color16::Transparent2 }, false);
+                  dialog_editor.set_sstr_vec_pre({ 1, 8 }, disp_glyph_normal);
                   dialog_editor[1] = str::rep_char(' ', 11 + c_max_glyph_disp_width)
                   + "("
-                  + str::rep_char(' ', t8::get_sstr_vec_width(normal_disp_sstr_vec))
+                  + str::rep_char(' ', t8::get_sstr_vec_width(disp_glyph_normal))
                   + ")";
-                  dialog_editor.set_sstr_vec_pre({ 1, 12 + c_max_glyph_disp_width }, normal_disp_sstr_vec);
+                  dialog_editor.set_sstr_vec_pre({ 1, 12 + c_max_glyph_disp_width }, disp_glyph_normal);
                 }
                 dialog_editor.set_tab_selection(0);
                 edit_mode = EditTextelMode::EditTextelShadow;
@@ -1629,8 +1633,10 @@ private:
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.glyph, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
             else
             {
-              edit_textel_preset->update_disp_strings<CharT>({ Color16::DarkCyan, Color16::Transparent2 }, false);
-              dialog_editor.set_sstr_vec_pre({ 1, 8 }, edit_textel_preset->get_glyph_disp_sstr(true));
+              //edit_textel_preset->update_disp_strings<CharT>({ Color16::DarkCyan, Color16::Transparent2 }, false);
+              //dialog_editor.set_sstr_vec_pre({ 1, 8 }, edit_textel_preset->get_glyph_disp_sstr(true));
+              auto disp_glyph_shadow = format_long_glyph_disp_sstr<CharT>(edit_textel_normal, { Color16::DarkCyan, Color16::Transparent2 }, false);
+              dialog_editor.set_sstr_vec_pre({ 1, 8 }, disp_glyph_shadow);
             }
             if (curr_special_key == t8::SpecialKey::Enter)
             {
