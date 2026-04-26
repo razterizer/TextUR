@@ -1582,6 +1582,15 @@ private:
                 {
                   edit_textel_preset->name = edit_textel_name;
                   edit_textel_preset->textel_normal = edit_textel_normal;
+                  
+                  // Fill out dialog widgets with shadow textel preset data.
+                  if (ascii_only_textures)
+                    dialog_editor.set_text_field_input(1, std::string(1, edit_textel_shadow.glyph.fallback));
+                  else
+                    dialog_editor.set_glyph_picker_glyph(1, edit_textel_shadow.glyph);
+                  dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
+                  dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
+                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_shadow.mat));
                 }
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 if (ascii_only_textures)
