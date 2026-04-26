@@ -1575,6 +1575,7 @@ private:
               }
               else
               {
+                edit_textel_normal.glyph.try_canonicalize_from_fallback();
                 edit_textel_normal.mat = std::stoi(dialog_editor.get_text_field_input(4));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
@@ -1660,6 +1661,7 @@ private:
               }
               else
               {
+                edit_textel_shadow.glyph.try_canonicalize_from_fallback();
                 edit_textel_shadow.mat = std::stoi(dialog_editor.get_text_field_input(4));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
