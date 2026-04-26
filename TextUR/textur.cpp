@@ -1636,7 +1636,7 @@ private:
             {
               //edit_textel_preset->update_disp_strings<CharT>({ Color16::DarkCyan, Color16::Transparent2 }, false);
               //dialog_editor.set_sstr_vec_pre({ 1, 8 }, edit_textel_preset->get_glyph_disp_sstr(true));
-              auto disp_glyph_shadow = format_long_glyph_disp_sstr<CharT>(edit_textel_normal, { Color16::DarkCyan, Color16::Transparent2 }, false);
+              auto disp_glyph_shadow = format_long_glyph_disp_sstr<CharT>(edit_textel_shadow, { Color16::DarkCyan, Color16::Transparent2 }, false);
               dialog_editor.set_sstr_vec_pre({ 1, 8 }, disp_glyph_shadow);
             }
             if (curr_special_key == t8::SpecialKey::Enter)
