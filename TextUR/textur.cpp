@@ -1223,8 +1223,8 @@ private:
           reset_adhoc_textel_editor();
         else
         {
-          edit_textel_preset = &textel_presets[0];
-          edit_textel_normal = edit_textel_preset->textel_normal;
+          edit_textel_preset_adhoc = &textel_presets[0];
+          edit_textel_normal = edit_textel_preset_adhoc->textel_normal;
           if (ascii_only_textures)
             dialog_editor_adhoc.set_text_field_input(0, std::string(1, edit_textel_normal.glyph.fallback));
           else
@@ -1743,10 +1743,11 @@ private:
         
         if (curr_special_key == t8::SpecialKey::Enter)
         {
-          edit_textel_preset = &textel_presets[0];
-          edit_textel_preset->textel_normal = edit_textel_normal;
-          edit_textel_preset->textel_shadow = edit_textel_normal;
-          edit_textel_preset->update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, true);
+          edit_textel_preset_adhoc = &textel_presets[0];
+          edit_textel_normal.glyph.try_canonicalize_from_fallback();
+          edit_textel_preset_adhoc->textel_normal = edit_textel_normal;
+          edit_textel_preset_adhoc->textel_shadow = edit_textel_normal;
+          edit_textel_preset_adhoc->update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, true);
           
           reset_adhoc_textel_editor();
           show_adhoc_textel_editor = false;
@@ -1927,6 +1928,7 @@ private:
   TextelItem* edit_textel_preset = nullptr;
   Textel edit_textel_normal;
   Textel edit_textel_shadow;
+  TextelItem* edit_textel_preset_adhoc = nullptr;
   std::string edit_textel_name;
   
   t8x::TextBox<std::string> tb_ui_help_edit_adhoc {{
