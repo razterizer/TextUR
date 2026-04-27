@@ -344,6 +344,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor.clear_glyph_picker(1);
       dialog_editor.clear_color_picker(2);
       dialog_editor.clear_color_picker(3);
+      dialog_editor.clear_text_field(4);
     }
     dialog_editor.set_tab_selection(0);
   }
