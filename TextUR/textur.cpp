@@ -84,6 +84,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [--suppress_tty_input]" << std::endl;
     std::cout << "   [--force_8bit_colors_on_win_cmd]" << std::endl;
     std::cout << "   [--ascii_only_textures]" << std::endl;
+    std::cout << "   [--save_textures_as_ascii_only]" << std::endl;
     std::cout << "   [--display_ascii_only]" << std::endl;
     std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
     std::cout << "   [--set_big_brush_radius <br>]" << std::endl;
@@ -839,6 +840,8 @@ public:
         force_8bit_colors_on_win_cmd = true;
       else if (std::strcmp(argv[a_idx], "--ascii_only_textures") == 0)
         ascii_only_textures = true;
+      else if (std::strcmp(argv[a_idx], "--save_textures_as_ascii_only") == 0)
+        save_textures_as_ascii_only = true;
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_aspect_ratio") == 0)
         big_brush_aspect_ratio = std::stof(argv[a_idx + 1]);
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_radius") == 0)
@@ -917,7 +920,7 @@ public:
             curr_texture.set_textel(r, c, curr_textel);
         }
       curr_texture.save(file_path_curr_texture,
-                        ascii_only_textures ?
+                        save_textures_as_ascii_only ?
                           t8::TxGlyphEncoding::AsciiOnly :
                           t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly);
       request_exit();
@@ -1262,7 +1265,7 @@ private:
       if (safe_to_save)
       {
         if (curr_texture.save(file_path_curr_texture,
-                              ascii_only_textures ?
+                              save_textures_as_ascii_only ?
                                 t8::TxGlyphEncoding::AsciiOnly :
                                 t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly))
         {
@@ -1943,6 +1946,7 @@ private:
   t8x::GlyphPicker* gp_textel_symbol_adhoc = nullptr;
   bool force_8bit_colors_on_win_cmd = false;
   bool ascii_only_textures = false;
+  bool save_textures_as_ascii_only = false;
   t8x::ColorPickerParams cp_params;
   t8x::TextField tf_textel_mat { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
   TextelItem* edit_textel_preset = nullptr;
