@@ -84,6 +84,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [--suppress_tty_input]" << std::endl;
     std::cout << "   [--force_8bit_colors_on_win_cmd]" << std::endl;
     std::cout << "   [--ascii_only_textures]" << std::endl;
+    std::cout << "   [--display_ascii_only]" << std::endl;
     std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
     std::cout << "   [--set_big_brush_radius <br>]" << std::endl;
     std::cout << std::endl;
@@ -1989,6 +1990,8 @@ int main(int argc, char** argv)
         params.log_mode = LogMode::Replay;
       params.xcode_log_path = "../../../../../../../../Documents/xcode/TextUR/TextUR/bin/";
     }
+    else if (std::strcmp(argv[a_idx], "--display_ascii_only") == 0)
+      params.ascii_fallback_policy = t8::AsciiFallbackPolicy::FORCE_ASCII;
   }
 
   Game game(argc, argv, params);
