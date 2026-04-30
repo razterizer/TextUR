@@ -1579,7 +1579,7 @@ private:
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(1))
-                    || (!edit_textel_presets_as_ascii_only && dialog_editor.glyph_picker_empty(1)))
+                    || (!edit_textel_presets_as_ascii_only && edit_textel_normal.glyph.fully_empty()))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel " + (edit_textel_presets_as_ascii_only ? "character"s : "glyph"s) + ".",
@@ -1622,12 +1622,12 @@ private:
                 {
                   const int c_max_glyph_disp_width = 12;
                   //const auto& normal_disp_sstr_vec = edit_textel_preset->get_glyph_disp_sstr(false);
-                  auto disp_glyph_normal = format_long_glyph_disp_sstr<CharT>(edit_textel_normal, { Color16::DarkCyan, Color16::Transparent2 }, false);
+                  auto disp_glyph_normal = format_long_glyph_disp_sstr<CharT>(edit_textel_normal, { Color16::DarkCyan, Color16::Transparent2 }, true);
                   dialog_editor.set_sstr_vec_pre({ 1, 8 }, disp_glyph_normal);
                   dialog_editor[1] = str::rep_char(' ', 11 + c_max_glyph_disp_width)
-                  + "("
-                  + str::rep_char(' ', t8::get_sstr_vec_width(disp_glyph_normal))
-                  + ")";
+                    + "("
+                    + str::rep_char(' ', t8::get_sstr_vec_width(disp_glyph_normal))
+                    + ")";
                   dialog_editor.set_sstr_vec_pre({ 1, 12 + c_max_glyph_disp_width }, disp_glyph_normal);
                 }
                 dialog_editor.set_tab_selection(0);
@@ -1678,7 +1678,7 @@ private:
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(1))
-                    || (!edit_textel_presets_as_ascii_only && dialog_editor.glyph_picker_empty(1)))
+                    || (!edit_textel_presets_as_ascii_only && edit_textel_shadow.glyph.fully_empty()))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel " + (edit_textel_presets_as_ascii_only ? "character"s : "glyph"s) + ".",
