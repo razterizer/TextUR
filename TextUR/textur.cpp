@@ -83,7 +83,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [--suppress_tty_output]" << std::endl;
     std::cout << "   [--suppress_tty_input]" << std::endl;
     std::cout << "   [--force_8bit_colors_on_win_cmd]" << std::endl;
-    std::cout << "   [--edit_textels_as_ascii_only]" << std::endl;
+    std::cout << "   [--edit_textel_presets_as_ascii_only]" << std::endl;
     std::cout << "   [--save_textures_as_ascii_only]" << std::endl;
     std::cout << "   [--display_ascii_only]" << std::endl;
     std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
@@ -305,7 +305,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor.emplace_label({ v_offs++, 0 }, "Idx:", dlg_style);
       dialog_editor.emplace_label({ v_offs, 0 }, "Name:", dlg_style);
       dialog_editor.emplace_text_field({ v_offs++, 6 }, 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0);
-      if (edit_textels_as_ascii_only)
+      if (edit_textel_presets_as_ascii_only)
       {
         dialog_editor.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
         auto& tf_textel_symbol = dialog_editor.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 1);
@@ -359,7 +359,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor_adhoc = t8x::Dialog(rows);
       int v_offs = 1;
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
-      if (edit_textels_as_ascii_only)
+      if (edit_textel_presets_as_ascii_only)
       {
         dialog_editor_adhoc.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
         auto& tf_textel_symbol_adhoc = dialog_editor_adhoc.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 0);
@@ -838,8 +838,8 @@ public:
       }
       else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd") == 0)
         force_8bit_colors_on_win_cmd = true;
-      else if (std::strcmp(argv[a_idx], "--edit_textels_as_ascii_only") == 0)
-        edit_textels_as_ascii_only = true;
+      else if (std::strcmp(argv[a_idx], "--edit_textel_presets_as_ascii_only") == 0)
+        edit_textel_presets_as_ascii_only = true;
       else if (std::strcmp(argv[a_idx], "--save_textures_as_ascii_only") == 0)
         save_textures_as_ascii_only = true;
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_aspect_ratio") == 0)
@@ -1231,7 +1231,7 @@ private:
         {
           edit_textel_preset_adhoc = &textel_presets[0];
           edit_textel_normal = edit_textel_preset_adhoc->textel_normal;
-          if (edit_textels_as_ascii_only)
+          if (edit_textel_presets_as_ascii_only)
           {
             const auto fb = edit_textel_normal.glyph.fallback;
             dialog_editor_adhoc.set_text_field_input(0, fb == t8::Glyph::none ? "" : std::string(1, fb));
@@ -1496,7 +1496,7 @@ private:
                   edit_textel_name = edit_textel_preset->name;
                   dialog_editor[2] = "Idx: " + std::to_string(ctp_idx);
                   dialog_editor.set_text_field_input(0, edit_textel_name);
-                  if (edit_textels_as_ascii_only)
+                  if (edit_textel_presets_as_ascii_only)
                   {
                     const auto fb = edit_textel_normal.glyph.fallback;
                     dialog_editor.set_text_field_input(1, fb == t8::Glyph::none ? "" : std::string(1, fb));
@@ -1549,14 +1549,14 @@ private:
             // +--------------------------------------+
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
-            if (edit_textels_as_ascii_only)
+            if (edit_textel_presets_as_ascii_only)
               edit_textel_normal.glyph = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
             else
               edit_textel_normal.glyph = dialog_editor.get_glyph_picker_glyph(1);
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
             //edit_textel_preset->textel_normal = edit_textel_normal;
-            if (edit_textels_as_ascii_only)
+            if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
             else
             {
@@ -1573,11 +1573,11 @@ private:
                                              "You must enter a textel preset name.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if ((edit_textels_as_ascii_only && dialog_editor.text_field_empty(1))
-                    || (!edit_textels_as_ascii_only && dialog_editor.glyph_picker_empty(1)))
+              else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(1))
+                    || (!edit_textel_presets_as_ascii_only && dialog_editor.glyph_picker_empty(1)))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
-                                             "You must enter a textel " + (edit_textels_as_ascii_only ? "character"s : "glyph"s) + ".",
+                                             "You must enter a textel " + (edit_textel_presets_as_ascii_only ? "character"s : "glyph"s) + ".",
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
@@ -1596,7 +1596,7 @@ private:
                   edit_textel_preset->textel_normal = edit_textel_normal;
                   
                   // Fill out dialog widgets with shadow textel preset data.
-                  if (edit_textels_as_ascii_only)
+                  if (edit_textel_presets_as_ascii_only)
                   {
                     const auto fb = edit_textel_shadow.glyph.fallback;
                     dialog_editor.set_text_field_input(1, fb == t8::Glyph::none ? "" : std::string(1, fb));
@@ -1608,7 +1608,7 @@ private:
                   dialog_editor.set_text_field_input(4, std::to_string(edit_textel_shadow.mat));
                 }
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
-                if (edit_textels_as_ascii_only)
+                if (edit_textel_presets_as_ascii_only)
                 {
                   dialog_editor[1] = "          ( )";
                   dialog_editor.set_textel_pre({ 1, 11 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
@@ -1648,14 +1648,14 @@ private:
           {
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
-            if (edit_textels_as_ascii_only)
+            if (edit_textel_presets_as_ascii_only)
               edit_textel_shadow.glyph = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
             else
               edit_textel_shadow.glyph = dialog_editor.get_glyph_picker_glyph(1);
             edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
             edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
             //edit_textel_preset->textel_shadow = edit_textel_shadow;
-            if (edit_textels_as_ascii_only)
+            if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.glyph, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
             else
             {
@@ -1672,11 +1672,11 @@ private:
                                              "You must enter a textel preset name.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if ((edit_textels_as_ascii_only && dialog_editor.text_field_empty(1))
-                    || (!edit_textels_as_ascii_only && dialog_editor.glyph_picker_empty(1)))
+              else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(1))
+                    || (!edit_textel_presets_as_ascii_only && dialog_editor.glyph_picker_empty(1)))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
-                                             "You must enter a textel " + (edit_textels_as_ascii_only ? "character"s : "glyph"s) + ".",
+                                             "You must enter a textel " + (edit_textel_presets_as_ascii_only ? "character"s : "glyph"s) + ".",
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
@@ -1698,7 +1698,7 @@ private:
                   custom_textel_presets.emplace_back(edit_textel_normal, edit_textel_shadow, edit_textel_name);
                 
                 {
-                  if (!edit_textels_as_ascii_only && gp_textel_symbol != nullptr)
+                  if (!edit_textel_presets_as_ascii_only && gp_textel_symbol != nullptr)
                     gp_textel_symbol->push_recent();
                 
                   std::vector<std::string> lines_custom_textel_presets;
@@ -1760,13 +1760,13 @@ private:
       {
         allow_editing = false;
         dialog_editor_adhoc.update(curr_key, curr_special_key);
-        if (edit_textels_as_ascii_only)
+        if (edit_textel_presets_as_ascii_only)
           edit_textel_normal.glyph = dialog_editor_adhoc.text_field_empty(0) ? ' ' : dialog_editor_adhoc.get_text_field_input(0)[0];
         else
           edit_textel_normal.glyph = dialog_editor_adhoc.get_glyph_picker_glyph(0);
         edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(1);
         edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(2);
-        if (edit_textels_as_ascii_only)
+        if (edit_textel_presets_as_ascii_only)
           dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
         else
         {
@@ -1956,7 +1956,7 @@ private:
   t8x::GlyphPicker* gp_textel_symbol = nullptr;
   t8x::GlyphPicker* gp_textel_symbol_adhoc = nullptr;
   bool force_8bit_colors_on_win_cmd = false;
-  bool edit_textels_as_ascii_only = false;
+  bool edit_textel_presets_as_ascii_only = false;
   bool save_textures_as_ascii_only = false;
   t8x::ColorPickerParams cp_params;
   t8x::TextField tf_textel_mat { 4, t8x::TextFieldMode::Numeric, tf_style, 4 };
