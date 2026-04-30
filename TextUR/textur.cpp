@@ -1589,6 +1589,12 @@ private:
                                              "You must enter a textel " + (edit_textel_presets_as_ascii_only ? "character"s : "glyph"s) + ".",
                                              t8x::MessageHandlerLevel::Guide);
               }
+              else if (!edit_textel_presets_as_ascii_only && !dialog_editor.glyph_picker_valid(1))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "Unicode textel glyphs need an ASCII fallback.",
+                                             t8x::MessageHandlerLevel::Guide);
+              }
               else if (dialog_editor.text_field_empty(4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
@@ -1686,6 +1692,12 @@ private:
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel " + (edit_textel_presets_as_ascii_only ? "character"s : "glyph"s) + ".",
+                                             t8x::MessageHandlerLevel::Guide);
+              }
+              else if (!edit_textel_presets_as_ascii_only && !dialog_editor.glyph_picker_valid(1))
+              {
+                message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                             "Unicode textel glyphs need an ASCII fallback.",
                                              t8x::MessageHandlerLevel::Guide);
               }
               else if (dialog_editor.text_field_empty(4))
@@ -1786,14 +1798,23 @@ private:
         
         if (curr_special_key == t8::SpecialKey::Enter)
         {
-          edit_textel_preset_adhoc = &textel_presets[0];
-          edit_textel_normal.glyph.try_canonicalize_from_fallback();
-          edit_textel_preset_adhoc->textel_normal = edit_textel_normal;
-          edit_textel_preset_adhoc->textel_shadow = edit_textel_normal;
-          edit_textel_preset_adhoc->update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, true);
-          
-          reset_adhoc_textel_editor();
-          show_adhoc_textel_editor = false;
+          if (!edit_textel_presets_as_ascii_only && !dialog_editor_adhoc.glyph_picker_valid(0))
+          {
+            message_handler->add_message(static_cast<float>(get_real_time_s()),
+                                         "Unicode textel glyphs need an ASCII fallback.",
+                                         t8x::MessageHandlerLevel::Guide);
+          }
+          else
+          {
+            edit_textel_preset_adhoc = &textel_presets[0];
+            edit_textel_normal.glyph.try_canonicalize_from_fallback();
+            edit_textel_preset_adhoc->textel_normal = edit_textel_normal;
+            edit_textel_preset_adhoc->textel_shadow = edit_textel_normal;
+            edit_textel_preset_adhoc->update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, true);
+            
+            reset_adhoc_textel_editor();
+            show_adhoc_textel_editor = false;
+          }
         }
         else if (curr_special_key == t8::SpecialKey::Escape)
         {
