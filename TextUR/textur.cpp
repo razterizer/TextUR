@@ -1302,8 +1302,8 @@ private:
 
 //#define SHOW_DEBUG_WINDOW
 #ifdef SHOW_DEBUG_WINDOW
-    TextBoxDrawingArgsAlign tbd_args;
-    tbd_args.v_align = VerticalAlignment::TOP;
+    t8x::TextBoxDrawingArgsAlign tbd_args;
+    tbd_args.v_align = t8x::VerticalAlignment::TOP;
     tbd_args.base.box_style = { Color16::Blue, Color16::Yellow };
     tbd_args.base.outline_type = t8x::OutlineType::Unicode_SingleLine;
     tbd_args.framed_mode = true;
