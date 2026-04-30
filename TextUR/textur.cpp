@@ -939,6 +939,11 @@ public:
   }
   
 private:
+  std::string fallback_to_text_field_input(char fb) const
+  {
+    return fb == t8::Glyph::none ? "" : std::string(1, fb);
+  }
+
   void handle_editor_key_presses(char curr_key, t8::SpecialKey curr_special_key,
                                  int nri, int nci, t8::RC& cursor_pos)
   {
@@ -1234,7 +1239,7 @@ private:
           if (edit_textel_presets_as_ascii_only)
           {
             const auto fb = edit_textel_normal.glyph.fallback;
-            dialog_editor_adhoc.set_text_field_input(0, fb == t8::Glyph::none ? "" : std::string(1, fb));
+            dialog_editor_adhoc.set_text_field_input(0, fallback_to_text_field_input(fb));
           }
           else
             dialog_editor_adhoc.set_glyph_picker_glyph(0, edit_textel_normal.glyph);
@@ -1499,7 +1504,7 @@ private:
                   if (edit_textel_presets_as_ascii_only)
                   {
                     const auto fb = edit_textel_normal.glyph.fallback;
-                    dialog_editor.set_text_field_input(1, fb == t8::Glyph::none ? "" : std::string(1, fb));
+                    dialog_editor.set_text_field_input(1, fallback_to_text_field_input(fb));
                   }
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_normal.glyph);
@@ -1599,7 +1604,7 @@ private:
                   if (edit_textel_presets_as_ascii_only)
                   {
                     const auto fb = edit_textel_shadow.glyph.fallback;
-                    dialog_editor.set_text_field_input(1, fb == t8::Glyph::none ? "" : std::string(1, fb));
+                    dialog_editor.set_text_field_input(1, fallback_to_text_field_input(fb));
                   }
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_shadow.glyph);
