@@ -317,7 +317,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
         gp_textel_symbol = &dialog_editor.emplace_glyph_picker({ ++v_offs, 3 },
                                                                tf_style, dlg_style,
                                                                { Color16::Cyan, Color16::Transparent2 },
-                                                               { Color16::DarkCyan, Color16::Transparent2 }, 1);
+                                                               { Color16::DarkCyan, Color16::Transparent2 },
+                                                               Color16::DarkYellow, 1);
         v_offs += gp_textel_symbol->height();
       }
       dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
@@ -375,7 +376,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
         gp_textel_symbol_adhoc = &dialog_editor_adhoc.emplace_glyph_picker({ ++v_offs, 3 },
                                                                            tf_style, dlg_style,
                                                                            { Color16::Cyan, Color16::Transparent2 },
-                                                                           { Color16::DarkCyan, Color16::Transparent2 }, 0);
+                                                                           { Color16::DarkCyan, Color16::Transparent2 },
+                                                                           Color16::DarkYellow, 0);
         v_offs += gp_textel_symbol_adhoc->height();
       }
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
