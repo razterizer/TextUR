@@ -949,6 +949,19 @@ private:
   {
     return fb == t8::Glyph::none ? "" : std::string(1, fb);
   }
+  
+  // Sets the cursor and centers the view.
+  void set_cursor(const RC& pos, int nri, int nci)
+  {
+    cursor_pos = pos;
+  
+    screen_pos = { nri/2 - cursor_pos.r, nci/2 - cursor_pos.c };
+    
+    const int min_r = std::min(0, nri - static_cast<int>(curr_texture.size.r));
+    const int min_c = std::min(0, nci - static_cast<int>(curr_texture.size.c));
+    screen_pos.r = math::clamp(screen_pos.r, min_r, 0);
+    screen_pos.c = math::clamp(screen_pos.c, min_c, 0);
+  }
 
   void handle_editor_key_presses(char curr_key, t8::SpecialKey curr_special_key,
                                  int nri, int nci, t8::RC& cursor_pos)
@@ -1388,8 +1401,7 @@ private:
             if (math::in_range(pos.r, 0, curr_texture.size.r, Range::ClosedOpen)
                 && math::in_range(pos.c, 0, curr_texture.size.c, Range::ClosedOpen))
             {
-              cursor_pos = pos;
-              screen_pos = { nr/2 - cursor_pos.r, nc/2 - cursor_pos.c };
+              set_cursor(pos, nri, nci);
             }
             reset_goto_input();
             show_goto_pos = false;
