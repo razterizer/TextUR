@@ -893,7 +893,10 @@ public:
       else
       {
         if (!curr_texture.load(file_path_curr_texture))
+        {
+          std::cerr << "ERROR: Unable to parse texture file." << std::endl;
           exit(EXIT_FAILURE);
+        }
       }
       
       if (!file_path_tracing_texture.empty())
