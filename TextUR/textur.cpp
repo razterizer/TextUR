@@ -900,7 +900,11 @@ public:
       }
       
       if (!file_path_tracing_texture.empty())
-        tracing_texture.load(file_path_tracing_texture);
+        if (!tracing_texture.load(file_path_tracing_texture))
+        {
+          std::cerr << "ERROR: Unable to parse texture file." << std::endl;
+          exit(EXIT_FAILURE);
+        }
     }
   }
   
