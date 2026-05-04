@@ -933,6 +933,7 @@ public:
             curr_texture.set_textel(r, c, curr_textel);
         }
       curr_texture.save(file_path_curr_texture,
+                        t8::TextureFileFormat::Auto,
                         save_textures_as_ascii_only ?
                           t8::TxGlyphEncoding::AsciiOnly :
                           t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly);
@@ -1299,6 +1300,7 @@ private:
       if (safe_to_save)
       {
         if (curr_texture.save(file_path_curr_texture,
+                              t8::TextureFileFormat::Auto,
                               save_textures_as_ascii_only ?
                                 t8::TxGlyphEncoding::AsciiOnly :
                                 t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly))
