@@ -99,6 +99,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Allows you to do animations." << std::endl;
     std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
     std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
+    std::cout << "  --suppress_tty_output      : Be careful with this option as this suppresses all graphics." << std::endl;
+    std::cout << "  --suppress_tty_input       : Be careful with this option as this causes the program to" << std::endl;
+    std::cout << "                               not receive any keypresses." << std::endl;
     std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
     std::cout << "  <bar>                      : Aspect ratio for big brushes. Default value = 1.84." << std::endl;
     std::cout << "  <br>                       : Radius for big brushes. Default value = 10.5." << std::endl;
