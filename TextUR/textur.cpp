@@ -1837,6 +1837,9 @@ private:
             edit_textel_preset_adhoc->textel_shadow = edit_textel_normal;
             edit_textel_preset_adhoc->update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, true);
             
+            if (!edit_textel_presets_as_ascii_only && gp_textel_symbol_adhoc != nullptr)
+              gp_textel_symbol_adhoc->push_recent();
+            
             reset_adhoc_textel_editor();
             show_adhoc_textel_editor = false;
           }
