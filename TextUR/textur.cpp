@@ -96,7 +96,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "  -s                         : Specifies the size of a new texture." << std::endl;
     std::cout << "                             : If <filepath_texture> already exists, then it will be overwritten." << std::endl;
     std::cout << "  -t                         : Specifies a tracing texture." << std::endl;
-    std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Allows you to do animations." << std::endl;
+    std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Helps when making animations." << std::endl;
     std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
     std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
     std::cout << "  --suppress_tty_output      : Be careful with this option as this suppresses all graphics." << std::endl;
