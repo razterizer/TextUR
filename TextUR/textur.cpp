@@ -88,6 +88,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [--display_ascii_only]" << std::endl;
     std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
     std::cout << "   [--set_big_brush_radius <br>]" << std::endl;
+    std::cout << "   [--set_adhoc_textel_material <mat>]" << std::endl;
     std::cout << std::endl;
     std::cout << "  -f                         : Specifies the source file to (create and) edit." << std::endl;
     std::cout << "  <filepath_texture>         : Filepath for texture to edit. If file does not yet exist," << std:: endl;
@@ -101,6 +102,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
     std::cout << "  <bar>                      : Aspect ratio for big brushes. Default value = 1.84." << std::endl;
     std::cout << "  <br>                       : Radius for big brushes. Default value = 10.5." << std::endl;
+    std::cout << "  <mat>                      : AdHoc Textel material. Default value = -1." << std::endl;
     std::cout << std::endl;
     std::cout << "  Press 'K' in editor for list of supported key presses." << std::endl;
     exit(EXIT_SUCCESS);
@@ -406,8 +408,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
   {
     textel_presets.clear();
     custom_textel_presets.clear();
-    textel_presets.emplace_back(Textel { { }, Color16::Transparent2, Color16::Transparent2, t8::texture::mat_none },
-                                Textel { { }, Color16::Transparent2, Color16::Transparent2, t8::texture::mat_none },
+    textel_presets.emplace_back(Textel { { }, Color16::Transparent2, Color16::Transparent2, adhoc_textel_material },
+                                Textel { { }, Color16::Transparent2, Color16::Transparent2, adhoc_textel_material },
                                 "Ad Hoc [e]");
     textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, 0 },
                                 Textel { ' ', Color16::Default, Color16::Black, 0 },
@@ -852,6 +854,11 @@ public:
         big_brush_aspect_ratio = std::stof(argv[a_idx + 1]);
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_radius") == 0)
         big_brush_radius = std::stof(argv[a_idx + 1]);
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_adhoc_textel_material") == 0)
+      {
+        int mat = std::atoi(argv[a_idx + 1]);
+        adhoc_textel_material = mat < 0 ? t8::texture::mat_none : math::clamp(mat, 0, 254);
+      }
     }
     
     cp_params = {
@@ -2023,6 +2030,7 @@ private:
   Textel edit_textel_shadow;
   TextelItem* edit_textel_preset_adhoc = nullptr;
   std::string edit_textel_name;
+  uint8_t adhoc_textel_material = t8::texture::mat_none;
   
   t8x::TextBox<std::string> tb_ui_help_edit_adhoc {{
     "UI Help"s,
