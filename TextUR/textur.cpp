@@ -102,6 +102,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
     std::cout << "  -o                         : Specifies the filepath for saved texture." << std::endl;
     std::cout << "                             : <filepath_texture> will be unchanged in this case." << std::endl;
+    std::cout << "                             : You cannot use -o together with conversion flag -c." << std::endl;
     std::cout << "  <filepath_saved_texture>   : The new filepath for saving changes from <filepath_texture>." << std::endl;
     std::cout << "  --suppress_tty_output      : Be careful with this option as this suppresses all graphics." << std::endl;
     std::cout << "  --suppress_tty_input       : Be careful with this option as this causes the program to" << std::endl;
