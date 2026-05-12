@@ -892,6 +892,13 @@ public:
       
     if (convert)
     {
+      if (!file_path_alt_saved_texture.empty())
+      {
+        std::cerr << "ERROR: You cannot use -o together with conversion flag -c. "
+                  << "The -c argument already specifies the conversion output file."
+                  << std::endl;
+        request_exit();
+      }
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
       {
         std::cerr << "ERROR: You cannot use the size flag (-s) together with the conversion flag (-c)!" << std::endl;
