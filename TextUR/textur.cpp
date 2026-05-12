@@ -79,6 +79,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [-s <rows> <cols>]" << std::endl;
     std::cout << "   [-t <filepath_tracing_texture>]" << std::endl;
     std::cout << "   [-c <filepath_dark_texture>]" << std::endl;
+    std::cout << "   [-o <filename_saved_texture>]" << std::endl;
     std::cout << "   [--log_mode (record | replay)]" << std::endl;
     std::cout << "   [--suppress_tty_output]" << std::endl;
     std::cout << "   [--suppress_tty_input]" << std::endl;
@@ -99,6 +100,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "  <filepath_tracing_texture> : Filepath to tracing texture. Helps when making animations." << std::endl;
     std::cout << "  -c                         : Specifies a file to convert the current light mode texture" << std::endl;
     std::cout << "                               <filepath_texture> to a dark mode texture." << std::endl;
+    std::cout << "  -o                         : Specifies the filename for saved texture." << std::endl;
+    std::cout << "                             : <filepath_texture> will be unchanged in this case." << std::endl;
+    std::cout << "  <filename_saved_texture>   : The new filename for saving changes from <filepath_texture>." << std::endl;
     std::cout << "  --suppress_tty_output      : Be careful with this option as this suppresses all graphics." << std::endl;
     std::cout << "  --suppress_tty_input       : Be careful with this option as this causes the program to" << std::endl;
     std::cout << "                               not receive any keypresses." << std::endl;
