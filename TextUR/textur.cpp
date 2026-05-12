@@ -851,6 +851,8 @@ public:
         file_path_curr_texture = argv[a_idx + 1];
         convert = true;
       }
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "-o") == 0) // alt output
+        file_path_alt_saved_texture = argv[a_idx + 1];
       else if (std::strcmp(argv[a_idx], "--force_8bit_colors_on_win_cmd") == 0)
         force_8bit_colors_on_win_cmd = true;
       else if (std::strcmp(argv[a_idx], "--edit_textel_presets_as_ascii_only") == 0)
