@@ -759,7 +759,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
             post_process_color_tokens(tokens);
             textel_normal.fg_color.parse(tokens[1]);
             textel_normal.bg_color.parse(tokens[2]);
-            textel_normal.mat = std::atoi(tokens[3].c_str());
+            textel_normal.encode_raw_mat(std::atoi(tokens[3].c_str()));
           }
           else
             std::cerr << "Unable to parse normal textel." << std::endl;
@@ -783,7 +783,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
             post_process_color_tokens(tokens);
             textel_shadow.fg_color.parse(tokens[1]);
             textel_shadow.bg_color.parse(tokens[2]);
-            textel_shadow.mat = std::atoi(tokens[3].c_str());
+            textel_shadow.encode_raw_mat(std::atoi(tokens[3].c_str()));
           }
           else
             std::cerr << "Unable to parse shadow textel." << std::endl;
@@ -860,7 +860,7 @@ public:
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_adhoc_textel_material") == 0)
       {
         int mat = std::atoi(argv[a_idx + 1]);
-        adhoc_textel_material = mat < 0 ? t8::texture::mat_none : math::clamp(mat, 0, 254);
+        adhoc_textel_material = t8::texture::encode_raw_material(mat);
       }
     }
     
@@ -935,7 +935,7 @@ public:
             return tp.textel_normal.glyph == curr_textel.glyph
             && tp.textel_normal.fg_color == curr_textel.fg_color
             && tp.textel_normal.bg_color == curr_textel.bg_color
-            && tp.textel_normal.mat == curr_textel.mat;
+            && tp.textel_normal.mat_raw == curr_textel.mat_raw;
           });
           if (it != textel_presets.end())
             curr_texture.set_textel(r, c, it->textel_shadow);
@@ -1014,9 +1014,9 @@ private:
       }
       else if (is_left)
       {
-        int curr_mat = textel_presets[selected_textel_preset_idx].textel_normal.mat;
+        int curr_mat = textel_presets[selected_textel_preset_idx].textel_normal.decode_raw_mat();
         for (int idx = selected_textel_preset_idx - 1; idx >= 0; --idx)
-          if (textel_presets[idx].textel_normal.mat != curr_mat)
+          if (textel_presets[idx].textel_normal.decode_raw_mat() != curr_mat)
           {
             selected_textel_preset_idx = idx;
             menu_r_offs = -3*selected_textel_preset_idx;
@@ -1025,9 +1025,9 @@ private:
       }
       else if (is_right)
       {
-        int curr_mat = textel_presets[selected_textel_preset_idx].textel_normal.mat;
+        int curr_mat = textel_presets[selected_textel_preset_idx].textel_normal.decode_raw_mat();
         for (int idx = selected_textel_preset_idx + 1; idx < static_cast<int>(textel_presets.size()); ++idx)
-          if (textel_presets[idx].textel_normal.mat != curr_mat)
+          if (textel_presets[idx].textel_normal.decode_raw_mat() != curr_mat)
           {
             selected_textel_preset_idx = idx;
             menu_r_offs = -3*selected_textel_preset_idx;
@@ -1549,7 +1549,7 @@ private:
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_normal.glyph);
                   dialog_editor.set_color_picker_color(2, edit_textel_normal.fg_color);
                   dialog_editor.set_color_picker_color(3, edit_textel_normal.bg_color);
-                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.mat));
+                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.decode_raw_mat()));
                   edit_mode = EditTextelMode::EditTextelNormal;
                 }
                 else
@@ -1639,7 +1639,7 @@ private:
               else
               {
                 edit_textel_normal.glyph.try_canonicalize_from_fallback();
-                edit_textel_normal.mat = std::stoi(dialog_editor.get_text_field_input(4));
+                edit_textel_normal.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(4)));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
@@ -1655,7 +1655,7 @@ private:
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_shadow.glyph);
                   dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
                   dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
-                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_shadow.mat));
+                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_shadow.decode_raw_mat()));
                 }
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 if (edit_textel_presets_as_ascii_only)
@@ -1744,7 +1744,7 @@ private:
               else
               {
                 edit_textel_shadow.glyph.try_canonicalize_from_fallback();
-                edit_textel_shadow.mat = std::stoi(dialog_editor.get_text_field_input(4));
+                edit_textel_shadow.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(4)));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
@@ -1766,11 +1766,11 @@ private:
                     lines_custom_textel_presets.emplace_back(ctp.textel_normal.glyph.str(false) + ", "
                       + ctp.textel_normal.fg_color.str() + ", "
                       + ctp.textel_normal.bg_color.str() + ", "
-                      + std::to_string(ctp.textel_normal.mat));
+                      + std::to_string(ctp.textel_normal.decode_raw_mat()));
                     lines_custom_textel_presets.emplace_back(ctp.textel_shadow.glyph.str(false) + ", "
                       + ctp.textel_shadow.fg_color.str() + ", "
                       + ctp.textel_shadow.bg_color.str() + ", "
-                      + std::to_string(ctp.textel_shadow.mat));
+                      + std::to_string(ctp.textel_shadow.decode_raw_mat()));
                     lines_custom_textel_presets.emplace_back(ctp.name);
                   }
                   if (TextIO::write_file(filepath_custom_textel_presets, lines_custom_textel_presets))
@@ -2033,7 +2033,7 @@ private:
   Textel edit_textel_shadow;
   TextelItem* edit_textel_preset_adhoc = nullptr;
   std::string edit_textel_name;
-  uint8_t adhoc_textel_material = t8::texture::mat_none;
+  uint8_t adhoc_textel_material = t8::texture::raw_mat_none;
   
   t8x::TextBox<std::string> tb_ui_help_edit_adhoc {{
     "UI Help"s,
