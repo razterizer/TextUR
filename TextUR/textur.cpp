@@ -1310,9 +1310,15 @@ private:
     else if (str::to_lower(curr_key) == 'x' || safe_to_save)
     {
       const auto& file_path_output = file_path_alt_saved_texture.empty() ? file_path_curr_texture : file_path_alt_saved_texture;
-      if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
+
+      const bool saving_to_alt_file = !file_path_alt_saved_texture.empty();
+      const bool should_confirm_overwrite =
+        folder::exists(file_path_output) &&
+        (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE || saving_to_alt_file);
+
+      if (!safe_to_save)
       {
-        if (folder::exists(file_path_output))
+        if (should_confirm_overwrite)
         {
           show_confirm_overwrite = true;
           overwrite_confirm_button = t8x::YesNoButtons::No;
@@ -1320,8 +1326,6 @@ private:
         else
           safe_to_save = true;
       }
-      else
-        safe_to_save = true;
         
       if (safe_to_save)
       {
