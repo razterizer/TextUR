@@ -1301,9 +1301,10 @@ private:
         math::toggle(use_shadow_textels);
     else if (str::to_lower(curr_key) == 'x' || safe_to_save)
     {
+      const auto& file_path_output = file_path_alt_saved_texture.empty() ? file_path_curr_texture : file_path_alt_saved_texture;
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
       {
-        if (folder::exists(file_path_curr_texture))
+        if (folder::exists(file_path_output))
         {
           show_confirm_overwrite = true;
           overwrite_confirm_button = t8x::YesNoButtons::No;
@@ -1316,7 +1317,7 @@ private:
         
       if (safe_to_save)
       {
-        if (curr_texture.save(file_path_curr_texture,
+        if (curr_texture.save(file_path_output,
                               t8::TextureFileFormat::Auto,
                               true,
                               save_textures_as_ascii_only ?
@@ -1383,7 +1384,8 @@ private:
     if (show_confirm_overwrite)
     {
       bg_color = Color16::DarkCyan;
-      draw_confirm(sh, { "Are you sure you want to overwrite the file \"" + file_path_curr_texture + "\"?" },
+      const auto& file_path_output = file_path_alt_saved_texture.empty() ? file_path_curr_texture : file_path_alt_saved_texture;
+      draw_confirm(sh, { "Are you sure you want to overwrite the file \"" + file_path_output + "\"?" },
                    overwrite_confirm_button,
                    { Color16::Black, Color16::DarkCyan },
                    { Color16::Black, Color16::DarkCyan, Color16::Cyan },
@@ -1947,6 +1949,7 @@ private:
   std::string file_path_curr_texture;
   std::string file_path_tracing_texture;
   std::string file_path_bright_texture;
+  std::string file_path_alt_saved_texture;
   bool convert = false;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
