@@ -2102,9 +2102,5 @@ int main(int argc, char** argv)
 
   Game game(argc, argv, params);
 
-  game.init();
-  game.generate_data();
-  game.run();
-
-  return EXIT_SUCCESS;
+  return game.run();
 }
