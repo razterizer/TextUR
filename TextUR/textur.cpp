@@ -963,6 +963,7 @@ public:
                           t8::TxGlyphEncoding::AsciiOnly :
                           t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly);
       request_exit();
+      return;
     }
 
     tbd.add(PARAM(screen_pos.r));
