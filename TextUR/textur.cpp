@@ -887,7 +887,7 @@ public:
     {
       std::cerr << "ERROR: You must supply a texture filename as a command line argument!" << std::endl;
       show_help();
-      request_exit();
+      exit(EXIT_FAILURE);
     }
       
     if (convert)
@@ -897,17 +897,17 @@ public:
         std::cerr << "ERROR: You cannot use -o together with conversion flag -c. "
                   << "The -c argument already specifies the conversion output file."
                   << std::endl;
-        request_exit();
+        exit(EXIT_FAILURE);
       }
       if (file_mode == EditorFileMode::NEW_OR_OVERWRITE_FILE)
       {
         std::cerr << "ERROR: You cannot use the size flag (-s) together with the conversion flag (-c)!" << std::endl;
-        request_exit();
+        exit(EXIT_FAILURE);
       }
       else if (file_path_bright_texture.empty())
       {
         std::cerr << "ERROR: When using the conversion flag (-c) you need to also specify the source file with the -f flag!" << std::endl;
-        request_exit();
+        exit(EXIT_FAILURE);
       }
     }
     else
