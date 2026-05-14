@@ -109,7 +109,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "  --suppress_tty_output      : Be careful with this option as this suppresses all graphics." << std::endl;
     std::cout << "  --suppress_tty_input       : Be careful with this option as this causes the program to" << std::endl;
     std::cout << "                               not receive any keypresses." << std::endl;
-    std::cout << "  <color>                    : ANSI reset/default color for .ans imports. Default FG = LightGray," << std::endl;
+    std::cout << "  <color>                    : ANSI reset/default color for .ans imports. Default FG = White," << std::endl;
     std::cout << "                               default BG = Transparent2. Names and compact codes are accepted." << std::endl;
     std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
     std::cout << "  <bar>                      : Aspect ratio for big brushes. Default value = 1.84." << std::endl;
@@ -1998,7 +1998,7 @@ private:
   std::string file_path_tracing_texture;
   std::string file_path_bright_texture;
   std::string file_path_alt_saved_texture;
-  t8::Color ansi_default_fg = Color16::LightGray;
+  t8::Color ansi_default_fg = Color16::White;
   t8::Color ansi_default_bg = Color16::Transparent2;
   bool convert = false;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
