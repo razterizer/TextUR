@@ -87,6 +87,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "   [--edit_textel_presets_as_ascii_only]" << std::endl;
     std::cout << "   [--save_textures_as_ascii_only]" << std::endl;
     std::cout << "   [--display_ascii_only]" << std::endl;
+    std::cout << "   [--set_ansi_default_fg <color>]" << std::endl;
+    std::cout << "   [--set_ansi_default_bg <color>]" << std::endl;
     std::cout << "   [--set_big_brush_aspect_ratio <bar>]" << std::endl;
     std::cout << "   [--set_big_brush_radius <br>]" << std::endl;
     std::cout << "   [--set_adhoc_textel_material <mat>]" << std::endl;
@@ -107,6 +109,8 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     std::cout << "  --suppress_tty_output      : Be careful with this option as this suppresses all graphics." << std::endl;
     std::cout << "  --suppress_tty_input       : Be careful with this option as this causes the program to" << std::endl;
     std::cout << "                               not receive any keypresses." << std::endl;
+    std::cout << "  <color>                    : ANSI reset/default color for .ans imports. Default FG = LightGray," << std::endl;
+    std::cout << "                               default BG = Transparent2. Names and compact codes are accepted." << std::endl;
     std::cout << "  <filepath_dark_texture>    : The destination filepath to the generated dark mode texture." << std::endl;
     std::cout << "  <bar>                      : Aspect ratio for big brushes. Default value = 1.84." << std::endl;
     std::cout << "  <br>                       : Radius for big brushes. Default value = 10.5." << std::endl;
@@ -864,6 +868,22 @@ public:
         big_brush_aspect_ratio = std::stof(argv[a_idx + 1]);
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_big_brush_radius") == 0)
         big_brush_radius = std::stof(argv[a_idx + 1]);
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_ansi_default_fg") == 0)
+      {
+        if (!ansi_default_fg.parse(argv[a_idx + 1], false, true))
+        {
+          std::cerr << "ERROR: Unable to parse ANSI default foreground color." << std::endl;
+          exit(EXIT_FAILURE);
+        }
+      }
+      else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_ansi_default_bg") == 0)
+      {
+        if (!ansi_default_bg.parse(argv[a_idx + 1], false, true))
+        {
+          std::cerr << "ERROR: Unable to parse ANSI default background color." << std::endl;
+          exit(EXIT_FAILURE);
+        }
+      }
       else if (a_idx + 1 < argc && std::strcmp(argv[a_idx], "--set_adhoc_textel_material") == 0)
       {
         int mat = std::atoi(argv[a_idx + 1]);
@@ -916,7 +936,12 @@ public:
         curr_texture = Texture { size };
       else
       {
-        if (!curr_texture.load(file_path_curr_texture))
+        if (!curr_texture.load(file_path_curr_texture,
+                               t8::TextureFileFormat::Auto,
+                               true,
+                               t8::AnsiGlyphEncoding::Auto,
+                               ansi_default_fg,
+                               ansi_default_bg))
         {
           std::cerr << "ERROR: Unable to parse texture file." << std::endl;
           exit(EXIT_FAILURE);
@@ -924,7 +949,12 @@ public:
       }
       
       if (!file_path_tracing_texture.empty())
-        if (!tracing_texture.load(file_path_tracing_texture))
+        if (!tracing_texture.load(file_path_tracing_texture,
+                                  t8::TextureFileFormat::Auto,
+                                  true,
+                                  t8::AnsiGlyphEncoding::Auto,
+                                  ansi_default_fg,
+                                  ansi_default_bg))
         {
           std::cerr << "ERROR: Unable to parse texture file." << std::endl;
           exit(EXIT_FAILURE);
@@ -938,7 +968,12 @@ public:
                                 
     if (convert)
     {
-      bright_texture.load(file_path_bright_texture); // source
+      bright_texture.load(file_path_bright_texture, // source
+                          t8::TextureFileFormat::Auto,
+                          true,
+                          t8::AnsiGlyphEncoding::Auto,
+                          ansi_default_fg,
+                          ansi_default_bg);
       curr_texture = Texture { bright_texture.size }; // target
       for (int r = 0; r < bright_texture.size.r; ++r)
         for (int c = 0; c < bright_texture.size.c; ++c)
@@ -1963,6 +1998,8 @@ private:
   std::string file_path_tracing_texture;
   std::string file_path_bright_texture;
   std::string file_path_alt_saved_texture;
+  t8::Color ansi_default_fg = Color16::LightGray;
+  t8::Color ansi_default_bg = Color16::Transparent2;
   bool convert = false;
   EditorFileMode file_mode = EditorFileMode::OPEN_EXISTING_FILE;
   
