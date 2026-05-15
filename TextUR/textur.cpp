@@ -940,7 +940,7 @@ public:
         if (!t8::TextureFile::load(curr_texture, file_path_curr_texture,
                                    t8::TextureFileFormat::Auto,
                                    true,
-                                   t8::AnsiGlyphEncoding::Auto,
+                                   t8::AnsiLoadGlyphEncoding::Auto,
                                    ansi_default_fg,
                                    ansi_default_bg))
         {
@@ -953,7 +953,7 @@ public:
         if (!t8::TextureFile::load(tracing_texture, file_path_tracing_texture,
                                    t8::TextureFileFormat::Auto,
                                    true,
-                                   t8::AnsiGlyphEncoding::Auto,
+                                   t8::AnsiLoadGlyphEncoding::Auto,
                                    ansi_default_fg,
                                    ansi_default_bg))
         {
@@ -972,7 +972,7 @@ public:
       t8::TextureFile::load(bright_texture, file_path_bright_texture, // source
                             t8::TextureFileFormat::Auto,
                             true,
-                            t8::AnsiGlyphEncoding::Auto,
+                            t8::AnsiLoadGlyphEncoding::Auto,
                             ansi_default_fg,
                             ansi_default_bg);
       curr_texture = Texture { bright_texture.size }; // target
