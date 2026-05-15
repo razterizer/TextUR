@@ -9,6 +9,7 @@
 #include <Termin8or/screen/ScreenUtils.h>
 #include <Termin8or/drawing/Drawing.h>
 #include <Termin8or/drawing/Texture.h>
+#include <Termin8or/drawing/TextureFile.h>
 #include <Termin8or/geom/RC.h>
 #include <Termin8or/ui/MessageHandler.h>
 #include <Termin8or/ui/UI.h>
@@ -936,12 +937,12 @@ public:
         curr_texture = Texture { size };
       else
       {
-        if (!curr_texture.load(file_path_curr_texture,
-                               t8::TextureFileFormat::Auto,
-                               true,
-                               t8::AnsiGlyphEncoding::Auto,
-                               ansi_default_fg,
-                               ansi_default_bg))
+        if (!t8::TextureFile::load(curr_texture, file_path_curr_texture,
+                                   t8::TextureFileFormat::Auto,
+                                   true,
+                                   t8::AnsiGlyphEncoding::Auto,
+                                   ansi_default_fg,
+                                   ansi_default_bg))
         {
           std::cerr << "ERROR: Unable to parse texture file." << std::endl;
           exit(EXIT_FAILURE);
@@ -949,12 +950,12 @@ public:
       }
       
       if (!file_path_tracing_texture.empty())
-        if (!tracing_texture.load(file_path_tracing_texture,
-                                  t8::TextureFileFormat::Auto,
-                                  true,
-                                  t8::AnsiGlyphEncoding::Auto,
-                                  ansi_default_fg,
-                                  ansi_default_bg))
+        if (!t8::TextureFile::load(tracing_texture, file_path_tracing_texture,
+                                   t8::TextureFileFormat::Auto,
+                                   true,
+                                   t8::AnsiGlyphEncoding::Auto,
+                                   ansi_default_fg,
+                                   ansi_default_bg))
         {
           std::cerr << "ERROR: Unable to parse texture file." << std::endl;
           exit(EXIT_FAILURE);
@@ -968,14 +969,15 @@ public:
                                 
     if (convert)
     {
-      bright_texture.load(file_path_bright_texture, // source
-                          t8::TextureFileFormat::Auto,
-                          true,
-                          t8::AnsiGlyphEncoding::Auto,
-                          ansi_default_fg,
-                          ansi_default_bg);
+      t8::TextureFile::load(bright_texture, file_path_bright_texture, // source
+                            t8::TextureFileFormat::Auto,
+                            true,
+                            t8::AnsiGlyphEncoding::Auto,
+                            ansi_default_fg,
+                            ansi_default_bg);
       curr_texture = Texture { bright_texture.size }; // target
       for (int r = 0; r < bright_texture.size.r; ++r)
+      {
         for (int c = 0; c < bright_texture.size.c; ++c)
         {
           const auto& curr_textel = bright_texture(r, c);
@@ -991,12 +993,13 @@ public:
           else
             curr_texture.set_textel(r, c, curr_textel);
         }
-      curr_texture.save(file_path_curr_texture,
-                        t8::TextureFileFormat::Auto,
-                        true,
-                        save_textures_as_ascii_only ?
-                          t8::TxGlyphEncoding::AsciiOnly :
-                          t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly);
+      }
+      t8::TextureFile::save(curr_texture, file_path_curr_texture,
+                            t8::TextureFileFormat::Auto,
+                            true,
+                            save_textures_as_ascii_only ?
+                              t8::TxGlyphEncoding::AsciiOnly :
+                              t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly);
       request_exit();
       return;
     }
@@ -1365,12 +1368,12 @@ private:
         
       if (safe_to_save)
       {
-        if (curr_texture.save(file_path_output,
-                              t8::TextureFileFormat::Auto,
-                              true,
-                              save_textures_as_ascii_only ?
-                                t8::TxGlyphEncoding::AsciiOnly :
-                                t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly))
+        if (t8::TextureFile::save(curr_texture, file_path_output,
+                                  t8::TextureFileFormat::Auto,
+                                  true,
+                                  save_textures_as_ascii_only ?
+                                    t8::TxGlyphEncoding::AsciiOnly :
+                                    t8::TxGlyphEncoding::TryUnicodePreferredAndFallbackElseAsciiOnly))
         {
           message_handler->add_message(static_cast<float>(get_real_time_s()),
                                        "Your work was successfully saved.",
