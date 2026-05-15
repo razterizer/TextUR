@@ -320,10 +320,13 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor.emplace_label({ v_offs++, 0 }, "Idx:", dlg_style);
       dialog_editor.emplace_label({ v_offs, 0 }, "Name:", dlg_style);
       dialog_editor.emplace_text_field({ v_offs++, 6 }, 16, t8x::TextFieldMode::PrintableAscii, tf_style, 0);
+      int last_tab_idx = 1;
       if (edit_textel_presets_as_ascii_only)
       {
         dialog_editor.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
-        auto& tf_textel_symbol = dialog_editor.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 1);
+        dialog_editor.emplace_label({ v_offs, 6 }, "0x", { Color16::Cyan, Color16::Transparent2 });
+        dialog_editor.emplace_text_field({ v_offs, 8 }, 2, t8x::TextFieldMode::Hex, tf_style, last_tab_idx++); // 1
+        auto& tf_textel_symbol = dialog_editor.emplace_text_field({ v_offs, 13 }, 1, t8x::TextFieldMode::All, tf_style, last_tab_idx++); // 2
         v_offs += tf_textel_symbol.height();
       }
       else
@@ -333,23 +336,23 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                                                                tf_style, dlg_style,
                                                                { Color16::Cyan, Color16::Transparent2 },
                                                                { Color16::DarkCyan, Color16::Transparent2 },
-                                                               Color16::DarkYellow, 1);
+                                                               Color16::DarkYellow, last_tab_idx++); // 1
         v_offs += gp_textel_symbol->height();
       }
       dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
       const auto& cp_textel_fg = dialog_editor.emplace_color_picker({ v_offs, 3 },
                                                                     Color16::Blue, Color16::White,
                                                                     cp_params,
-                                                                    2, true, '*', ' ' );
+                                                                    last_tab_idx++, true, '*', ' ' );
       v_offs += cp_textel_fg.height();
       dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
       const auto& cp_textel_bg = dialog_editor.emplace_color_picker({ v_offs, 3 },
                                                                     Color16::Blue, Color16::White,
                                                                     cp_params,
-                                                                    3, true, '*', ' ');
+                                                                    last_tab_idx++, true, '*', ' ');
       v_offs += cp_textel_bg.height();
       dialog_editor.emplace_label({ v_offs, 0 }, "Mat:", dlg_style);
-      dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, 4);
+      dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, last_tab_idx++);
     }
     else
     {
@@ -360,13 +363,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor.clear_all_sstr_vec_pre();
       dialog_editor.clear_all_textel_pre();
       
-      dialog_editor.clear_text_field(0);
-      
-      dialog_editor.clear_text_field(1);
-      dialog_editor.clear_glyph_picker(1);
-      dialog_editor.clear_color_picker(2);
-      dialog_editor.clear_color_picker(3);
-      dialog_editor.clear_text_field(4);
+      dialog_editor.clear_all_text_fields();
+      dialog_editor.clear_all_glyph_pickers();
+      dialog_editor.clear_all_color_pickers();
     }
     dialog_editor.set_tab_selection(0);
   }
@@ -379,10 +378,13 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       dialog_editor_adhoc = t8x::Dialog(rows);
       int v_offs = 1;
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "Textel:", dlg_style);
+      int last_tab_idx = 0;
       if (edit_textel_presets_as_ascii_only)
       {
         dialog_editor_adhoc.emplace_label({ v_offs, 0 }, "Char:", dlg_style);
-        auto& tf_textel_symbol_adhoc = dialog_editor_adhoc.emplace_text_field({ v_offs, 6 }, 1, t8x::TextFieldMode::All, tf_style, 0);
+        dialog_editor_adhoc.emplace_label({ v_offs, 6 }, "0x", { Color16::Cyan, Color16::Transparent2 });
+        dialog_editor_adhoc.emplace_text_field({ v_offs, 8 }, 2, t8x::TextFieldMode::Hex, tf_style, last_tab_idx++); // 0
+        auto& tf_textel_symbol_adhoc = dialog_editor_adhoc.emplace_text_field({ v_offs, 13 }, 1, t8x::TextFieldMode::All, tf_style, last_tab_idx++); // 1
         v_offs += tf_textel_symbol_adhoc.height();
       }
       else
@@ -392,27 +394,26 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                                                                            tf_style, dlg_style,
                                                                            { Color16::Cyan, Color16::Transparent2 },
                                                                            { Color16::DarkCyan, Color16::Transparent2 },
-                                                                           Color16::DarkYellow, 0);
+                                                                           Color16::DarkYellow, last_tab_idx++); // 0
         v_offs += gp_textel_symbol_adhoc->height();
       }
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
       const auto& cp_textel_fg_adhoc = dialog_editor_adhoc.emplace_color_picker({ v_offs, 3 },
                                                                                 Color16::Blue, Color16::White,
                                                                                 cp_params,
-                                                                                1, true, '*', ' ');
+                                                                                last_tab_idx++, true, '*', ' ');
       v_offs += cp_textel_fg_adhoc.height();
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
       dialog_editor_adhoc.emplace_color_picker({ v_offs, 3 },
                                                Color16::Blue, Color16::White,
                                                cp_params,
-                                               2, true, '*', ' ');
+                                               last_tab_idx++, true, '*', ' ');
     }
     else
     {
-      dialog_editor_adhoc.clear_text_field(0);
-      dialog_editor_adhoc.clear_glyph_picker(0);
-      dialog_editor_adhoc.clear_color_picker(1);
-      dialog_editor_adhoc.clear_color_picker(2);
+      dialog_editor_adhoc.clear_all_text_fields();
+      dialog_editor_adhoc.clear_all_glyph_pickers();
+      dialog_editor_adhoc.clear_all_color_pickers();
     }
     dialog_editor_adhoc.set_tab_selection(0);
   }
@@ -1330,12 +1331,21 @@ private:
           if (edit_textel_presets_as_ascii_only)
           {
             const auto fb = edit_textel_normal.glyph.fallback;
-            dialog_editor_adhoc.set_text_field_input(0, fallback_to_text_field_input(fb));
+            if (fb == t8::Glyph::none)
+            {
+              dialog_editor_adhoc.clear_text_field(0);
+              dialog_editor_adhoc.clear_text_field(1);
+            }
+            else
+            {
+              dialog_editor_adhoc.set_text_field_input(0, str::int2hex(fb));
+              dialog_editor_adhoc.set_text_field_input(1, fallback_to_text_field_input(fb));
+            }
           }
           else
             dialog_editor_adhoc.set_glyph_picker_glyph(0, edit_textel_normal.glyph);
-          dialog_editor_adhoc.set_color_picker_color(1, edit_textel_normal.fg_color);
-          dialog_editor_adhoc.set_color_picker_color(2, edit_textel_normal.bg_color);
+          dialog_editor_adhoc.set_color_picker_color(edit_textel_presets_as_ascii_only ? 2 : 1, edit_textel_normal.fg_color);
+          dialog_editor_adhoc.set_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2, edit_textel_normal.bg_color);
         }
       }
       else if (str::to_lower(curr_key) == 't')
@@ -1602,13 +1612,22 @@ private:
                   if (edit_textel_presets_as_ascii_only)
                   {
                     const auto fb = edit_textel_normal.glyph.fallback;
-                    dialog_editor.set_text_field_input(1, fallback_to_text_field_input(fb));
+                    if (fb == t8::Glyph::none)
+                    {
+                      dialog_editor.clear_text_field(1);
+                      dialog_editor.clear_text_field(2);
+                    }
+                    else
+                    {
+                      dialog_editor.set_text_field_input(1, str::int2hex(fb));
+                      dialog_editor.set_text_field_input(2, fallback_to_text_field_input(fb));
+                    }
                   }
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_normal.glyph);
-                  dialog_editor.set_color_picker_color(2, edit_textel_normal.fg_color);
-                  dialog_editor.set_color_picker_color(3, edit_textel_normal.bg_color);
-                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_normal.decode_raw_mat()));
+                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2, edit_textel_normal.fg_color);
+                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3, edit_textel_normal.bg_color);
+                  dialog_editor.set_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4, std::to_string(edit_textel_normal.decode_raw_mat()));
                   edit_mode = EditTextelMode::EditTextelNormal;
                 }
                 else
@@ -1653,11 +1672,30 @@ private:
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
             if (edit_textel_presets_as_ascii_only)
-              edit_textel_normal.glyph = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
+            {
+              int curr_tab = 0, curr_sub_tab = 0;
+              dialog_editor.get_tab_selection(curr_tab, curr_sub_tab);
+              if (curr_tab == 1)
+              {
+                char ch = str::hex2int(dialog_editor.get_text_field_input(1));
+                if (t8::term::is_printable_ascii(ch))
+                  dialog_editor.set_text_field_input(2, std::string(1, ch));
+                else
+                  dialog_editor.clear_text_field(2);
+              }
+              else if (curr_tab == 2)
+              {
+                if (dialog_editor.text_field_empty(2))
+                  dialog_editor.clear_text_field(1);
+                else
+                  dialog_editor.set_text_field_input(1, str::int2hex(dialog_editor.get_text_field_input(2)[0]));
+              }
+              edit_textel_normal.glyph = dialog_editor.text_field_empty(2) ? ' ' : dialog_editor.get_text_field_input(2)[0];
+            }
             else
               edit_textel_normal.glyph = dialog_editor.get_glyph_picker_glyph(1);
-            edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(2);
-            edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(3);
+            edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2);
+            edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3);
             //edit_textel_preset->textel_normal = edit_textel_normal;
             if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
@@ -1676,7 +1714,7 @@ private:
                                              "You must enter a textel preset name.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(1))
+              else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(2))
                     || (!edit_textel_presets_as_ascii_only && edit_textel_normal.glyph.fully_empty()))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
@@ -1689,7 +1727,7 @@ private:
                                              "Unicode textel glyphs need an ASCII fallback.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if (dialog_editor.text_field_empty(4))
+              else if (dialog_editor.text_field_empty(edit_textel_presets_as_ascii_only ? 5 : 4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
@@ -1698,7 +1736,7 @@ private:
               else
               {
                 edit_textel_normal.glyph.try_canonicalize_from_fallback();
-                edit_textel_normal.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(4)));
+                edit_textel_normal.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4)));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
@@ -1708,13 +1746,22 @@ private:
                   if (edit_textel_presets_as_ascii_only)
                   {
                     const auto fb = edit_textel_shadow.glyph.fallback;
-                    dialog_editor.set_text_field_input(1, fallback_to_text_field_input(fb));
+                    if (fb == t8::Glyph::none)
+                    {
+                      dialog_editor.clear_text_field(1);
+                      dialog_editor.clear_text_field(2);
+                    }
+                    else
+                    {
+                      dialog_editor.set_text_field_input(1, str::int2hex(fb));
+                      dialog_editor.set_text_field_input(2, fallback_to_text_field_input(fb));
+                    }
                   }
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_shadow.glyph);
-                  dialog_editor.set_color_picker_color(2, edit_textel_shadow.fg_color);
-                  dialog_editor.set_color_picker_color(3, edit_textel_shadow.bg_color);
-                  dialog_editor.set_text_field_input(4, std::to_string(edit_textel_shadow.decode_raw_mat()));
+                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2, edit_textel_shadow.fg_color);
+                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3, edit_textel_shadow.bg_color);
+                  dialog_editor.set_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4, std::to_string(edit_textel_shadow.decode_raw_mat()));
                 }
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 if (edit_textel_presets_as_ascii_only)
@@ -1758,11 +1805,30 @@ private:
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
             if (edit_textel_presets_as_ascii_only)
-              edit_textel_shadow.glyph = dialog_editor.text_field_empty(1) ? ' ' : dialog_editor.get_text_field_input(1)[0];
+            {
+              int curr_tab = 0, curr_sub_tab = 0;
+              dialog_editor.get_tab_selection(curr_tab, curr_sub_tab);
+              if (curr_tab == 1)
+              {
+                char ch = str::hex2int(dialog_editor.get_text_field_input(1));
+                if (t8::term::is_printable_ascii(ch))
+                  dialog_editor.set_text_field_input(2, std::string(1, ch));
+                else
+                  dialog_editor.clear_text_field(2);
+              }
+              else if (curr_tab == 2)
+              {
+                if (dialog_editor.text_field_empty(2))
+                  dialog_editor.clear_text_field(1);
+                else
+                  dialog_editor.set_text_field_input(1, str::int2hex(dialog_editor.get_text_field_input(2)[0]));
+              }
+              edit_textel_shadow.glyph = dialog_editor.text_field_empty(2) ? ' ' : dialog_editor.get_text_field_input(2)[0];
+            }
             else
               edit_textel_shadow.glyph = dialog_editor.get_glyph_picker_glyph(1);
-            edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(2);
-            edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(3);
+            edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2);
+            edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3);
             //edit_textel_preset->textel_shadow = edit_textel_shadow;
             if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.glyph, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
@@ -1781,7 +1847,7 @@ private:
                                              "You must enter a textel preset name.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(1))
+              else if ((edit_textel_presets_as_ascii_only && dialog_editor.text_field_empty(2))
                     || (!edit_textel_presets_as_ascii_only && edit_textel_shadow.glyph.fully_empty()))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
@@ -1794,7 +1860,7 @@ private:
                                              "Unicode textel glyphs need an ASCII fallback.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if (dialog_editor.text_field_empty(4))
+              else if (dialog_editor.text_field_empty(edit_textel_presets_as_ascii_only ? 5 : 4))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
@@ -1803,7 +1869,7 @@ private:
               else
               {
                 edit_textel_shadow.glyph.try_canonicalize_from_fallback();
-                edit_textel_shadow.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(4)));
+                edit_textel_shadow.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4)));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
@@ -1876,11 +1942,30 @@ private:
         allow_editing = false;
         dialog_editor_adhoc.update(curr_key, curr_special_key);
         if (edit_textel_presets_as_ascii_only)
-          edit_textel_normal.glyph = dialog_editor_adhoc.text_field_empty(0) ? ' ' : dialog_editor_adhoc.get_text_field_input(0)[0];
+        {
+          int curr_tab = 0, curr_sub_tab = 0;
+          dialog_editor_adhoc.get_tab_selection(curr_tab, curr_sub_tab);
+          if (curr_tab == 0)
+          {
+            char ch = str::hex2int(dialog_editor_adhoc.get_text_field_input(0));
+            if (t8::term::is_printable_ascii(ch))
+              dialog_editor_adhoc.set_text_field_input(1, std::string(1, ch));
+            else
+              dialog_editor_adhoc.clear_text_field(1);
+          }
+          else if (curr_tab == 1)
+          {
+            if (dialog_editor_adhoc.text_field_empty(1))
+              dialog_editor_adhoc.clear_text_field(0);
+            else
+              dialog_editor_adhoc.set_text_field_input(0, str::int2hex(dialog_editor_adhoc.get_text_field_input(1)[0]));
+          }
+          edit_textel_normal.glyph = dialog_editor_adhoc.text_field_empty(1) ? ' ' : dialog_editor_adhoc.get_text_field_input(1)[0];
+        }
         else
           edit_textel_normal.glyph = dialog_editor_adhoc.get_glyph_picker_glyph(0);
-        edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(1);
-        edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(2);
+        edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(edit_textel_presets_as_ascii_only ? 2 : 1);
+        edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2);
         if (edit_textel_presets_as_ascii_only)
           dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
         else
