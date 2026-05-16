@@ -343,16 +343,19 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       const auto& cp_textel_fg = dialog_editor.emplace_color_picker({ v_offs, 3 },
                                                                     Color16::Blue, Color16::White,
                                                                     cp_params,
-                                                                    last_tab_idx++, true, '*', ' ' );
+                                                                    tab_fg_color = last_tab_idx++,
+                                                                    true, '*', ' ' );
       v_offs += cp_textel_fg.height();
       dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
       const auto& cp_textel_bg = dialog_editor.emplace_color_picker({ v_offs, 3 },
                                                                     Color16::Blue, Color16::White,
                                                                     cp_params,
-                                                                    last_tab_idx++, true, '*', ' ');
+                                                                    tab_bg_color = last_tab_idx++,
+                                                                    true, '*', ' ');
       v_offs += cp_textel_bg.height();
       dialog_editor.emplace_label({ v_offs, 0 }, "Mat:", dlg_style);
-      dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style, last_tab_idx++);
+      dialog_editor.emplace_text_field({ v_offs++, 5 }, 4, t8x::TextFieldMode::Numeric, tf_style,
+                                       tab_mat = last_tab_idx++);
     }
     else
     {
@@ -401,13 +404,15 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       const auto& cp_textel_fg_adhoc = dialog_editor_adhoc.emplace_color_picker({ v_offs, 3 },
                                                                                 Color16::Blue, Color16::White,
                                                                                 cp_params,
-                                                                                last_tab_idx++, true, '*', ' ');
+                                                                                tab_fg_color_adhoc = last_tab_idx++,
+                                                                                true, '*', ' ');
       v_offs += cp_textel_fg_adhoc.height();
       dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
       dialog_editor_adhoc.emplace_color_picker({ v_offs, 3 },
                                                Color16::Blue, Color16::White,
                                                cp_params,
-                                               last_tab_idx++, true, '*', ' ');
+                                               tab_bg_color_adhoc = last_tab_idx++,
+                                               true, '*', ' ');
     }
     else
     {
@@ -1344,8 +1349,8 @@ private:
           }
           else
             dialog_editor_adhoc.set_glyph_picker_glyph(0, edit_textel_normal.glyph);
-          dialog_editor_adhoc.set_color_picker_color(edit_textel_presets_as_ascii_only ? 2 : 1, edit_textel_normal.fg_color);
-          dialog_editor_adhoc.set_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2, edit_textel_normal.bg_color);
+          dialog_editor_adhoc.set_color_picker_color(tab_fg_color_adhoc, edit_textel_normal.fg_color);
+          dialog_editor_adhoc.set_color_picker_color(tab_bg_color_adhoc, edit_textel_normal.bg_color);
         }
       }
       else if (str::to_lower(curr_key) == 't')
@@ -1625,9 +1630,9 @@ private:
                   }
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_normal.glyph);
-                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2, edit_textel_normal.fg_color);
-                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3, edit_textel_normal.bg_color);
-                  dialog_editor.set_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4, std::to_string(edit_textel_normal.decode_raw_mat()));
+                  dialog_editor.set_color_picker_color(tab_fg_color, edit_textel_normal.fg_color);
+                  dialog_editor.set_color_picker_color(tab_bg_color, edit_textel_normal.bg_color);
+                  dialog_editor.set_text_field_input(tab_mat, std::to_string(edit_textel_normal.decode_raw_mat()));
                   edit_mode = EditTextelMode::EditTextelNormal;
                 }
                 else
@@ -1694,8 +1699,8 @@ private:
             }
             else
               edit_textel_normal.glyph = dialog_editor.get_glyph_picker_glyph(1);
-            edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2);
-            edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3);
+            edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(tab_fg_color);
+            edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(tab_bg_color);
             //edit_textel_preset->textel_normal = edit_textel_normal;
             if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
@@ -1727,7 +1732,7 @@ private:
                                              "Unicode textel glyphs need an ASCII fallback.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if (dialog_editor.text_field_empty(edit_textel_presets_as_ascii_only ? 5 : 4))
+              else if (dialog_editor.text_field_empty(tab_mat))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
@@ -1736,7 +1741,7 @@ private:
               else
               {
                 edit_textel_normal.glyph.try_canonicalize_from_fallback();
-                edit_textel_normal.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4)));
+                edit_textel_normal.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(tab_mat)));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
@@ -1759,9 +1764,9 @@ private:
                   }
                   else
                     dialog_editor.set_glyph_picker_glyph(1, edit_textel_shadow.glyph);
-                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2, edit_textel_shadow.fg_color);
-                  dialog_editor.set_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3, edit_textel_shadow.bg_color);
-                  dialog_editor.set_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4, std::to_string(edit_textel_shadow.decode_raw_mat()));
+                  dialog_editor.set_color_picker_color(tab_fg_color, edit_textel_shadow.fg_color);
+                  dialog_editor.set_color_picker_color(tab_bg_color, edit_textel_shadow.bg_color);
+                  dialog_editor.set_text_field_input(tab_mat, std::to_string(edit_textel_shadow.decode_raw_mat()));
                 }
                 dialog_editor[0] = "Custom Textel Preset Editor (Shadow)    ";
                 if (edit_textel_presets_as_ascii_only)
@@ -1827,8 +1832,8 @@ private:
             }
             else
               edit_textel_shadow.glyph = dialog_editor.get_glyph_picker_glyph(1);
-            edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2);
-            edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(edit_textel_presets_as_ascii_only ? 4 : 3);
+            edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(tab_fg_color);
+            edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(tab_bg_color);
             //edit_textel_preset->textel_shadow = edit_textel_shadow;
             if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_shadow.glyph, edit_textel_shadow.fg_color, edit_textel_shadow.bg_color);
@@ -1860,7 +1865,7 @@ private:
                                              "Unicode textel glyphs need an ASCII fallback.",
                                              t8x::MessageHandlerLevel::Guide);
               }
-              else if (dialog_editor.text_field_empty(edit_textel_presets_as_ascii_only ? 5 : 4))
+              else if (dialog_editor.text_field_empty(tab_mat))
               {
                 message_handler->add_message(static_cast<float>(get_real_time_s()),
                                              "You must enter a textel material.",
@@ -1869,7 +1874,7 @@ private:
               else
               {
                 edit_textel_shadow.glyph.try_canonicalize_from_fallback();
-                edit_textel_shadow.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(edit_textel_presets_as_ascii_only ? 5 : 4)));
+                edit_textel_shadow.encode_raw_mat(std::stoi(dialog_editor.get_text_field_input(tab_mat)));
                 if (edit_or_add == EditOrAdd::Edit && edit_textel_preset != nullptr)
                 {
                   edit_textel_preset->name = edit_textel_name;
@@ -1964,8 +1969,8 @@ private:
         }
         else
           edit_textel_normal.glyph = dialog_editor_adhoc.get_glyph_picker_glyph(0);
-        edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(edit_textel_presets_as_ascii_only ? 2 : 1);
-        edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(edit_textel_presets_as_ascii_only ? 3 : 2);
+        edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(tab_fg_color_adhoc);
+        edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(tab_bg_color_adhoc);
         if (edit_textel_presets_as_ascii_only)
           dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
         else
@@ -2181,6 +2186,11 @@ private:
   TextelItem* edit_textel_preset_adhoc = nullptr;
   std::string edit_textel_name;
   uint8_t adhoc_textel_material = t8::texture::raw_mat_none;
+  int tab_fg_color = 0;
+  int tab_bg_color = 0;
+  int tab_mat = 0;
+  int tab_fg_color_adhoc = 0;
+  int tab_bg_color_adhoc = 0;
   
   t8x::TextBox<std::string> tb_ui_help_edit_adhoc {{
     "UI Help"s,
