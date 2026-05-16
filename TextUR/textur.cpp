@@ -1998,7 +1998,7 @@ private:
                           tracing_texture);
       }
     }
-                      
+    
     set_allow_quitting(!show_textel_editor && !show_adhoc_textel_editor);
                       
     if (allow_editing)
