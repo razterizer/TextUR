@@ -241,7 +241,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       "M : toggle show/hide of material id:s.",
       "SHIFT + E : edit existing or add new custom textel preset.",
       "E : edit Ad Hoc textel preset (the first in the list). Mat = -1.",
-      "Q : quit."
+      "Q : quit. Cannot quit while any textel editing dialog is visible."
     });
     t8::Color fg_key = Color16::Cyan; //{ 4, 3, 2 };
     t8::Color bg_key = Color16::Transparent2;
