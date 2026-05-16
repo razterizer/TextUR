@@ -1676,29 +1676,7 @@ private:
             // +--------------------------------------+
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
-            if (edit_textel_presets_as_ascii_only)
-            {
-              int curr_tab = 0, curr_sub_tab = 0;
-              dialog_editor.get_tab_selection(curr_tab, curr_sub_tab);
-              if (curr_tab == 1)
-              {
-                char ch = str::hex2int(dialog_editor.get_text_field_input(1));
-                if (t8::term::is_printable_ascii(ch))
-                  dialog_editor.set_text_field_input(2, std::string(1, ch));
-                else
-                  dialog_editor.clear_text_field(2);
-              }
-              else if (curr_tab == 2)
-              {
-                if (dialog_editor.text_field_empty(2))
-                  dialog_editor.clear_text_field(1);
-                else
-                  dialog_editor.set_text_field_input(1, str::int2hex(dialog_editor.get_text_field_input(2)[0]));
-              }
-              edit_textel_normal.glyph = dialog_editor.text_field_empty(2) ? ' ' : dialog_editor.get_text_field_input(2)[0];
-            }
-            else
-              edit_textel_normal.glyph = dialog_editor.get_glyph_picker_glyph(1);
+            update_current_textel_glyph_widgets(dialog_editor, edit_textel_normal, 1, 2, 1);
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(tab_fg_color);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(tab_bg_color);
             //edit_textel_preset->textel_normal = edit_textel_normal;
@@ -1809,29 +1787,7 @@ private:
           {
             dialog_editor.update(curr_key, curr_special_key);
             edit_textel_name = dialog_editor.get_text_field_input(0);
-            if (edit_textel_presets_as_ascii_only)
-            {
-              int curr_tab = 0, curr_sub_tab = 0;
-              dialog_editor.get_tab_selection(curr_tab, curr_sub_tab);
-              if (curr_tab == 1)
-              {
-                char ch = str::hex2int(dialog_editor.get_text_field_input(1));
-                if (t8::term::is_printable_ascii(ch))
-                  dialog_editor.set_text_field_input(2, std::string(1, ch));
-                else
-                  dialog_editor.clear_text_field(2);
-              }
-              else if (curr_tab == 2)
-              {
-                if (dialog_editor.text_field_empty(2))
-                  dialog_editor.clear_text_field(1);
-                else
-                  dialog_editor.set_text_field_input(1, str::int2hex(dialog_editor.get_text_field_input(2)[0]));
-              }
-              edit_textel_shadow.glyph = dialog_editor.text_field_empty(2) ? ' ' : dialog_editor.get_text_field_input(2)[0];
-            }
-            else
-              edit_textel_shadow.glyph = dialog_editor.get_glyph_picker_glyph(1);
+            update_current_textel_glyph_widgets(dialog_editor, edit_textel_shadow, 1, 2, 1);
             edit_textel_shadow.fg_color = dialog_editor.get_color_picker_color(tab_fg_color);
             edit_textel_shadow.bg_color = dialog_editor.get_color_picker_color(tab_bg_color);
             //edit_textel_preset->textel_shadow = edit_textel_shadow;
@@ -1946,29 +1902,7 @@ private:
       {
         allow_editing = false;
         dialog_editor_adhoc.update(curr_key, curr_special_key);
-        if (edit_textel_presets_as_ascii_only)
-        {
-          int curr_tab = 0, curr_sub_tab = 0;
-          dialog_editor_adhoc.get_tab_selection(curr_tab, curr_sub_tab);
-          if (curr_tab == 0)
-          {
-            char ch = str::hex2int(dialog_editor_adhoc.get_text_field_input(0));
-            if (t8::term::is_printable_ascii(ch))
-              dialog_editor_adhoc.set_text_field_input(1, std::string(1, ch));
-            else
-              dialog_editor_adhoc.clear_text_field(1);
-          }
-          else if (curr_tab == 1)
-          {
-            if (dialog_editor_adhoc.text_field_empty(1))
-              dialog_editor_adhoc.clear_text_field(0);
-            else
-              dialog_editor_adhoc.set_text_field_input(0, str::int2hex(dialog_editor_adhoc.get_text_field_input(1)[0]));
-          }
-          edit_textel_normal.glyph = dialog_editor_adhoc.text_field_empty(1) ? ' ' : dialog_editor_adhoc.get_text_field_input(1)[0];
-        }
-        else
-          edit_textel_normal.glyph = dialog_editor_adhoc.get_glyph_picker_glyph(0);
+        update_current_textel_glyph_widgets(dialog_editor_adhoc, edit_textel_normal, 0, 1, 0);
         edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(tab_fg_color_adhoc);
         edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(tab_bg_color_adhoc);
         if (edit_textel_presets_as_ascii_only)
@@ -2080,6 +2014,34 @@ private:
   virtual void draw_instructions() override
   {
     //::draw_instructions(sh, 0);
+  }
+  
+  void update_current_textel_glyph_widgets(t8x::Dialog<std::string>& dialog, Textel& edit_textel,
+                                           int tab_ascii_hex, int tab_ascii_char, int tab_glyph_picker)
+  {
+    if (edit_textel_presets_as_ascii_only)
+    {
+      int curr_tab = 0, curr_sub_tab = 0;
+      dialog.get_tab_selection(curr_tab, curr_sub_tab);
+      if (curr_tab == tab_ascii_hex)
+      {
+        char ch = str::hex2int(dialog.get_text_field_input(tab_ascii_hex));
+        if (t8::term::is_printable_ascii(ch))
+          dialog.set_text_field_input(tab_ascii_char, std::string(1, ch));
+        else
+          dialog.clear_text_field(tab_ascii_char);
+      }
+      else if (curr_tab == tab_ascii_char)
+      {
+        if (dialog.text_field_empty(tab_ascii_char))
+          dialog.clear_text_field(tab_ascii_hex);
+        else
+          dialog.set_text_field_input(tab_ascii_hex, str::int2hex(dialog.get_text_field_input(tab_ascii_char)[0]));
+      }
+      edit_textel.glyph = dialog.text_field_empty(tab_ascii_char) ? ' ' : dialog.get_text_field_input(tab_ascii_char)[0];
+    }
+    else
+      edit_textel.glyph = dialog.get_glyph_picker_glyph(tab_glyph_picker);
   }
   
   std::string filepath_custom_textel_presets;
