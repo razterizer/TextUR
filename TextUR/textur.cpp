@@ -1557,7 +1557,7 @@ private:
               auto sel_btn_text = dialog_edit_or_add.get_selected_button_text();
               if (sel_btn_text == "Edit")
               {
-                edit_mode = EditTextelMode::EditEnterMat;
+                edit_mode = EditTextelMode::EditEnterCustomPresetIdx;
                 edit_or_add = EditOrAdd::Edit;
               }
               else if (sel_btn_text == "Add")
@@ -1582,8 +1582,7 @@ private:
             break;
           }
             
-          // #FIXME: Rename to EditEnterCustomPresetIdx
-          case EditTextelMode::EditEnterMat:
+          case EditTextelMode::EditEnterCustomPresetIdx:
           {
             // +----------------------------------+
             // | Enter Custom Textel Preset Index |
@@ -2118,7 +2117,7 @@ private:
   }};
   t8x::Dialog<std::string> dialog_keys;
   
-  enum class EditTextelMode { EditOrAdd, EditEnterMat, EditTextelNormal, EditTextelShadow };
+  enum class EditTextelMode { EditOrAdd, EditEnterCustomPresetIdx, EditTextelNormal, EditTextelShadow };
   enum class EditOrAdd { None, Edit, Add };
   std::array<t8x::TextBox<std::string>, 4> tb_ui_help_edit_textel
   {
