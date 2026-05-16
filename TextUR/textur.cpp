@@ -1999,6 +1999,8 @@ private:
       }
     }
                       
+    set_allow_quitting(!show_textel_editor && !show_adhoc_textel_editor);
+                      
     if (allow_editing)
       handle_editor_key_presses(curr_key, curr_special_key, nri, nci, cursor_pos);
     
