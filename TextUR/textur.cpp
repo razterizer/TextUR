@@ -2027,7 +2027,7 @@ private:
       if (curr_tab == tab_ascii_hex)
       {
         char ch = str::hex2int(dialog.get_text_field_input(tab_ascii_hex));
-        if (t8::term::is_printable_ascii(ch))
+        if (str::is_printable_ascii(ch))
           dialog.set_text_field_input(tab_ascii_char, std::string(1, ch));
         else
           dialog.clear_text_field(tab_ascii_char);
