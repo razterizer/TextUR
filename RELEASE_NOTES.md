@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.4.0.12
+- Bumped Termin8or dependency to 3.0.0.6.
+- Updated compatibility with Termin8or's Unicode/glyph API changes.
+
 ## 1.3.3.11
 - Better shaped big brush strokes using mathematical algorithm rather than hard hacked pattern.
 - Feature: Added command line arguments that allows you to configure the size and aspect ratio of big brush strokes.
