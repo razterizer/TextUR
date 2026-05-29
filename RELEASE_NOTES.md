@@ -1,8 +1,20 @@
 # Release Notes
 
 ## 1.4.0.12
-- Bumped Termin8or dependency to 3.0.0.6.
-- Updated compatibility with Termin8or's Unicode/glyph API changes.
+- Added Unicode/glyph-aware textel preset editing, including GlyphPicker-based input, styled glyph previews, ASCII fallback validation, and recent glyph handling.
+- Updated custom textel preset parsing and writing to support glyphs instead of single chars, including fallback canonicalization and preservation when editing normal/shadow textels.
+- Added ASCII-focused command line modes for editing, saving, and display: `--edit_textel_presets_as_ascii_only`, `--save_textures_as_ascii_only`, and `--display_ascii_only`.
+- Added hexadecimal character input when editing textel presets in ASCII-only mode.
+- Added support for loading textures with automatic format detection between `.tx` and `.ans`, gentler Unicode-vs-ASCII save encoding for `.tx` files, and clearer parse/load errors.
+- Added `-o <filepath_saved_texture>` for saving edits to an alternate output file, including overwrite confirmation and validation against incompatible `-c` conversion usage.
+- Added ANSI import default color overrides with `--set_ansi_default_fg` and `--set_ansi_default_bg`.
+- Added `--set_adhoc_textel_material <mat>` for configuring the Ad Hoc textel material.
+- Improved custom and Ad Hoc textel editor state handling, including preset propagation, preview clearing, shadow glyph editing, dirty text cleanup, and recent glyph selection highlighting.
+- Improved editor behavior by keeping the texture inside the frame near boundaries and disabling quit while textel editing dialogs are open.
+- Improved UI polish with Unicode outlines/guide lines, better glyph display strings in the preset menu, updated key legend text, and safer TTY suppression help/warnings.
+- Added new example texture and ANSI files for UTF-8, BOM, wide-row, and glyph-format coverage.
+- Removed the checked-in Visual Studio `.vcxproj.user` file.
+- Updated Termin8or to version 3.0.0.6 and refreshed the Core dependency hash for the newer glyph/texture APIs.
 
 ## 1.3.3.11
 - Better shaped big brush strokes using mathematical algorithm rather than hard hacked pattern.
@@ -51,4 +63,3 @@
 
 ## 1.0.0.0
 - Added new script retag_release.sh to xcode project.
-
