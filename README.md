@@ -37,7 +37,7 @@ The recommended file extension for texture files is `*.tx`, though the program d
 ## Keys
 
  * `K` : to get a list of all support key presses.
- * `Escape : close windows.
+ * `Escape` : close windows.
  * `WASD` (lower case) or arrow keys : navigates the cursor or selects a textel preset in the textel menu. When in the textel menu, left and right (or `A` and `D`) scrolls from material to material for quicker navigation among the different textel presets.
  * `SHIFT + WASD` (upper case) keys : scrolls the texture page-wise.
  * Space : enter selected textel preset under cursor.
