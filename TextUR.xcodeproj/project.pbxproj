@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		070041E32FCB138F0099D5E4 /* textel_presets */ = {isa = PBXFileReference; lastKnownFileType = text; path = textel_presets; sourceTree = "<group>"; };
 		072AE7EB2D08BAB8004F92D3 /* fetch-dependencies.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = "fetch-dependencies.py"; sourceTree = SOURCE_ROOT; };
 		072AE7EC2D08BAC3004F92D3 /* dependencies */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dependencies; sourceTree = SOURCE_ROOT; };
 		072AE7F52D09ED26004F92D3 /* setup_and_build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = setup_and_build.sh; sourceTree = SOURCE_ROOT; };
@@ -122,6 +123,7 @@
 				076AB05C2C9DDA3E00531419 /* workflows */,
 				075C5B082C59B36700E6A6C0 /* examples */,
 				07C2A7992C31E62700869A56 /* textur.cpp */,
+				070041E32FCB138F0099D5E4 /* textel_presets */,
 			);
 			path = TextUR;
 			sourceTree = "<group>";

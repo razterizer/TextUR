@@ -423,325 +423,12 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_editor_adhoc.set_tab_selection(0);
   }
   
-  void reload_textel_presets()
+  void load_textel_presets_from_file(const std::string filepath,
+                                     std::vector<TextelItem>& all_textel_presets,
+                                     std::vector<TextelItem>* these_textel_presets = nullptr)
   {
-    textel_presets.clear();
-    custom_textel_presets.clear();
-    textel_presets.emplace_back(Textel { { }, Color16::Transparent2, Color16::Transparent2, adhoc_textel_material },
-                                Textel { { }, Color16::Transparent2, Color16::Transparent2, adhoc_textel_material },
-                                "Ad Hoc [e]");
-    textel_presets.emplace_back(Textel { ' ', Color16::Default, Color16::Black, 0 },
-                                Textel { ' ', Color16::Default, Color16::Black, 0 },
-                                "Void");
-    textel_presets.emplace_back(Textel { '~', Color16::DarkCyan, Color16::Cyan, 2 },
-                                Textel { '~', Color16::Cyan, Color16::DarkCyan, 2 },
-                                "Water0");
-    textel_presets.emplace_back(Textel { '*', Color16::White, Color16::Cyan, 2 },
-                                Textel { '*', Color16::LightGray, Color16::DarkCyan, 2 },
-                                "Water1");
-    textel_presets.emplace_back(Textel { '~', Color16::Cyan, Color16::DarkCyan, 2 },
-                                Textel { '~', Color16::DarkCyan, Color16::Blue, 2 },
-                                "Water2");
-    textel_presets.emplace_back(Textel { '*', Color16::LightGray, Color16::DarkCyan, 2 },
-                                Textel { '*', Color16::DarkGray, Color16::Blue, 2 },
-                                "Water3");
-    textel_presets.emplace_back(Textel { '~', Color16::DarkBlue, Color16::Blue, 2 },
-                                Textel { '~', Color16::Blue, Color16::DarkBlue, 2 },
-                                "Water4");
-    textel_presets.emplace_back(Textel { '*', Color16::White, Color16::Blue, 2 },
-                                Textel { '*', Color16::LightGray, Color16::DarkBlue, 2 },
-                                "Water5");
-    textel_presets.emplace_back(Textel { '~', Color16::Blue, Color16::DarkBlue, 2 },
-                                Textel { '~', Color16::DarkBlue, Color16::Black, 2 },
-                                "Water6");
-    textel_presets.emplace_back(Textel { '*', Color16::LightGray, Color16::DarkBlue, 2 },
-                                Textel { '*', Color16::DarkGray, Color16::Black, 2 },
-                                "Water7");
-    textel_presets.emplace_back(Textel { ':', Color16::DarkYellow, Color16::Yellow, 3 },
-                                Textel { ':', Color16::Yellow, Color16::DarkYellow, 3 },
-                                "Sand0");
-    textel_presets.emplace_back(Textel { '.', Color16::DarkYellow, Color16::Yellow, 3 },
-                                Textel { '.', Color16::Yellow, Color16::DarkYellow, 3 },
-                                "Sand1");
-    textel_presets.emplace_back(Textel { '.', Color16::DarkGray, Color16::LightGray, 22 },
-                                Textel { '.', Color16::LightGray, Color16::DarkGray, 22 },
-                                "Gravel0");
-    textel_presets.emplace_back(Textel { ':', Color16::DarkGray, Color16::LightGray, 22 },
-                                Textel { ':', Color16::LightGray, Color16::DarkGray, 22 },
-                                "Gravel1");
-    textel_presets.emplace_back(Textel { '.', Color16::Black, Color16::LightGray, 22 },
-                                Textel { '.', Color16::Black, Color16::DarkGray, 22 },
-                                "Gravel2");
-    textel_presets.emplace_back(Textel { ':', Color16::Black, Color16::LightGray, 22 },
-                                Textel { ':', Color16::Black, Color16::DarkGray, 22 },
-                                "Gravel3");
-    textel_presets.emplace_back(Textel { '8', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { '8', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone0");
-    textel_presets.emplace_back(Textel { 'o', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'o', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone1");
-    textel_presets.emplace_back(Textel { 'O', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'O', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone2");
-    textel_presets.emplace_back(Textel { 'b', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'b', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone3");
-    textel_presets.emplace_back(Textel { 'B', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'B', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone4");
-    textel_presets.emplace_back(Textel { 'p', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'p', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone5");
-    textel_presets.emplace_back(Textel { 'P', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'P', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone6");
-    textel_presets.emplace_back(Textel { 'q', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'q', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone7");
-    textel_presets.emplace_back(Textel { '6', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { '6', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone8");
-    textel_presets.emplace_back(Textel { '9', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { '9', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone9");
-    textel_presets.emplace_back(Textel { 'c', Color16::DarkGray, Color16::LightGray, 4 },
-                                Textel { 'c', Color16::LightGray, Color16::DarkGray, 4 },
-                                "Stone10");
-    textel_presets.emplace_back(Textel { '8', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { '8', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone11");
-    textel_presets.emplace_back(Textel { 'o', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'o', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone12");
-    textel_presets.emplace_back(Textel { 'O', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'O', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone13");
-    textel_presets.emplace_back(Textel { 'b', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'b', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone14");
-    textel_presets.emplace_back(Textel { 'B', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'B', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone15");
-    textel_presets.emplace_back(Textel { 'p', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'p', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone16");
-    textel_presets.emplace_back(Textel { 'P', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'P', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone17");
-    textel_presets.emplace_back(Textel { 'q', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'q', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone18");
-    textel_presets.emplace_back(Textel { '6', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { '6', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone19");
-    textel_presets.emplace_back(Textel { '9', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { '9', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone20");
-    textel_presets.emplace_back(Textel { 'c', Color16::LightGray, Color16::DarkGray, 4 },
-                                Textel { 'c', Color16::DarkGray, Color16::Black, 4 },
-                                "Stone21");
-    textel_presets.emplace_back(Textel { '^', Color16::DarkGray, Color16::LightGray, 13 },
-                                Textel { '^', Color16::LightGray, Color16::DarkGray, 13 },
-                                "Mountain0");
-    textel_presets.emplace_back(Textel { '^', Color16::LightGray, Color16::White, 13 },
-                                Textel { '^', Color16::DarkGray, Color16::LightGray, 13 },
-                                "Mountain1");
-    textel_presets.emplace_back(Textel { 'W', Color16::DarkRed, Color16::Red, 14 },
-                                Textel { 'W', Color16::Red, Color16::DarkRed, 14 },
-                                "Lava");
-    textel_presets.emplace_back(Textel { 'C', Color16::DarkYellow, Color16::Yellow, 15 },
-                                Textel { 'C', Color16::Yellow, Color16::DarkYellow, 15 },
-                                "Cave0");
-    textel_presets.emplace_back(Textel { 'U', Color16::DarkYellow, Color16::Yellow, 15 },
-                                Textel { 'U', Color16::Yellow, Color16::DarkYellow, 15 },
-                                "Cave1");
-    textel_presets.emplace_back(Textel { 'S', Color16::DarkRed, Color16::Green, 16 },
-                                Textel { 'S', Color16::Red, Color16::DarkGreen, 16 },
-                                "Swamp0");
-    textel_presets.emplace_back(Textel { 'B', Color16::DarkRed, Color16::Green, 16 },
-                                Textel { 'B', Color16::Red, Color16::DarkGreen, 16 },
-                                "Swamp1");
-    textel_presets.emplace_back(Textel { 'C', Color16::DarkRed, Color16::Green, 16 },
-                                Textel { 'C', Color16::Red, Color16::DarkGreen, 16 },
-                                "Swamp2");
-    textel_presets.emplace_back(Textel { 'P', Color16::DarkRed, Color16::Green, 16 },
-                                Textel { 'P', Color16::Red, Color16::DarkGreen, 16 },
-                                "Swamp3");
-    textel_presets.emplace_back(Textel { 'S', Color16::Green, Color16::DarkRed, 16 },
-                                Textel { 'S', Color16::DarkGreen, Color16::DarkRed, 16 },
-                                "Swamp4");
-    textel_presets.emplace_back(Textel { 'B', Color16::Green, Color16::DarkRed, 16 },
-                                Textel { 'B', Color16::DarkGreen, Color16::DarkRed, 16 },
-                                "Swamp5");
-    textel_presets.emplace_back(Textel { 'C', Color16::Green, Color16::DarkRed, 16 },
-                                Textel { 'C', Color16::DarkGreen, Color16::DarkRed, 16 },
-                                "Swamp6");
-    textel_presets.emplace_back(Textel { 'P', Color16::Green, Color16::DarkRed, 16 },
-                                Textel { 'P', Color16::DarkGreen, Color16::DarkRed, 16 },
-                                "Swamp7");
-    textel_presets.emplace_back(Textel { '~', Color16::DarkGreen, Color16::Green, 17 },
-                                Textel { '~', Color16::Green, Color16::DarkGreen, 17 },
-                                "Poison0");
-    textel_presets.emplace_back(Textel { 'o', Color16::DarkGreen, Color16::Green, 17 },
-                                Textel { 'o', Color16::Green, Color16::DarkGreen, 17 },
-                                "Poison1");
-    textel_presets.emplace_back(Textel { '~', Color16::Magenta, Color16::Cyan, 24 },
-                                Textel { '~', Color16::DarkMagenta, Color16::DarkCyan, 24 },
-                                "Acid0");
-    textel_presets.emplace_back(Textel { 'o', Color16::Magenta, Color16::Cyan, 24 },
-                                Textel { 'o', Color16::DarkMagenta, Color16::DarkCyan, 24 },
-                                "Acid1");
-    textel_presets.emplace_back(Textel { '~', Color16::LightGray, Color16::Black, 26 },
-                                Textel { '~', Color16::DarkGray, Color16::Black, 26 },
-                                "Tar");
-    textel_presets.emplace_back(Textel { '#', Color16::DarkYellow, Color16::Green, 18 },
-                                Textel { '#', Color16::Yellow, Color16::DarkGreen, 18 },
-                                "Path");
-    textel_presets.emplace_back(Textel { 'M', Color16::DarkGray, Color16::LightGray, 19 },
-                                Textel { 'M', Color16::LightGray, Color16::DarkGray, 19 },
-                                "Mine");
-    textel_presets.emplace_back(Textel { '|', Color16::DarkGreen, Color16::Green, 7 },
-                                Textel { '|', Color16::Green, Color16::DarkGreen, 7 },
-                                "Grass0");
-    textel_presets.emplace_back(Textel { { 0x2506, '|' }, Color16::DarkGreen, Color16::Green, 7 },
-                                Textel { { 0x2506, '|' }, Color16::Green, Color16::DarkGreen, 7 },
-                                "Grass0u");
-    textel_presets.emplace_back(Textel { '.', Color16::DarkGreen, Color16::Green, 7 },
-                                Textel { '.', Color16::Green, Color16::DarkGreen, 7 },
-                                "Grass1");
-    textel_presets.emplace_back(Textel { ':', Color16::DarkGreen, Color16::Green, 7 },
-                                Textel { ':', Color16::Green, Color16::DarkGreen, 7 },
-                                "Grass2");
-    textel_presets.emplace_back(Textel { '/', Color16::DarkGreen, Color16::Green, 7 },
-                                Textel { '/', Color16::Green, Color16::DarkGreen, 7 },
-                                "Grass3");
-    textel_presets.emplace_back(Textel { '\\', Color16::DarkGreen, Color16::Green, 7 },
-                                Textel { '\\', Color16::Green, Color16::DarkGreen, 7 },
-                                "Grass4");
-    textel_presets.emplace_back(Textel { '|', Color16::DarkYellow, Color16::Green, 7 },
-                                Textel { '|', Color16::Yellow, Color16::DarkGreen, 7 },
-                                "Grass5");
-    textel_presets.emplace_back(Textel { '.', Color16::DarkYellow, Color16::Green, 7 },
-                                Textel { '.', Color16::Yellow, Color16::DarkGreen, 7 },
-                                "Grass6");
-    textel_presets.emplace_back(Textel { ':', Color16::DarkYellow, Color16::Green, 7 },
-                                Textel { ':', Color16::Yellow, Color16::DarkGreen, 7 },
-                                "Grass7");
-    textel_presets.emplace_back(Textel { '/', Color16::DarkYellow, Color16::Green, 7 },
-                                Textel { '/', Color16::Yellow, Color16::DarkGreen, 7 },
-                                "Grass8");
-    textel_presets.emplace_back(Textel { '\\', Color16::DarkYellow, Color16::Green, 7 },
-                                Textel { '\\', Color16::Yellow, Color16::DarkGreen, 7 },
-                                "Grass9");
-    textel_presets.emplace_back(Textel { '&', Color16::DarkYellow, Color16::Green, 8 },
-                                Textel { '&', Color16::Yellow, Color16::DarkGreen, 8 },
-                                "Shrub0");
-    textel_presets.emplace_back(Textel { '@', Color16::DarkGray, Color16::Green, 8 },
-                                Textel { '@', Color16::LightGray, Color16::DarkGreen, 8 },
-                                "Shrub1");
-    textel_presets.emplace_back(Textel { '*', Color16::DarkGreen, Color16::Green, 8 },
-                                Textel { '*', Color16::Green, Color16::DarkGreen, 8 },
-                                "Shrub2");
-    textel_presets.emplace_back(Textel { 'T', Color16::DarkRed, Color16::Green, 9 },
-                                Textel { 'T', Color16::Red, Color16::DarkGreen, 9 },
-                                "Tree0");
-    textel_presets.emplace_back(Textel { 'Y', Color16::DarkRed, Color16::Green, 9 },
-                                Textel { 'Y', Color16::Red, Color16::DarkGreen, 9 },
-                                "Tree1");
-    textel_presets.emplace_back(Textel { '_', Color16::Default, Color16::LightGray, 1 },
-                                Textel { '_', Color16::Black, Color16::DarkGray, 1 },
-                                "Tile0");
-    textel_presets.emplace_back(Textel { '_', Color16::White, Color16::DarkGray, 1 },
-                                Textel { '_', Color16::LightGray, Color16::Black, 1 },
-                                "Tile1");
-    textel_presets.emplace_back(Textel { '_', Color16::LightGray, Color16::White, 1 },
-                                Textel { '_', Color16::White, Color16::LightGray, 1 },
-                                "Tile2");
-    textel_presets.emplace_back(Textel { 'L', Color16::Default, Color16::LightGray, 1 },
-                                Textel { 'L', Color16::Black, Color16::DarkGray, 1 },
-                                "Tile3");
-    textel_presets.emplace_back(Textel { 'L', Color16::White, Color16::DarkGray, 1 },
-                                Textel { 'L', Color16::LightGray, Color16::Black, 1 },
-                                "Tile4");
-    textel_presets.emplace_back(Textel { 'L', Color16::LightGray, Color16::White, 1 },
-                                Textel { 'L', Color16::White, Color16::LightGray, 1 },
-                                "Tile5");
-    textel_presets.emplace_back(Textel { 'H', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { 'H', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry0");
-    textel_presets.emplace_back(Textel { 'M', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { 'M', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry1");
-    textel_presets.emplace_back(Textel { 'W', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { 'W', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry2");
-    textel_presets.emplace_back(Textel { '=', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { '=', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry3");
-    textel_presets.emplace_back(Textel { '#', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { '#', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry4");
-    textel_presets.emplace_back(Textel { '@', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { '@', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry5");
-    textel_presets.emplace_back(Textel { 'O', Color16::LightGray, Color16::DarkGray, 5 },
-                                Textel { 'O', Color16::DarkGray, Color16::Black, 5 },
-                                "Masonry6");
-    textel_presets.emplace_back(Textel { 'I', Color16::White, Color16::LightGray, 25 },
-                                Textel { 'I', Color16::LightGray, Color16::DarkGray, 25 },
-                                "Column0");
-    textel_presets.emplace_back(Textel { '=', Color16::White, Color16::LightGray, 25 },
-                                Textel { '=', Color16::LightGray, Color16::DarkGray, 25 },
-                                "Column1");
-    textel_presets.emplace_back(Textel { '#', Color16::DarkRed, Color16::Red, 6 },
-                                Textel { '#', Color16::Red, Color16::DarkRed, 6 },
-                                "Brick");
-    textel_presets.emplace_back(Textel { 'W', Color16::DarkRed, Color16::Yellow, 11 },
-                                Textel { 'W', Color16::Yellow, Color16::DarkRed, 11 },
-                                "Wood0");
-    textel_presets.emplace_back(Textel { 'E', Color16::DarkRed, Color16::Yellow, 11 },
-                                Textel { 'E', Color16::Yellow, Color16::DarkRed, 11 },
-                                "Wood1");
-    textel_presets.emplace_back(Textel { 'Z', Color16::DarkRed, Color16::Yellow, 11 },
-                                Textel { 'Z', Color16::Yellow, Color16::DarkRed, 11 },
-                                "Wood2");
-    textel_presets.emplace_back(Textel { 'X', Color16::DarkBlue, Color16::Cyan, 12 },
-                                Textel { 'X', Color16::Cyan, Color16::DarkBlue, 12 },
-                                "Ice");
-    textel_presets.emplace_back(Textel { '=', Color16::DarkGray, Color16::LightGray, 10 },
-                                Textel { '=', Color16::LightGray, Color16::DarkGray, 10 },
-                                "Metal");
-    textel_presets.emplace_back(Textel { 'S', Color16::White, Color16::LightGray, 21 },
-                                Textel { 'S', Color16::LightGray, Color16::DarkGray, 21 },
-                                "Silver");
-    textel_presets.emplace_back(Textel { 'G', Color16::DarkYellow, Color16::Yellow, 20 },
-                                Textel { 'G', Color16::Yellow, Color16::DarkYellow, 20 },
-                                "Gold");
-    textel_presets.emplace_back(Textel { '@', Color16::White, Color16::DarkGray, 23 },
-                                Textel { '@', Color16::LightGray, Color16::Black, 23 },
-                                "Skull");
-    textel_presets.emplace_back(Textel { '+', Color16::White, Color16::DarkGray, 23 },
-                                Textel { '+', Color16::LightGray, Color16::Black, 23 },
-                                "Bone0");
-    textel_presets.emplace_back(Textel { '|', Color16::White, Color16::DarkGray, 23 },
-                                Textel { '|', Color16::LightGray, Color16::Black, 23 },
-                                "Bone1");
-    textel_presets.emplace_back(Textel { '-', Color16::White, Color16::DarkGray, 23 },
-                                Textel { '-', Color16::LightGray, Color16::Black, 23 },
-                                "Bone2");
-    textel_presets.emplace_back(Textel { '/', Color16::White, Color16::DarkGray, 23 },
-                                Textel { '/', Color16::LightGray, Color16::Black, 23 },
-                                "Bone3");
-    textel_presets.emplace_back(Textel { '\\', Color16::White, Color16::DarkGray, 23 },
-                                Textel { '\\', Color16::LightGray, Color16::Black, 23 },
-                                "Bone4");
-    textel_presets.emplace_back(Textel { '%', Color16::Red, Color16::Yellow, 27 },
-                                Textel { '%', Color16::DarkRed, Color16::DarkYellow, 27 },
-                                "Rope");
-    
-    std::vector<std::string> lines_custom_textel_presets;
-    if (TextIO::read_file(filepath_custom_textel_presets, lines_custom_textel_presets))
+    std::vector<std::string> lines_textel_presets;
+    if (TextIO::read_file(filepath, lines_textel_presets))
     {
       auto post_process_color_tokens = [](std::vector<std::string>& tokens)
       {
@@ -752,12 +439,21 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       };
     
       int part = 0;
+      std::string name;
       Textel textel_normal, textel_shadow;
-      for (const auto& line : lines_custom_textel_presets)
+      for (const auto& line : lines_textel_presets)
       {
         if (line.empty())
           continue;
+        if (line.starts_with('#')) // Filter out comment-lines
+          continue;
+        
         if (part == 0)
+        {
+          name = line;
+          part = 1;
+        }
+        else if (part == 1)
         {
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
           if (tokens.size() == 4)
@@ -771,7 +467,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                 textel_normal.glyph.parse("[" + tokens[0] + "]", false); // Presumably Unicode + ASCII character.
             }
             else
-              std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
+              std::cerr << "ERROR in load_textel_presets_from_file() : Unrecognized glyph token.\n";
             post_process_color_tokens(tokens);
             textel_normal.fg_color.parse(tokens[1]);
             textel_normal.bg_color.parse(tokens[2]);
@@ -779,9 +475,9 @@ class Game : public t8x::GameEngine<44, 92, CharT>
           }
           else
             std::cerr << "Unable to parse normal textel." << std::endl;
-          part = 1;
+          part = 2;
         }
-        else if (part == 1)
+        else if (part == 2)
         {
           auto tokens = str::tokenize(line, { ' ', ',' }, { '\'', '[', ']' });
           if (tokens.size() == 4)
@@ -795,24 +491,36 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                 textel_shadow.glyph.parse("[" + tokens[0] + "]", false); // Presumably Unicode + ASCII character.
             }
             else
-              std::cerr << "ERROR in reload_textel_presets() : Unrecognized glyph token.\n";
+              std::cerr << "ERROR in load_textel_presets_from_file() : Unrecognized glyph token.\n";
             post_process_color_tokens(tokens);
             textel_shadow.fg_color.parse(tokens[1]);
             textel_shadow.bg_color.parse(tokens[2]);
             textel_shadow.encode_raw_mat(std::atoi(tokens[3].c_str()));
+            
+            all_textel_presets.emplace_back(textel_normal, textel_shadow, name);
+            if (these_textel_presets != nullptr)
+              these_textel_presets->emplace_back(textel_normal, textel_shadow, name);
           }
           else
             std::cerr << "Unable to parse shadow textel." << std::endl;
-          part = 2;
-        }
-        else if (part == 2)
-        {
-          textel_presets.emplace_back(textel_normal, textel_shadow, line);
-          custom_textel_presets.emplace_back(textel_normal, textel_shadow, line);
           part = 0;
         }
       }
     }
+  }
+  
+  void reload_textel_presets()
+  {
+    textel_presets.clear();
+    custom_textel_presets.clear();
+    
+    textel_presets.emplace_back(Textel { { }, Color16::Transparent2, Color16::Transparent2, adhoc_textel_material },
+                                Textel { { }, Color16::Transparent2, Color16::Transparent2, adhoc_textel_material },
+                                "Ad Hoc [e]");
+    
+    load_textel_presets_from_file(filepath_builtin_textel_presets, textel_presets);
+    
+    load_textel_presets_from_file(filepath_custom_textel_presets, textel_presets, &custom_textel_presets);
     
     for (auto& tp : textel_presets)
       tp.update_disp_strings<CharT>(t8::Style { Color16::DarkGray, Color16::Transparent2 }, true);
@@ -833,6 +541,7 @@ public:
       bin_folder = folder::join_path({ bin_folder, "../../../../../../../../Documents/xcode/TextUR/TextUR/bin" }); // #FIXME: Find a better solution!
 #endif
     filepath_custom_textel_presets = folder::join_path({ bin_folder, "custom_textel_presets" });
+    filepath_builtin_textel_presets = folder::join_path({ bin_folder, "..", "textel_presets" });
   
     RC size;
   
@@ -1845,9 +1554,10 @@ private:
                   std::vector<std::string> lines_custom_textel_presets;
                   for (const auto& ctp : custom_textel_presets)
                   {
+                    // Magic Stone
                     // '%', Magenta, Cyan, 28
                     // '%', DarkMagenta, DarkCyan, 28
-                    // Magic Stone
+                    lines_custom_textel_presets.emplace_back(ctp.name);
                     lines_custom_textel_presets.emplace_back(ctp.textel_normal.glyph.str(false) + ", "
                       + ctp.textel_normal.fg_color.str() + ", "
                       + ctp.textel_normal.bg_color.str() + ", "
@@ -1856,7 +1566,6 @@ private:
                       + ctp.textel_shadow.fg_color.str() + ", "
                       + ctp.textel_shadow.bg_color.str() + ", "
                       + std::to_string(ctp.textel_shadow.decode_raw_mat()));
-                    lines_custom_textel_presets.emplace_back(ctp.name);
                   }
                   if (TextIO::write_file(filepath_custom_textel_presets, lines_custom_textel_presets))
                     message_handler->add_message(static_cast<float>(get_real_time_s()),
@@ -2045,6 +1754,7 @@ private:
       edit_textel.glyph = dialog.get_glyph_picker_glyph(tab_glyph_picker);
   }
   
+  std::string filepath_builtin_textel_presets;
   std::string filepath_custom_textel_presets;
     
   t8::Texture curr_texture;
