@@ -252,6 +252,14 @@ Gravel0u0
 Gravel0u1
 [2886,.], DarkGray, LightGray, 22
 [2886,.], LightGray, DarkGray, 22
+# ∙
+Gravel0u2
+[2219,.], DarkGray, LightGray, 22
+[2219,.], LightGray, DarkGray, 22
+# ⋅
+Gravel0u3
+[22C5,.], DarkGray, LightGray, 22
+[22C5,.], LightGray, DarkGray, 22
 Gravel1
 ':', DarkGray, LightGray, 22
 ':', LightGray, DarkGray, 22
@@ -263,6 +271,14 @@ Gravel1u0
 Gravel1u1
 [2876,:], DarkGray, LightGray, 22
 [2876,:], LightGray, DarkGray, 22
+# ∴
+Gravel1u2
+[2234,:], DarkGray, LightGray, 22
+[2234,:], LightGray, DarkGray, 22
+# ∵
+Gravel1u3
+[2235,:], DarkGray, LightGray, 22
+[2235,:], LightGray, DarkGray, 22
 Gravel2
 '.', Black, LightGray, 22
 '.', Black, DarkGray, 22
@@ -274,6 +290,14 @@ Gravel2u0
 Gravel2u1
 [2886,.], Black, LightGray, 22
 [2886,.], Black, DarkGray, 22
+# ∙
+Gravel2u2
+[2219,.], Black, LightGray, 22
+[2219,.], Black, DarkGray, 22
+# ⋅
+Gravel2u3
+[22C5,.], Black, LightGray, 22
+[22C5,.], Black, DarkGray, 22
 Gravel3
 ':', Black, LightGray, 22
 ':', Black, DarkGray, 22
@@ -285,21 +309,41 @@ Gravel3u0
 Gravel3u1
 [2876,:], Black, LightGray, 22
 [2876,:], Black, DarkGray, 22
+# ∴
+Gravel3u2
+[2234,:], Black, LightGray, 22
+[2234,:], Black, DarkGray, 22
+# ∵
+Gravel3u3
+[2235,:], Black, LightGray, 22
+[2235,:], Black, DarkGray, 22
 Stone0
 '8', DarkGray, LightGray, 4
 '8', LightGray, DarkGray, 4
 Stone1
 'o', DarkGray, LightGray, 4
 'o', LightGray, DarkGray, 4
+# ◦
+Stone1u
+[25E6,o], DarkGray, LightGray, 4
+[25E6,o], LightGray, DarkGray, 4
 Stone2
 'O', DarkGray, LightGray, 4
 'O', LightGray, DarkGray, 4
+# ○
+Stone2u
+[25CB,O], DarkGray, LightGray, 4
+[25CB,O], LightGray, DarkGray, 4
 Stone3
 'b', DarkGray, LightGray, 4
 'b', LightGray, DarkGray, 4
 Stone4
 'B', DarkGray, LightGray, 4
 'B', LightGray, DarkGray, 4
+# ◉
+Stone4u
+[25C9,B], DarkGray, LightGray, 4
+[25C9,B], LightGray, DarkGray, 4
 Stone5
 'p', DarkGray, LightGray, 4
 'p', LightGray, DarkGray, 4
@@ -312,9 +356,17 @@ Stone7
 Stone8
 '6', DarkGray, LightGray, 4
 '6', LightGray, DarkGray, 4
+# ◔
+Stone8u
+[25D4,6], DarkGray, LightGray, 4
+[25D4,6], LightGray, DarkGray, 4
 Stone9
 '9', DarkGray, LightGray, 4
 '9', LightGray, DarkGray, 4
+# ◕
+Stone9u
+[25D5,9], DarkGray, LightGray, 4
+[25D5,9], LightGray, DarkGray, 4
 Stone10
 'c', DarkGray, LightGray, 4
 'c', LightGray, DarkGray, 4
@@ -324,15 +376,27 @@ Stone11
 Stone12
 'o', LightGray, DarkGray, 4
 'o', DarkGray, Black, 4
+# ◦
+Stone12u
+[25E6,o], LightGray, DarkGray, 4
+[25E6,o], DarkGray, Black, 4
 Stone13
 'O', LightGray, DarkGray, 4
 'O', DarkGray, Black, 4
+# ○
+Stone13u
+[25CB,O], LightGray, DarkGray, 4
+[25CB,O], DarkGray, Black, 4
 Stone14
 'b', LightGray, DarkGray, 4
 'b', DarkGray, Black, 4
 Stone15
 'B', LightGray, DarkGray, 4
 'B', DarkGray, Black, 4
+# ◉
+Stone15u
+[25C9,B], LightGray, DarkGray, 4
+[25C9,B], DarkGray, Black, 4
 Stone16
 'p', LightGray, DarkGray, 4
 'p', DarkGray, Black, 4
@@ -345,51 +409,121 @@ Stone18
 Stone19
 '6', LightGray, DarkGray, 4
 '6', DarkGray, Black, 4
+# ◔
+Stone19u
+[25D4,6], LightGray, DarkGray, 4
+[25D4,6], DarkGray, Black, 4
 Stone20
 '9', LightGray, DarkGray, 4
 '9', DarkGray, Black, 4
+# ◕
+Stone20u
+[25D5,9], LightGray, DarkGray, 4
+[25D5,9], DarkGray, Black, 4
 Stone21
 'c', LightGray, DarkGray, 4
 'c', DarkGray, Black, 4
 Mountain0
 '^', DarkGray, LightGray, 13
 '^', LightGray, DarkGray, 13
+# ▵
+Mountain0u0
+[25B5,^], DarkGray, LightGray, 13
+[25B5,^], LightGray, DarkGray, 13
+# △
+Mountain0u1
+[25B3,^], DarkGray, LightGray, 13
+[25B3,^], LightGray, DarkGray, 13
 Mountain1
 '^', LightGray, White, 13
 '^', DarkGray, LightGray, 13
+# ▵
+Mountain0u0
+[25B5,^], LightGray, White, 13
+[25B5,^], DarkGray, LightGray, 13
+# △
+Mountain0u1
+[25B3,^], LightGray, White, 13
+[25B3,^], DarkGray, LightGray, 13
 Lava
 'W', DarkRed, Red, 14
 'W', Red, DarkRed, 14
 Cave0
 'C', DarkYellow, Yellow, 15
 'C', Yellow, DarkYellow, 15
-Cave0
+# ⊂
+Cave0u
+[2282,C], DarkYellow, Yellow, 15
+[2282,C], Yellow, DarkYellow, 15
+Cave1
 'U', DarkYellow, Yellow, 15
 'U', Yellow, DarkYellow, 15
+# ∪
+Cave1u
+[222A,U], DarkYellow, Yellow, 15
+[222A,U], Yellow, DarkYellow, 15
 Swamp0
 'S', DarkRed, Green, 16
 'S', Red, DarkGreen, 16
 Swamp1
+'s', DarkRed, Green, 16
+'s', Red, DarkGreen, 16
+# ≈
+Swamp1u
+[2248,s], DarkRed, Green, 16
+[2248,s], Red, DarkGreen, 16
+Swamp2
 'B', DarkRed, Green, 16
 'B', Red, DarkGreen, 16
-Swamp2
+# ◖
+Swamp2u
+[25D6,B], DarkRed, Green, 16
+[25D6,B], Red, DarkGreen, 16
+Swamp3
 'C', DarkRed, Green, 16
 'C', Red, DarkGreen, 16
-Swamp3
+# ɔ
+Swamp3u
+[0254,C], DarkRed, Green, 16
+[0254,C], Red, DarkGreen, 16
+Swamp4
 'P', DarkRed, Green, 16
 'P', Red, DarkGreen, 16
-Swamp4
+# ◗
+Swamp4u
+[25D7,P], DarkRed, Green, 16
+[25D7,P], Red, DarkGreen, 16
+Swamp5
 'S', Green, DarkRed, 16
 'S', DarkGreen, DarkRed, 16
-Swamp5
+Swamp6
+'s', Green, DarkRed, 16
+'s', DarkGreen, DarkRed, 16
+# ≈
+Swamp6u
+[2248,s], Green, DarkRed, 16
+[2248,s], DarkGreen, DarkRed, 16
+Swamp7
 'B', Green, DarkRed, 16
 'B', DarkGreen, DarkRed, 16
-Swamp6
+# ◖
+Swamp7u
+[25D6,B], Green, DarkRed, 16
+[25D6,B], DarkGreen, DarkRed, 16
+Swamp8
 'C', Green, DarkRed, 16
 'C', DarkGreen, DarkRed, 16
-Swamp7
+# ɔ
+Swamp8u
+[0254,C], Green, DarkRed, 16
+[0254,C], DarkGreen, DarkRed, 16
+Swamp9
 'P', Green, DarkRed, 16
 'P', DarkGreen, DarkRed, 16
+# ◗
+Swamp9u
+[25D7,P], Green, DarkRed, 16
+[25D7,P], DarkGreen, DarkRed, 16
 Poison0
 '~', DarkGreen, Green, 17
 '~', Green, DarkGreen, 17
@@ -472,6 +606,10 @@ Tree0
 Tree1
 'Y', DarkRed, Green, 9
 'Y', Red, DarkGreen, 9
+# Ψ
+Tree1u
+[03A8,Y], DarkRed, Green, 9
+[03A8,Y], Red, DarkGreen, 9
 Tile0
 '_', Default, LightGray, 1
 '_', Black, DarkGray, 1
@@ -505,6 +643,10 @@ Masonry3
 Masonry4
 '#', LightGray, DarkGray, 5
 '#', DarkGray, Black, 5
+# ▓
+Masonry4u
+[2593,#], LightGray, DarkGray, 5
+[2593,#], DarkGray, Black, 5
 Masonry5
 '@', LightGray, DarkGray, 5
 '@', DarkGray, Black, 5
@@ -517,9 +659,13 @@ Column0
 Column1
 '=', White, LightGray, 25
 '=', LightGray, DarkGray, 25
-Brick
+Brick0
 '#', DarkRed, Red, 6
 '#', Red, DarkRed, 6
+# ▒
+Brick0u
+[2592,#], DarkRed, Red, 6
+[2592,#], Red, DarkRed, 6
 Wood0
 'W', DarkRed, Yellow, 11
 'W', Yellow, DarkRed, 11
@@ -530,27 +676,59 @@ Wood0u
 Wood1
 'E', DarkRed, Yellow, 11
 'E', Yellow, DarkRed, 11
+# ≋
+Wood1u0
+[224B,E], DarkRed, Yellow, 11
+[224B,E], Yellow, DarkRed, 11
+# ⋲
+Wood1u1
+[22F2,E], DarkRed, Yellow, 11
+[22F2,E], Yellow, DarkRed, 11
 Wood2
 'Z', DarkRed, Yellow, 11
 'Z', Yellow, DarkRed, 11
-Ice
+# ⨍
+Wood2u
+[2A0D,Z], DarkRed, Yellow, 11
+[2A0D,Z], Yellow, DarkRed, 11
+Ice0
 'X', DarkBlue, Cyan, 12
 'X', Cyan, DarkBlue, 12
-Metal
+# ❄
+Ice0u
+[2744,X], DarkBlue, Cyan, 12
+[2744,X], Cyan, DarkBlue, 12
+Metal0
 '=', DarkGray, LightGray, 10
 '=', LightGray, DarkGray, 10
-Silver
+# ≡
+Metal0u
+[2261,=], DarkGray, LightGray, 10
+[2261,=], LightGray, DarkGray, 10
+Silver0
 'S', White, LightGray, 21
 'S', LightGray, DarkGray, 21
+# §
+Silver0u
+[00A7,S], White, LightGray, 21
+[00A7,S], LightGray, DarkGray, 21
 Gold0
 'G', DarkYellow, Yellow, 20
 'G', Yellow, DarkYellow, 20
+# ◈
+Gold0u
+[25C8,G], DarkYellow, Yellow, 20
+[25C8,G], Yellow, DarkYellow, 20
 Gold1
 '$', DarkYellow, Yellow, 20
 '$', Yellow, DarkYellow, 20
-Skull
+Skull0
 '@', White, DarkGray, 23
 '@', LightGray, Black, 23
+# ☠
+Skull0u
+[2620,@], White, DarkGray, 23
+[2620,@], LightGray, Black, 23
 Bone0
 '+', White, DarkGray, 23
 '+', LightGray, Black, 23
