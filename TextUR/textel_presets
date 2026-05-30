@@ -523,6 +523,10 @@ Brick
 Wood0
 'W', DarkRed, Yellow, 11
 'W', Yellow, DarkRed, 11
+# ∬
+Wood0u
+[222C,W], DarkRed, Yellow, 11
+[222C,W], Yellow, DarkRed, 11
 Wood1
 'E', DarkRed, Yellow, 11
 'E', Yellow, DarkRed, 11
