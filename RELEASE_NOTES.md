@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.5.0.13
+- Moved the built-in textel presets into a bundled `textel_presets` file, making the factory preset definitions easier to inspect and extend without recompiling TextUR.
+- Expanded the built-in preset library with many new ASCII and Unicode glyph variants, including additional water, sand, gravel, stone, terrain, wood, metal, treasure, and bone presets.
+- Added support for comment lines beginning with `#` in textel preset files.
+- Changed the `custom_textel_presets` file format to store each preset name before its normal and shadow glyph definitions. Existing custom preset files created for earlier releases must be reordered to match the new format.
+- Added `.asc` and `.nfo` file extension support for ANSI-art files through an updated Termin8or dependency.
+- Updated Linux, macOS, and Windows builds and release packages to include the required `textel_presets` file alongside the executable.
+- Refreshed the README with the new custom preset format, glyph fallback documentation, and updated screenshots.
+- Polished the key-bind legend text for consistency.
+
 ## 1.4.0.12
 - Added Unicode/glyph-aware textel preset editing, including GlyphPicker-based input, styled glyph previews, ASCII fallback validation, and recent glyph handling.
 - Updated custom textel preset parsing and writing to support glyphs instead of single chars, including fallback canonicalization and preservation when editing normal/shadow textels.
