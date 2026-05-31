@@ -70,22 +70,29 @@ The recommended file extension for texture files is `*.tx`, though the program d
 Add a file named `custom_textel_presets`.
 The file format looks like this:
 ```
-'<normal-char>', <normal-fg-color>, <normal-bg-color>, <normal-material>
-'<shadow-char>', <shadow-fg-color>, <shadow-bg-color>, <shadow-material>
 <textel-preset-name>
-'<normal-char>', <normal-fg-color>, <normal-bg-color>, <normal-material>
-'<shadow-char>', <shadow-fg-color>, <shadow-bg-color>, <shadow-material>
+'<normal-glyph>', <normal-fg-color>, <normal-bg-color>, <normal-material>
+'<shadow-glyph>', <shadow-fg-color>, <shadow-bg-color>, <shadow-material>
 <textel-preset-name>
+'<normal-glyph>', <normal-fg-color>, <normal-bg-color>, <normal-material>
+'<shadow-glyph>', <shadow-fg-color>, <shadow-bg-color>, <shadow-material>
 ...etc...
 ```
+
+`<normal-glyph> = <shadow-glyph> := "'" <printable-ascii-char> "'" | "[" <preferred-unicode-codepoint> "|" <printable-ascii-char> "]"`
+where the latter `<printable-ascii-char>` acts as fallback if the `<preferred-unicode-codepoint>` can't be rendered.
+
+Comments can be done on separate lines with `#` in front.
+
 So e.g.
 ```
+Magic Stone
 '%', Magenta, Cyan, 28
 '%', DarkMagenta, DarkCyan, 28
-Magic Stone
-'7', rgb6:[0, 1, 5], gray24:{19}, 0
-'7', rgb6:[0, 3, 4], Transparent2, 0
-8-bit test
+# ╮ 7
+8-bit + glyph
+[256E,7], rgb6:[0, 1, 5], gray24:{19}, 0
+[256E,7], rgb6:[0, 3, 4], Transparent2, 0
 ```
 produces the following textel preset at the end of the list:
 
