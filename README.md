@@ -107,11 +107,21 @@ Look in `TextUR/TextUR/textel_presets` for which material number that is appropr
 ## Screenshots
 
 <!--<img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">-->
-<img width="221" height="225" alt="image" src="https://github.com/user-attachments/assets/faabbd6f-bc35-420e-9de7-4518604da0c7" />
+<!--<img width="221" height="225" alt="image" src="https://github.com/user-attachments/assets/faabbd6f-bc35-420e-9de7-4518604da0c7" />-->
+<img width="646" height="657" alt="image" src="https://github.com/user-attachments/assets/66e0eaca-da17-403d-bc87-62f1062f98c2" />
 
-<img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
-<img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">
-<img width="568" alt="image" src="https://github.com/user-attachments/assets/622e7c0d-a166-4bea-be0a-f348bdb58fb2">
+<!--<img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">-->
+<img width="645" height="657" alt="image" src="https://github.com/user-attachments/assets/eb8171d0-ad06-444d-a4ec-4563b54dc10b" />
+
+<!--<img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">-->
+<img width="646" height="657" alt="image" src="https://github.com/user-attachments/assets/53ec8202-241e-4a14-9b84-a07cd72d220d" />
+
+<!--<img width="568" alt="image" src="https://github.com/user-attachments/assets/622e7c0d-a166-4bea-be0a-f348bdb58fb2">-->
+<!--<img width="648" height="658" alt="image" src="https://github.com/user-attachments/assets/c87c3ee1-602c-438a-8e5f-2cff4aa99e7d" />-->
+<img width="647" height="660" alt="image" src="https://github.com/user-attachments/assets/cc279ef5-88f2-4802-9806-4b0d616732a5" />
+
+Older pictures:
+
 <img width="568" alt="image" src="https://github.com/user-attachments/assets/0286226c-a18c-48b6-98d3-adc183e51bc2">
 <img width="562" alt="image" src="https://github.com/user-attachments/assets/18ddb12d-acec-476d-81f8-6798624ede9d">
 <img width="567" alt="image" src="https://github.com/user-attachments/assets/eee16100-d7f4-4ea5-936b-1826b185a6e3">
