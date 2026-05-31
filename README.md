@@ -23,7 +23,8 @@ TextUR is a terminal-based editor for text-based textures or images.
 This is a tool for generating textures to be used with [`DungGine`](https://github.com/razterizer/DungGine/).
 The recommended file extension for texture files is `*.tx`, though the program doesn't really care about the extension however.
 
-<img width="568" alt="image" src="https://github.com/user-attachments/assets/bfb04801-8969-418f-b5bd-0c24d37eb0b3">
+<!--<img width="568" alt="image" src="https://github.com/user-attachments/assets/bfb04801-8969-418f-b5bd-0c24d37eb0b3">-->
+<img width="644" height="658" alt="image" src="https://github.com/user-attachments/assets/6989eacb-fc62-4ed6-b65c-c3ceb768cdd4" />
 
 ## Command Line Arguments
 
