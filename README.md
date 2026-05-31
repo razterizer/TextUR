@@ -106,7 +106,9 @@ Look in `TextUR/TextUR/textel_presets` for which material number that is appropr
 
 ## Screenshots
 
-<img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">
+<!--<img width="564" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/1628f6b5-0956-4c56-b307-13a5a4dea5e7">-->
+<img width="221" height="225" alt="image" src="https://github.com/user-attachments/assets/faabbd6f-bc35-420e-9de7-4518604da0c7" />
+
 <img width="562" alt="image" src="https://github.com/razterizer/TextUR/assets/32767250/a8bf9850-5499-49fe-8aea-a98cd00f0f01">
 <img width="564" alt="image" src="https://github.com/user-attachments/assets/a33490ae-3921-431d-8d15-477f2566b279">
 <img width="568" alt="image" src="https://github.com/user-attachments/assets/622e7c0d-a166-4bea-be0a-f348bdb58fb2">
