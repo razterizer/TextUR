@@ -566,8 +566,8 @@ Grass3
 '/', DarkGreen, Green, 7
 '/', Green, DarkGreen, 7
 Grass4
-'\\', DarkGreen, Green, 7
-'\\', Green, DarkGreen, 7
+'\', DarkGreen, Green, 7
+'\', Green, DarkGreen, 7
 Grass5
 '|', DarkYellow, Green, 7
 '|', Yellow, DarkGreen, 7
@@ -589,8 +589,8 @@ Grass8
 '/', DarkYellow, Green, 7
 '/', Yellow, DarkGreen, 7
 Grass9
-'\\', DarkYellow, Green, 7
-'\\', Yellow, DarkGreen, 7
+'\', DarkYellow, Green, 7
+'\', Yellow, DarkGreen, 7
 Shrub0
 '&', DarkYellow, Green, 8
 '&', Yellow, DarkGreen, 8
@@ -742,8 +742,8 @@ Bone3
 '/', White, DarkGray, 23
 '/', LightGray, Black, 23
 Bone4
-'\\', White, DarkGray, 23
-'\\', LightGray, Black, 23
+'\', White, DarkGray, 23
+'\', LightGray, Black, 23
 Rope
 '%', Red, Yellow, 27
 '%', DarkRed, DarkYellow, 27
