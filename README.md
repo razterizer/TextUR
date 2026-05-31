@@ -97,9 +97,11 @@ Magic Stone
 produces the following textel preset at the end of the list:
 
 <!-- <img width="210" alt="image" src="https://github.com/user-attachments/assets/30343240-befd-4242-a60c-1cbe4f72b992"> -->
-<img width="220" height="224" alt="image" src="https://github.com/user-attachments/assets/9dc55ab8-5657-49d8-a73a-93749b7353f9" />
+<!--<img width="220" height="224" alt="image" src="https://github.com/user-attachments/assets/9dc55ab8-5657-49d8-a73a-93749b7353f9" />-->
+<img width="309" height="441" alt="image" src="https://github.com/user-attachments/assets/f6312cdc-9d96-4c3e-b14d-8d917e2ebd8b" />
 
-Look in the source code for which material number that is appropriate to use for your custom presets.
+
+Look in `TextUR/TextUR/textel_presets` for which material number that is appropriate to use for your custom presets.
 
 ## Screenshots
 
