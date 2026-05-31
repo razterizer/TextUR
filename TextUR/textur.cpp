@@ -224,7 +224,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       "SHIFT + H : toggle drawing of horizontal guide line from the vert coord axis.",
       "- : toggle hide/show textel presets menu.",
       "X : export (save) work to current file.",
-      "B : Circle-shaped brush stroke, filled with selected textel preset.",
+      "B : circle-shaped brush stroke, filled with selected textel preset.",
       "SHIFT + B : big brush-stroke.",
       "R : randomized brush-stroke.",
       "  Same as the B key, but fills the circle with textels according to a",
