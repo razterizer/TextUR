@@ -22,6 +22,7 @@
     <None Include="..\..\LICENSE" />
     <None Include="..\..\README.md" />
     <None Include="..\build.sh" />
+    <None Include="..\textel_presets" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\textur.cpp" />
@@ -128,7 +129,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\..\..\lib\Termin8or\include\Termin8or\title\fonts\*" "$(TargetDir)\fonts\" /Y</Command>
+      <Command>xcopy "$(SolutionDir)\textel_presets" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)\..\..\lib\Termin8or\include\Termin8or\title\fonts\*" "$(TargetDir)\fonts\" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,7 +153,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)\..\..\lib\Termin8or\include\Termin8or\title\fonts\*" "$(TargetDir)\fonts\" /Y</Command>
+      <Command>xcopy "$(SolutionDir)\textel_presets" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)\..\..\lib\Termin8or\include\Termin8or\title\fonts\*" "$(TargetDir)\fonts\" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

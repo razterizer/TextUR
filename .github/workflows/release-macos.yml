@@ -73,6 +73,7 @@ jobs:
           # Copy the executable and necessary files
           chmod ugo+x textur
           cp textur textur-${{ github.ref_name }}/
+          cp textel_presets textur-${{ github.ref_name }}/
           if [ -d examples ]; then
             cp -r examples textur-${{ github.ref_name }}/
           fi

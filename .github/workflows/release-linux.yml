@@ -124,6 +124,7 @@ jobs:
           mkdir textur-${{ github.ref_name }}
           cp glibc2.38/textur textur-${{ github.ref_name }}/textur-glibc2.38
           cp glibc2.35/textur textur-${{ github.ref_name }}/textur-glibc2.35
+          cp glibc2.38/textel_presets textur-${{ github.ref_name }}/
           if [ -d glibc2.38/examples ]; then
             cp -r glibc2.38/examples textur-${{ github.ref_name }}/
           fi

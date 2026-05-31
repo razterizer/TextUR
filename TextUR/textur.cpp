@@ -541,7 +541,7 @@ public:
       bin_folder = folder::join_path({ bin_folder, "../../../../../../../../Documents/xcode/TextUR/TextUR/bin" }); // #FIXME: Find a better solution!
 #endif
     filepath_custom_textel_presets = folder::join_path({ bin_folder, "custom_textel_presets" });
-    filepath_builtin_textel_presets = folder::join_path({ bin_folder, "..", "textel_presets" });
+    filepath_builtin_textel_presets = folder::join_path({ bin_folder, "textel_presets" });
   
     RC size;
   

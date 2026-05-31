@@ -21,3 +21,6 @@ if [ $exit_code -ne 0 ]; then
   exit $exit_code
 fi
 
+### Post-Build Actions ###
+
+cp textel_presets bin/
