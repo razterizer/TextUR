@@ -339,14 +339,14 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                                                                Color16::DarkYellow, last_tab_idx++); // 1
         v_offs += gp_textel_symbol->height();
       }
-      dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
+      lbl_fg_color = &dialog_editor.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
       const auto& cp_textel_fg = dialog_editor.emplace_color_picker({ v_offs, 3 },
                                                                     Color16::Blue, Color16::White,
                                                                     cp_params,
                                                                     tab_fg_color = last_tab_idx++,
                                                                     true, '*', ' ' );
       v_offs += cp_textel_fg.height();
-      dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
+      lbl_bg_color = &dialog_editor.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
       const auto& cp_textel_bg = dialog_editor.emplace_color_picker({ v_offs, 3 },
                                                                     Color16::Blue, Color16::White,
                                                                     cp_params,
@@ -400,14 +400,14 @@ class Game : public t8x::GameEngine<44, 92, CharT>
                                                                            Color16::DarkYellow, last_tab_idx++); // 0
         v_offs += gp_textel_symbol_adhoc->height();
       }
-      dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
+      lbl_fg_color_adhoc = &dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "FG Color:", dlg_style);
       const auto& cp_textel_fg_adhoc = dialog_editor_adhoc.emplace_color_picker({ v_offs, 3 },
                                                                                 Color16::Blue, Color16::White,
                                                                                 cp_params,
                                                                                 tab_fg_color_adhoc = last_tab_idx++,
                                                                                 true, '*', ' ');
       v_offs += cp_textel_fg_adhoc.height();
-      dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
+      lbl_bg_color_adhoc = &dialog_editor_adhoc.emplace_label({ v_offs++, 0 }, "BG Color:", dlg_style);
       dialog_editor_adhoc.emplace_color_picker({ v_offs, 3 },
                                                Color16::Blue, Color16::White,
                                                cp_params,
@@ -1388,6 +1388,8 @@ private:
             edit_textel_normal.fg_color = dialog_editor.get_color_picker_color(tab_fg_color);
             edit_textel_normal.bg_color = dialog_editor.get_color_picker_color(tab_bg_color);
             //edit_textel_preset->textel_normal = edit_textel_normal;
+            lbl_fg_color->set_text("FG Color: " + std::to_string(dialog_editor.get_color_picker_color(tab_fg_color).get_index()));
+            lbl_bg_color->set_text("BG Color: " + std::to_string(dialog_editor.get_color_picker_color(tab_bg_color).get_index()));
             if (edit_textel_presets_as_ascii_only)
               dialog_editor.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
             else
@@ -1613,6 +1615,8 @@ private:
         update_current_textel_glyph_widgets(dialog_editor_adhoc, edit_textel_normal, 0, 1, 0);
         edit_textel_normal.fg_color = dialog_editor_adhoc.get_color_picker_color(tab_fg_color_adhoc);
         edit_textel_normal.bg_color = dialog_editor_adhoc.get_color_picker_color(tab_bg_color_adhoc);
+        lbl_fg_color_adhoc->set_text("FG Color: " + std::to_string(dialog_editor_adhoc.get_color_picker_color(tab_fg_color_adhoc).get_index()));
+        lbl_bg_color_adhoc->set_text("BG Color: " + std::to_string(dialog_editor_adhoc.get_color_picker_color(tab_bg_color_adhoc).get_index()));
         if (edit_textel_presets_as_ascii_only)
           dialog_editor_adhoc.set_textel_pre({ 1, 8 }, edit_textel_normal.glyph, edit_textel_normal.fg_color, edit_textel_normal.bg_color);
         else
@@ -1848,6 +1852,10 @@ private:
   t8x::TextField tf_textel_symbol { 1, t8x::TextFieldMode::All, tf_style, 1 };
   t8x::GlyphPicker* gp_textel_symbol = nullptr;
   t8x::GlyphPicker* gp_textel_symbol_adhoc = nullptr;
+  t8x::Label* lbl_fg_color = nullptr;
+  t8x::Label* lbl_bg_color = nullptr;
+  t8x::Label* lbl_fg_color_adhoc = nullptr;
+  t8x::Label* lbl_bg_color_adhoc = nullptr;
   bool force_8bit_colors_on_win_cmd = false;
   bool edit_textel_presets_as_ascii_only = false;
   bool save_textures_as_ascii_only = false;
