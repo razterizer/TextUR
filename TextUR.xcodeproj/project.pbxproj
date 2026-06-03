@@ -138,6 +138,7 @@
 				07C2A7922C31E62700869A56 /* Sources */,
 				07C2A7932C31E62700869A56 /* Frameworks */,
 				07C2A7942C31E62700869A56 /* CopyFiles */,
+				07C80E322FCD500100106C83 /* Copy Runtime Assets */,
 			);
 			buildRules = (
 			);
@@ -179,6 +180,32 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		07C80E322FCD500100106C83 /* Copy Runtime Assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/TextUR/textel_presets",
+				"$(SRCROOT)/../lib/Termin8or/include/Termin8or/title/fonts",
+			);
+			name = "Copy Runtime Assets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/textel_presets",
+				"$(TARGET_BUILD_DIR)/fonts",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nmkdir -p \"$TARGET_BUILD_DIR/fonts\"\ncp \"$SRCROOT/TextUR/textel_presets\" \"$TARGET_BUILD_DIR/\"\nif [ -f \"$SRCROOT/TextUR/bin/rec.txt\" ]; then\n  cp \"$SRCROOT/TextUR/bin/rec.txt\" \"$TARGET_BUILD_DIR/\"\nfi\nif [ -f \"$SRCROOT/TextUR/bin/custom_textel_presets\" ]; then\n  cp \"$SRCROOT/TextUR/bin/custom_textel_presets\" \"$TARGET_BUILD_DIR/\"\nfi\ncp \"$SRCROOT/../lib/Termin8or/include/Termin8or/title/fonts/\"* \"$TARGET_BUILD_DIR/fonts/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		07C2A7922C31E62700869A56 /* Sources */ = {
@@ -313,6 +340,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HFL2Q84SZB;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				HEADER_SEARCH_PATHS = (
 					../lib/Core/include,
 					../lib/Termin8or/include,
@@ -327,6 +355,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HFL2Q84SZB;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				HEADER_SEARCH_PATHS = (
 					../lib/Core/include,
 					../lib/Termin8or/include,

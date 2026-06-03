@@ -535,11 +535,6 @@ public:
     GameEngine::set_anim_rate(1, 6);
     
     auto bin_folder = get_exe_folder();
-#ifndef _WIN32
-    const char* xcode_env = std::getenv("RUNNING_FROM_XCODE");
-    if (xcode_env != nullptr)
-      bin_folder = folder::join_path({ bin_folder, "../../../../../../../../Documents/xcode/TextUR/TextUR/bin" }); // #FIXME: Find a better solution!
-#endif
     filepath_custom_textel_presets = folder::join_path({ bin_folder, "custom_textel_presets" });
     filepath_builtin_textel_presets = folder::join_path({ bin_folder, "textel_presets" });
   
@@ -1910,7 +1905,6 @@ int main(int argc, char** argv)
         params.log_mode = LogMode::Record;
       else if (strcmp(argv[a_idx + 1], "replay") == 0)
         params.log_mode = LogMode::Replay;
-      params.xcode_log_path = "../../../../../../../../Documents/xcode/TextUR/TextUR/bin/";
     }
     else if (std::strcmp(argv[a_idx], "--display_ascii_only") == 0)
       params.ascii_fallback_policy = t8::AsciiFallbackPolicy::FORCE_ASCII;
