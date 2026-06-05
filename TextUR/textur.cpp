@@ -123,45 +123,71 @@ class Game : public t8x::GameEngine<44, 92, CharT>
 
   void draw_menu(const t8::Style& ui_style, const int menu_width)
   {
-    //const int nr = sh.num_rows();
     const int nri = sh.num_rows_inset();
     const int nc = sh.num_cols();
-  
-    int r = menu_r_offs;
-    const int num_textel_presets = static_cast<int>(textel_presets.size());
-    for (int p_idx = 0; p_idx < num_textel_presets; ++p_idx)
+
+    const bool draw_used_textels = show_menu_used_textels;
+    int& menu_offset = draw_used_textels ? menu_r_offs_ut : menu_r_offs;
+    const int selected_idx = draw_used_textels ? selected_used_textel_idx : selected_textel_preset_idx;
+    const int num_items = draw_used_textels
+      ? static_cast<int>(used_textels.size())
+      : static_cast<int>(textel_presets.size());
+    const int row_step = draw_used_textels ? 1 : 3;
+    const int box_height = row_step + 1;
+
+    int r = menu_offset;
+    for (int idx = 0; idx < num_items; ++idx)
     {
-      auto name_style = ui_style;
-      if (p_idx == selected_textel_preset_idx)
+      const bool selected = idx == selected_idx;
+      if (selected)
       {
-        name_style.fg_color = Color16::Cyan;
-        if (r + 2 >= nri)
-          menu_r_offs -= 3;
+        if (r + row_step - 1 >= nri)
+          menu_offset -= row_step;
         else if (r < 0)
-          menu_r_offs += 3;
+          menu_offset += row_step;
       }
-      const auto& preset = textel_presets[p_idx];
-      //const auto& textel = preset.get_textel(use_shadow_textels);
-      auto disp_glyph = preset.get_glyph_disp_sstr(use_shadow_textels);
-      auto fg_color_bracket = p_idx == selected_textel_preset_idx ? Color16::LightGray : Color16::DarkGray;
-      auto N_dg = disp_glyph.size();
-      if (N_dg == 5)
+
+      if (draw_used_textels)
       {
-        disp_glyph[0].style.fg_color = fg_color_bracket;
-        disp_glyph[2].style.fg_color = fg_color_bracket;
-        disp_glyph[4].style.fg_color = fg_color_bracket;
+        const auto& textel = used_textels[idx];
+        sh.write_buffer(selected ? '>' : ' ', r + 1, nc - menu_width + 1,
+                        selected ? Color16::Cyan : Color16::LightGray, Color16::Black);
+        sh.write_buffer(textel.glyph, r + 1, nc - menu_width + 2,
+                        textel.fg_color, textel.bg_color);
       }
-      else if (N_dg == 4)
+      else
       {
-        disp_glyph[0].style.fg_color = fg_color_bracket;
-        disp_glyph[2].style.fg_color = fg_color_bracket;
-        disp_glyph[3].style.fg_color = fg_color_bracket;
+        const auto& preset = textel_presets[idx];
+        auto disp_glyph = preset.get_glyph_disp_sstr(use_shadow_textels);
+        const auto fg_color_bracket = selected ? Color16::LightGray : Color16::DarkGray;
+        const auto num_disp_glyphs = disp_glyph.size();
+        if (num_disp_glyphs == 5)
+        {
+          disp_glyph[0].style.fg_color = fg_color_bracket;
+          disp_glyph[2].style.fg_color = fg_color_bracket;
+          disp_glyph[4].style.fg_color = fg_color_bracket;
+        }
+        else if (num_disp_glyphs == 4)
+        {
+          disp_glyph[0].style.fg_color = fg_color_bracket;
+          disp_glyph[2].style.fg_color = fg_color_bracket;
+          disp_glyph[3].style.fg_color = fg_color_bracket;
+        }
+        sh.write_buffer(disp_glyph, r + 1, nc - menu_width + 2);
+
+        auto name_style = ui_style;
+        if (selected)
+          name_style.fg_color = Color16::Cyan;
+        sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
       }
-      sh.write_buffer(disp_glyph, r + 1, nc - menu_width + 2);
-      sh.write_buffer(preset.name, r + 2, nc - menu_width + 2, name_style);
-      // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-      t8x::draw_box_outline(sh, r, nc - menu_width, 4, menu_width, t8x::OutlineType::Unicode_SingleLine, ui_style);
-      r += 3;
+
+      if (!draw_used_textels)
+      {
+        // Does not need to be qualified with t8x::, but I'm not sure why.
+        t8x::draw_box_outline(sh, r, nc - menu_width, box_height, menu_width,
+                              t8x::OutlineType::Unicode_SingleLine, ui_style);
+      }
+      r += row_step;
     }
   }
   
@@ -181,7 +207,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     {
       const int str_max_len = curr_texture.size.c == 0 ? 0 : static_cast<int>(1 + std::log10(std::max(1, curr_texture.size.c - 1)));
       int num_cols = curr_texture.size.c;
-      if (show_menu && curr_texture.size.c > nc - menu_width)
+      if ((show_menu || show_menu_used_textels) && curr_texture.size.c > nc - menu_width)
         num_cols = nc - menu_width - screen_pos.c;
       for (int c = 0; c < num_cols; ++c)
       {
@@ -223,6 +249,7 @@ class Game : public t8x::GameEngine<44, 92, CharT>
       "SHIFT + V : toggle drawing of vertical guide line from the horiz coord axis.",
       "SHIFT + H : toggle drawing of horizontal guide line from the vert coord axis.",
       "- : toggle hide/show textel presets menu.",
+      "_ : toggle hide/show recently used textels menu. Space or Enter selects.",
       "X : export (save) work to current file.",
       "B : circle-shaped brush stroke, filled with selected textel preset.",
       "SHIFT + B : big brush-stroke.",
@@ -259,21 +286,22 @@ class Game : public t8x::GameEngine<44, 92, CharT>
     dialog_keys.set_textel_str_pre({ 13, 0 }, "SHIFT + V", fg_key, bg_key);
     dialog_keys.set_textel_str_pre({ 14, 0 }, "SHIFT + H", fg_key, bg_key);
     dialog_keys.set_textel_pre({ 15, 0 }, '-', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 16, 0 }, 'X', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 17, 0 }, 'B', fg_key, bg_key);
-    dialog_keys.set_textel_str_pre({ 18, 0 }, "SHIFT + B", fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 19, 0 }, 'R', fg_key, bg_key);
-    dialog_keys.set_textel_str_pre({ 22, 0 }, "SHIFT + R", fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 25, 0 }, 'F', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 26, 0 }, 'P', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 27, 0 }, 'L', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 28, 0 }, 'G', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 29, 0 }, 'T', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 30, 0 }, 'I', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 31, 0 }, 'M', fg_key, bg_key);
-    dialog_keys.set_textel_str_pre({ 32, 0 }, "SHIFT + E", fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 33, 0 }, 'E', fg_key, bg_key);
-    dialog_keys.set_textel_pre({ 34, 0 }, 'Q', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 16, 0 }, '_', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 17, 0 }, 'X', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 18, 0 }, 'B', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 19, 0 }, "SHIFT + B", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 20, 0 }, 'R', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 23, 0 }, "SHIFT + R", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 26, 0 }, 'F', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 27, 0 }, 'P', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 28, 0 }, 'L', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 29, 0 }, 'G', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 30, 0 }, 'T', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 31, 0 }, 'I', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 32, 0 }, 'M', fg_key, bg_key);
+    dialog_keys.set_textel_str_pre({ 33, 0 }, "SHIFT + E", fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 34, 0 }, 'E', fg_key, bg_key);
+    dialog_keys.set_textel_pre({ 35, 0 }, 'Q', fg_key, bg_key);
     dialog_keys.set_tab_selection(0);
   }
   
@@ -727,6 +755,56 @@ public:
   }
   
 private:
+  Textel selected_textel() const
+  {
+    return textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels);
+  }
+
+  void select_textel(const Textel& textel)
+  {
+    const auto idx_normal = stlutils::find_if_idx(textel_presets,
+      [&textel](const auto& preset) { return preset.get_textel(false) == textel; });
+    const auto idx_shadow = stlutils::find_if_idx(textel_presets,
+      [&textel](const auto& preset) { return preset.get_textel(true) == textel; });
+    const auto preset_idx = 0 <= idx_normal ? idx_normal : idx_shadow;
+
+    if (0 <= preset_idx)
+    {
+      selected_textel_preset_idx = preset_idx;
+      menu_r_offs = -3*selected_textel_preset_idx;
+      return;
+    }
+
+    selected_textel_preset_idx = 0;
+    textel_presets[0].textel_normal = textel;
+    textel_presets[0].textel_shadow = textel;
+    textel_presets[0].update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, false);
+    reset_adhoc_textel_editor();
+  }
+
+  void select_used_textel()
+  {
+    if (!stlutils::in_range(used_textels, selected_used_textel_idx))
+      return;
+
+    select_textel(used_textels[selected_used_textel_idx]);
+  }
+
+  void record_used_textel(const Textel& textel)
+  {
+    auto it = stlutils::find_if(used_textels,
+      [&textel](const auto& used_textel) { return used_textel == textel; });
+
+    if (it != used_textels.end())
+      used_textels.erase(it);
+    used_textels.insert(used_textels.begin(), textel);
+    if (used_textels.size() > max_used_textels)
+      used_textels.pop_back();
+
+    selected_used_textel_idx = 0;
+    menu_r_offs_ut = 0;
+  }
+
   std::string fallback_to_text_field_input(char fb) const
   {
     return fb == t8::Glyph::none ? "" : std::string(1, fb);
@@ -749,7 +827,19 @@ private:
                                  int nri, int nci, t8::RC& cursor_pos)
   {
     if (curr_key == '-')
-      math::toggle(show_menu);
+    {
+      if (math::toggle(show_menu))
+        show_menu_used_textels = false;
+    }
+    else if (curr_key == '_')
+    {
+      if (math::toggle(show_menu_used_textels))
+      {
+        show_menu = false;
+        selected_used_textel_idx = 0;
+        menu_r_offs_ut = 0;
+      }
+    }
       
     bool is_up = curr_special_key == t8::SpecialKey::Up || curr_key == 'w';
     bool is_down = curr_special_key == t8::SpecialKey::Down || curr_key == 's';
@@ -796,6 +886,24 @@ private:
             menu_r_offs = -3*selected_textel_preset_idx;
             break;
           }
+      }
+    }
+    else if (show_menu_used_textels)
+    {
+      if (is_up && !used_textels.empty())
+      {
+        selected_used_textel_idx = std::max(0, selected_used_textel_idx - 1);
+      }
+      else if (is_down && !used_textels.empty())
+      {
+        selected_used_textel_idx = std::min(stlutils::sizeI(used_textels) - 1,
+                                            selected_used_textel_idx + 1);
+      }
+      else if ((curr_key == ' ' || curr_special_key == t8::SpecialKey::Enter)
+               && !used_textels.empty())
+      {
+        select_used_textel();
+        show_menu_used_textels = false;
       }
     }
     else
@@ -866,8 +974,10 @@ private:
       }
       else if (curr_key == ' ')
       {
+        const auto textel = selected_textel();
         undo_buffer.push({ { cursor_pos, curr_texture(cursor_pos) } });
-        curr_texture.set_textel(cursor_pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+        curr_texture.set_textel(cursor_pos, textel);
+        record_used_textel(textel);
         redo_buffer = {};
         is_modified = true;
       }
@@ -920,6 +1030,7 @@ private:
       }
       else if (curr_key == 'b' || curr_key == 'r')
       {
+        const auto textel = selected_textel();
         UndoItem undo;
         for (int i = -2; i <= 2; ++i)
         {
@@ -933,16 +1044,19 @@ private:
             if (curr_key == 'b' || (curr_key == 'r' && anrnd < 0.1f))
             {
               undo.emplace_back(pos, curr_texture(pos));
-              curr_texture.set_textel(pos, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+              curr_texture.set_textel(pos, textel);
             }
           }
         }
+        if (!undo.empty())
+          record_used_textel(textel);
         undo_buffer.push(undo);
         redo_buffer = {};
         is_modified = true;
       }
       else if (curr_key == 'B' || curr_key == 'R')
       {
+        const auto textel = selected_textel();
         UndoItem undo;
         auto positions = t8x::filled_circle_positions(cursor_pos, big_brush_radius, big_brush_aspect_ratio);
         for (const auto& p : positions)
@@ -959,9 +1073,11 @@ private:
           if (anrnd < 0.1f)
           {
             undo.emplace_back(p, curr_texture(p));
-            curr_texture.set_textel(p, textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels));
+            curr_texture.set_textel(p, textel);
           }
         }
+        if (!undo.empty())
+          record_used_textel(textel);
         undo_buffer.push(undo);
         redo_buffer = {};
         is_modified = true;
@@ -969,52 +1085,24 @@ private:
       else if (str::to_lower(curr_key) == 'f')
       {
         UndoItem undo;
-        const auto& selected_textel = textel_presets[selected_textel_preset_idx].get_textel(use_shadow_textels);
+        const auto textel = selected_textel();
         for (int i = 0; i < nri; ++i)
         {
           for (int j = 0; j < nci; ++j)
           {
             RC pos = RC { i, j } - screen_pos;
             undo.emplace_back(pos, curr_texture(pos));
-            curr_texture.set_textel(pos, selected_textel);
+            curr_texture.set_textel(pos, textel);
           }
         }
+        if (!undo.empty())
+          record_used_textel(textel);
         undo_buffer.push(undo);
         redo_buffer = {};
         is_modified = true;
       }
       else if (str::to_lower(curr_key) == 'p')
-      {
-        const auto& curr_textel = curr_texture(cursor_pos);
-        auto idx_normal = stlutils::find_if_idx(textel_presets,
-          [&curr_textel](const auto& tp) { return tp.get_textel(false) == curr_textel; });
-        if (0 <= idx_normal)
-        {
-          selected_textel_preset_idx = idx_normal;
-          menu_r_offs = -3*selected_textel_preset_idx;
-        }
-        else
-        {
-          auto idx_shadow = stlutils::find_if_idx(textel_presets,
-            [&curr_textel](const auto& tp) { return tp.get_textel(true) == curr_textel; });
-          if (0 <= idx_shadow)
-          {
-            selected_textel_preset_idx = idx_shadow;
-            menu_r_offs = -3*selected_textel_preset_idx;
-          }
-          else
-          {
-            selected_textel_preset_idx = 0;
-            textel_presets[0].textel_normal.glyph = curr_textel.glyph;
-            textel_presets[0].textel_normal.fg_color = curr_textel.fg_color;
-            textel_presets[0].textel_normal.bg_color = curr_textel.bg_color;
-            textel_presets[0].textel_shadow = textel_presets[0].textel_normal;
-            textel_presets[0].update_disp_strings<CharT>({ Color16::DarkGray, Color16::Transparent2 }, false);
-            // Make sure to propagate the picked textel to the Ad Hoc editor.
-            reset_adhoc_textel_editor();
-          }
-        }
-      }
+        select_textel(curr_texture(cursor_pos));
       else if (str::to_lower(curr_key) == 'l')
         message_handler->add_message(static_cast<float>(get_real_time_s()),
                                      "Cursor @ " + cursor_pos.str(),
@@ -1124,6 +1212,8 @@ private:
     const int nri = sh.num_rows_inset();
     const int nci = sh.num_cols_inset();
     const int menu_width = 15;
+    const int menu_width_used_textels = 4;
+    const int active_menu_width = show_menu ? menu_width : (show_menu_used_textels ? menu_width_used_textels : 0);
 
 //#define SHOW_DEBUG_WINDOW
 #ifdef SHOW_DEBUG_WINDOW
@@ -1139,10 +1229,12 @@ private:
     auto curr_special_key = get_special_key(kpdp.transient);
     bool allow_editing = true;
       
-    if (!show_confirm_overwrite && show_menu)
+    if (!show_confirm_overwrite)
     {
-      // Does not need to be qualified with t8x::drawing, but I'm not sure why.
-      t8x::draw_box_outline(sh, 0, nc - menu_width, nr, menu_width, t8x::OutlineType::Unicode_SingleLine, ui_style);
+      // draw_box_outline() does not need to be qualified with t8x::, but I'm not sure why.
+      if (active_menu_width > 0)
+        t8x::draw_box_outline(sh, 0, nc - active_menu_width, nr, active_menu_width,
+                              t8x::OutlineType::Unicode_SingleLine, ui_style);
     }
   
     if (is_modified)
@@ -1175,8 +1267,8 @@ private:
     }
     else
     {
-      if (show_menu)
-        draw_menu(ui_style, menu_width);
+      if (active_menu_width > 0)
+        draw_menu(ui_style, active_menu_width);
       else if (show_goto_pos)
       {
         allow_editing = false;
@@ -1666,19 +1758,21 @@ private:
       }
       
       // Caret
-      if (get_anim_count(0) % 2 == 0 && (!show_menu || screen_pos.c + cursor_pos.c + 1 < nc - menu_width))
+      if (get_anim_count(0) % 2 == 0
+          && (active_menu_width == 0 || screen_pos.c + cursor_pos.c + 1 < nc - active_menu_width))
         sh.write_buffer("#", screen_pos.r + cursor_pos.r + 1, screen_pos.c + cursor_pos.c + 1, ui_style);
       
-      draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line, nc, menu_width);
+      draw_coord_sys(draw_vert_coords, draw_horiz_coords, draw_vert_coord_line, draw_horiz_coord_line,
+                     nc, active_menu_width);
       
       int box_width_curr = curr_texture.size.c;
       int box_width_tracing = tracing_texture.size.c;
-      if (show_menu)
+      if (active_menu_width > 0)
       {
-        if (curr_texture.size.c > nc - menu_width)
-          box_width_curr = nc - menu_width - screen_pos.c;
-        if (tracing_texture.size.c > nc - menu_width)
-          box_width_tracing = nc - menu_width - screen_pos.c;
+        if (curr_texture.size.c > nc - active_menu_width)
+          box_width_curr = nc - active_menu_width - screen_pos.c;
+        if (tracing_texture.size.c > nc - active_menu_width)
+          box_width_tracing = nc - active_menu_width - screen_pos.c;
       }
       if (show_materials)
       {
@@ -1771,8 +1865,10 @@ private:
   t8::RC screen_pos { 0, 0 };
   t8::RC cursor_pos { 0, 0 };
   int menu_r_offs = 0;
+  int menu_r_offs_ut = 0;
   
   bool show_menu = false;
+  bool show_menu_used_textels = false;
   bool show_confirm_overwrite = false;
   bool show_tracing = true;
   bool show_goto_pos = false;
@@ -1788,6 +1884,10 @@ private:
   int selected_textel_preset_idx = 0;
   std::vector<TextelItem> custom_textel_presets;
   
+  static constexpr size_t max_used_textels = 20;
+  std::vector<Textel> used_textels;
+  int selected_used_textel_idx = 0;
+
   std::unique_ptr<t8x::MessageHandler<std::string>> message_handler;
   t8x::MessageBoxDrawingArgs msg_box_drawing_args;
   using UndoItem = std::vector<std::pair<t8::RC, Textel>>;
