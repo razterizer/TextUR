@@ -50,6 +50,7 @@ The recommended file extension for texture files is `*.tx`, though the program d
  * `SHIFT + V` : toggle drawing of vertical guide line from the horizontal coordinate axis.
  * `SHIFT + H` : toggle drawing of horizontal guide line from the vertical coordinate axis.
  * `-` : toggle hide/show textel presets menu.
+ * `_` : toggle hide/show recently used textels palette. Use up/down or `w`/`s` to mark a textel, then Space or Enter to select it.
  * `X` : export (save) work to current file.
  * `B` : brush-stroke. Forms a circle, filled with the currently selected textel preset.
  * `SHIFT + B` : big brush-stroke.
