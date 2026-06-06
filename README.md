@@ -142,6 +142,11 @@ Dark mode texture (shadow texture):
 
 <img width="562" alt="image" src="https://github.com/user-attachments/assets/ad90f507-8797-45ac-8781-47be1ed6ecdc">
 
+Recently used textels menu invoked with `'_'` (`SHIFT + '-'`) keypress.
+
+<img width="645" height="657" alt="image" src="https://github.com/user-attachments/assets/f026157e-0afa-43b9-9a03-a2bbfe67f5b1" />
+
+
 Unsaved changes indicator:
 
 <img width="130" alt="image" src="https://github.com/user-attachments/assets/25d7d238-6d35-441e-96cd-463edf94973b">
